@@ -15,7 +15,7 @@ using Distributions
 include("parsegtf.jl")
 include("plotgenes.jl")
 include("plotisoforms.jl")
-# include("plotld.jl")
+include("plotld.jl")
 # include("plotqq.jl")
 # include("plotgwas.jl")
 # include("plotlocus.jl")
