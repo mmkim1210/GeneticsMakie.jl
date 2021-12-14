@@ -61,7 +61,7 @@ kgp = let
     # Download sample metadata
     url = joinpath(beagle, "/sample_info/integrated_call_samples_v3.20130502.ALL.panel")
     meta = last(split(url, "/")) 
-    isfile("data/$(meta)") || download(url2, "data/$(meta)")
+    isfile("data/$(meta)") || download(url, "data/$(meta)")
     # Subset data to the genomic region of interest and European samples
     kgp = SnpData("data/$(replace(vcf, ".vcf.gz" => ""))")
     meta = CSV.read("data/$(meta)", DataFrame)
@@ -85,6 +85,6 @@ LD = LD.^2
 
 # Visualize LD for KMT2E locus
 @time GM.plotld(LD, filename = "figs/KMT2E-LD"; 
-    xlabel = (kgp.snp_info.chromosome[1], kgp.snp_info.position[1], kgp.snp_info.position[end]))
+    xlabel = (kgp.snp_info.chromosome[begin], kgp.snp_info.position[begin], kgp.snp_info.position[end]))
 ```
 <p align="center"><img width="60%" style="border-radius: 5px;" src="figs/KMT2E-LD.png"></p>
