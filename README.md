@@ -14,38 +14,67 @@ pkg> add https://github.com/mmkim1210/GeneticsMakie.jl.git
 ## Examples
 ```julia
 using GeneticsMakie
-using CSV, DataFrames, DataFramesMeta, Chain, SnpArrays, Statistics
+using Makie, CairoMakie
+using CSV, DataFrames, DataFramesMeta, Chain, SnpArrays, Statistics, ColorSchemes
 
 const GM = GeneticsMakie
 isdir("data") || mkdir("data")
 isdir("figs") || mkdir("figs")
 
 # Download the latest GENCODE annotation
-gencode = let 
-    url = "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_38/GRCh37_mapping/gencode.v38lift37.annotation.gtf.gz"
+gencode = let
+    url = "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/GRCh37_mapping/gencode.v39lift37.annotation.gtf.gz"
     file = last(split(url, "/"))
     isfile("data/$(file)") || download(url, "data/$(file)")
     header = ["seqnames", "source", "feature", "start", "end", "score", "strand", "phase", "info"]
     CSV.File("data/$(file)"; delim = "\t", skipto = 6, header = header) |> DataFrame
 end
 
-# Parse GENCODE 
+# Parse GENCODE
 GM.parsegtf!(gencode)
 
 # Focus on KMT2E gene as an example
-chr, start, stop = let 
+chr, start, stop = let
     ind = findfirst(isequal("KMT2E"), gencode.gene_name)
     gencode.seqnames[ind], gencode.start[ind], gencode[ind, :end]
 end
 
 # Visualize 1 Mb window around KMT2E
-GM.plotgenes(chr, start - 1e6, stop + 1e6, gencode; filename = "figs/KMT2E-gene", height = 0.15)
+set_theme!(font = "Arial")
+let
+    f = Figure(resolution = (306, 250))
+    ax = Axis(f[1, 1])
+    range1 = start - 1e6
+    range2 = stop + 1e6
+    rs = GM.plotgenes!(ax, chr, range1, range2, gencode; height = 0.1)
+    vspan!(ax, start, stop, color = (:gray, 0.2))
+    Label(f[1, 1, Bottom()], "~$(round(range1 / 1e6; digits = 1)) Mb",
+        textsize = 6, halign = :left)
+    Label(f[1, 1, Bottom()], "Chr $(chr)",
+        textsize = 6, halign = :center)
+    Label(f[1, 1, Bottom()], "~$(round(range2 / 1e6; digits = 1)) Mb",
+        textsize = 6, halign = :right)
+    rowsize!(f.layout, 1, rs)
+    save("figs/KMT2E-gene.png", f, px_per_unit = 4)
+end
 ```
 <p align="center"><img width="50%" style="border-radius: 5px;" src="figs/KMT2E-gene.png"></p>
 
 ```julia
 # Visualize KMT2E isoforms
-GM.plotisoforms("KMT2E", gencode; filename = "figs/KMT2E-isoform", height = 0.1)
+let
+    f = Figure(resolution = (306, 306))
+    ax = Axis(f[1, 1])
+    rs, chr, range1, range2 = GM.plotisoforms!(ax, "KMT2E", gencode; height = 0.1)
+    Label(f[1, 1, Bottom()], "~$(round(range1 / 1e6; digits = 1)) Mb",
+        textsize = 6, halign = :left)
+    Label(f[1, 1, Bottom()], "Chr $(chr)",
+        textsize = 6, halign = :center)
+    Label(f[1, 1, Bottom()], "~$(round(range2 / 1e6; digits = 1)) Mb",
+        textsize = 6, halign = :right)
+    rowsize!(f.layout, 1, rs)
+    save("figs/KMT2E-isoform.png", f, px_per_unit = 4)
+end
 ```
 <p align="center"><img width="50%" style="border-radius: 5px;" src="figs/KMT2E-isoform.png"></p>
 
@@ -84,7 +113,25 @@ LD = cor(geno, dims = 1)
 LD = LD.^2 
 
 # Visualize LD for KMT2E locus
-@time GM.plotld(LD, filename = "figs/KMT2E-LD"; 
-    xlabel = (kgp.snp_info.chromosome[begin], kgp.snp_info.position[begin], kgp.snp_info.position[end]))
+@time let
+    f = Figure(resolution = (306, 200))
+    ax = Axis(f[1, 1])
+    range1 = start - 1e6
+    range2 = stop + 1e6
+    GM.plotld!(ax, LD)
+    Label(f[1, 1, Top()], "~$(round(range1 / 1e6; digits = 1)) Mb",
+        textsize = 6, halign = :left)
+    Label(f[1, 1, Top()], "Chr $(chr)",
+        textsize = 6, halign = :center)
+    Label(f[1, 1, Top()], "~$(round(range2 / 1e6; digits = 1)) Mb",
+        textsize = 6, halign = :right)
+    rowsize!(f.layout, 1, 137)
+    Colorbar(f[2, 1], limits = (0, 1), tellwidth = false, ticklabelsize = 6,
+        colormap = cgrad(ColorSchemes.Blues_9, 9, categorical = true),
+        label = "LD", labelsize = 6, vertical = false, flipaxis = false,
+        width = 40, spinewidth = 0.5, tickwidth = 0.5, height = 5, ticksize = 3)
+    rowgap!(f.layout, 5)
+    save("figs/KMT2E-LD.png", f, px_per_unit = 4)
+end
 ```
 <p align="center"><img width="60%" style="border-radius: 5px;" src="figs/KMT2E-LD.png"></p>

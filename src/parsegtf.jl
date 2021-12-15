@@ -1,11 +1,11 @@
 """
-    parsegtf(gencode::DataFrame)
+    parsegtf!(gencode::DataFrame)
 
 Parse `gencode` by extracting information from the ninth info column.
 """
 function parsegtf!(gencode::DataFrame)
     for col in ["gene_id", "gene_name", "gene_type"]
-        gencode[:, "$(col)"] = 
+        gencode[:, "$(col)"] =
             [getindex(m.captures, 1) for m in match.(Regex("$(col) \"(.*?)\";"), gencode.info)]
     end
     for col in ["transcript_id", "transcript_support_level"]
