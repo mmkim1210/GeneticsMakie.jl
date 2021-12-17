@@ -14,7 +14,7 @@ pkg> add https://github.com/mmkim1210/GeneticsMakie.jl.git
 ## Examples
 ```julia
 using GeneticsMakie
-using Makie, CairoMakie, CSV, DataFrames, DataFramesMeta, Chain, SnpArrays, Statistics, ColorSchemes
+using Makie, CairoMakie, CSV, DataFrames, SnpArrays, Statistics, ColorSchemes
 
 const GM = GeneticsMakie
 isdir("data") || mkdir("data")
@@ -143,13 +143,13 @@ gwas = let
     asd = CSV.File("data/$(gwas["asd"][2])"; delim = "\t") |> DataFrame
     [scz, bd, asd]
 end
+titles = ["Schizophrenia (PGC3)", "Bipolar (Mullins et al. 2021)", "Autism (Grove et al. 2019)"]
 
 # Visualize GWAS results for KMT2E locus
 let
     n = length(gwas)
     f = Figure(resolution = (306, 350))
     axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
-    titles = ["Schizophrenia (PGC3)", "Bipolar (Mullins et al. 2021)", "Autism (Grove et al. 2019)"]
     for i in 1:n
         GM.plotlocus!(axs[i], chr, range1, range2, gwas[i]; colorld = true, ref = kgp, ymax = 18)
         rowsize!(f.layout, i, 30)
@@ -174,3 +174,28 @@ let
 end
 ```
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-locuszoom.png"></p>
+
+```julia
+# Visualize QQ plot of P values
+let
+    f = Figure(resolution = (612, 255))
+    axs = [Axis(f[2, i]) for i in 1:3]
+    for i in eachindex(titles)
+        GM.plotqq!(axs[i], gwas[i]; xlabel = "", ylabel = "", ystep = 5)
+        ylims!(axs[i], 0, 40)
+        i > 1 ? hideydecorations!(axs[i]) : nothing
+    end
+    for (i, title) in enumerate(titles)
+        Box(f[1, i], color = :gray90)
+        Label(f[1, i], title, tellwidth = false, textsize = 8, padding = (3, 0, 3, 3))
+    end
+    Label(f[3, 1:length(titles)], text = "Expected -log[p]", textsize = 8)
+    Label(f[2, 0], text = "Observed -log[p]", textsize = 8, rotation = pi / 2, tellheight = false)
+    rowsize!(f.layout, 2, Aspect(2, 1))
+    colgap!(f.layout, 5)
+    rowgap!(f.layout, 1, 0)
+    rowgap!(f.layout, 2, 5)
+    save("figs/QQ.png", f, px_per_unit = 4)
+end
+```
+<p align="center"><img width="65%" style="border-radius: 5px;" src="figs/QQ.png"></p>
