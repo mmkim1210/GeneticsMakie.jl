@@ -2,7 +2,6 @@
     coordinateisforms(gene::AbstractString, gencode::DataFrame, orderby::Union{Nothing, AbstractVector{<:AbstractString}}, height::Real, text::Bool, textpos::Symbol)
 
 Subset `gencode` to a `gene` and determine coordinates of exons for each isoform.
-
 """
 function coordinateisforms(gene::AbstractString, 
     gencode::DataFrame,

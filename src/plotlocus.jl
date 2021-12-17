@@ -1,0 +1,107 @@
+"""
+    calcluateld!(gwas::DataFrame, ref::SnpData; snp)
+
+Calculate LD between the most significant SNP and other SNPs in `gwas` by using
+`ref`. Optionally, the target SNP can be switched to `snp`.
+"""
+function calcluateld!(gwas::DataFrame, ref::SnpData; snp::AbstractString = "index")
+    n = size(gwas, 1)
+    gwas.LD = Vector{Union{Missing, Float64}}(undef, n)
+    if snp == "index"
+        ind = argmin(gwas.P)
+        snp, chr, bp = gwas.SNP[ind], gwas.CHR[ind], gwas.BP[ind]
+        ind = findfirst((ref.snp_info.chromosome .== chr) .& (ref.snp_info.position .== bp))
+    else
+        ind = findfirst(gwas.SNP .== snp)
+        chr, bp = gwas.CHR[ind], gwas.BP[ind]
+        ind = findfirst((ref.snp_info.chromosome .== chr) .& (ref.snp_info.position .== bp))
+    end
+    gwas.index = fill(snp, n)
+    for i in 1:n
+        j = findfirst((ref.snp_info.chromosome .== gwas.CHR[i]) .& (ref.snp_info.position .== gwas.BP[i]))
+        isnothing(j) ? gwas.LD[i] == missing : gwas.LD[i] = cor(ref.snparray[:, ind], ref.snparray[:, j])^2
+    end
+    return
+end
+
+function setymax(p::Real)
+    d, r = divrem(p, 10)
+    return (r > 5) ? (d + 1) * 10 + 2.5 : (d * 10 + 5) + 2.5
+end
+
+function setticks(y::Real)
+    if y <= 10
+        return 0:3:10
+    elseif 10 < y < 20
+        return 0:5:y
+    else
+        return 0:10:y
+    end
+end
+
+"""
+    plotlocus!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gwas::DataFrame; colorld, ref, snp, ymax)
+
+Plot `gwas` results within a given `chromosome` and genomic range between `range1` 
+and `range2`. Optionally, SNPs can be colored by LD via `colorld` using `ref`.
+The default SNP for which LD is calculated is index SNP, which can be changed to `snp`.
+"""
+function plotlocus!(ax::Axis,
+    chromosome::AbstractString,
+    range1::Real,
+    range2::Real,
+    gwas::DataFrame;
+    colorld::Bool = false,
+    ref::Union{Nothing, SnpData} = nothing,
+    snp::AbstractString = "index",
+    ymax::Real = 0)
+
+    df = filter(x -> (x.CHR == chromosome) && (x.BP >= range1) && (x.BP <= range2), gwas)
+    offset = (range2 - range1) / 15
+    minpval = maximum(-log.(10, df.P))
+    if ymax == 0
+        ymax = setymax(minpval)
+        yticks = setticks(ymax)
+    else
+        yticks = setticks(ymax)
+    end
+    if colorld
+        snp == "index" ? calcluateld!(df, ref) : calcluateld!(df, ref; snp = snp)
+        dropmissing!(df)
+        scatter!(ax, df.BP, -log.(10, df.P), color = df.LD, colorrange = (0, 1),
+            colormap = (:gray60, :red2), markersize = 1.5)
+        if snp == "index"
+            bp = getindex(df.BP, argmin(df.P))
+            p = -log10(minimum(df.P))
+        else
+            ind = findfirst(df.SNP .== snp)
+            bp, p = df.BP[ind], -log(10, df.P[ind])    
+        end
+        scatter!(ax, [bp], [p], color = :purple1, markersize = 4.0, marker = '◆')
+        text!(ax, "$(df.index[1])", position = (bp, p), textsize = 6, align = (:center, :bottom))
+    else
+        scatter!(ax, df.BP, -log.(10, df.P), color = :gray60, markersize = 1.5)
+    end
+    ax.spinewidth = 0.75
+    ax.ytickwidth = 0.75
+    ax.ylabelsize = 6
+    ax.ylabelsize = 6
+    ax.yticklabelsize = 6
+    ax.yticksize = 3
+    ax.yticks = setticks(ymax)
+    xlims!(ax, range1, range2)
+    ylims!(ax, 0, ymax)
+    hidespines!(ax, :t, :r)
+    hidexdecorations!(ax)
+    hideydecorations!(ax, ticks = false, label = false, ticklabels = false)
+end
+
+
+"""
+    plotlocus!(ax::Axis, chromosome::AbstractString, bp::Real, gwas::DataFrame; window, colorld, ref, snp, ymax, title)
+
+Plot `gwas` results within a given `chromosome` and a certain `window` around a 
+genomic coordinate `bp`. The default window is 1 Mb.
+"""
+plotlocus!(ax::Axis, chromosome::AbstractString, bp::Real, gwas::DataFrame; window::Real = 1e6, kwargs...) =
+    plotlocus!(ax, chromosome, bp - window, bp + window, gwas; kwargs...)
