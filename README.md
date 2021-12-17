@@ -54,7 +54,7 @@ let
     save("figs/KMT2E-gene.png", f, px_per_unit = 4)
 end
 ```
-<p align="center"><img width="50%" style="border-radius: 5px;" src="figs/KMT2E-gene.png"></p>
+<p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-gene.png"></p>
 
 ```julia
 # Visualize KMT2E isoforms
@@ -69,7 +69,7 @@ let
     save("figs/KMT2E-isoform.png", f, px_per_unit = 4)
 end
 ```
-<p align="center"><img width="50%" style="border-radius: 5px;" src="figs/KMT2E-isoform.png"></p>
+<p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-isoform.png"></p>
 
 ```julia
 kgp = let
@@ -122,7 +122,7 @@ LD = LD.^2
     save("figs/KMT2E-LD.png", f, px_per_unit = 4)
 end
 ```
-<p align="center"><img width="60%" style="border-radius: 5px;" src="figs/KMT2E-LD.png"></p>
+<p align="center"><img width="80%" style="border-radius: 5px;" src="figs/KMT2E-LD.png"></p>
 
 ```julia
 # Download GWAS summary statistics for psychiatric disorders
@@ -176,10 +176,51 @@ end
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-locuszoom.png"></p>
 
 ```julia
+# Visualize Manhattan plot
+@time let
+    f = Figure(resolution = (408, 275))
+    axs = [Axis(f[i, 1]) for i in 1:length(titles)]
+    coord, ymaxs, xmax, ticks = GM.coordinategwas(gwas) # set up coordinates
+    for i in eachindex(titles)
+        GM.plotgwas!(axs[i], coord, i, ymaxs[i], xmax, ticks; xlabel = "", ystep = 10)
+        hidespines!(axs[i], :t, :r)
+        Label(f[i, 1, Top()], text = "$(titles[i])", textsize = 8)
+        rowsize!(f.layout, i, 50)
+        i == length(titles) ? axs[i].xlabel = "Chromosome" : nothing
+    end
+    rowgap!(f.layout, 10)
+    save("figs/manhattan.png", f, px_per_unit = 4)
+end
+```
+<p align="center"><img width="75%" style="border-radius: 5px;" src="figs/manhattan.png"></p>
+
+```julia
+# Visualize Miami/Hudson plot
+@time let
+    f = Figure(resolution = (408, 180))
+    axs = [Axis(f[i, 1]) for i in 1:2]
+    coord, ymaxs, xmax, ticks = GM.coordinategwas(gwas[1:2])
+    for i in 1:2
+        GM.plotgwas!(axs[i], coord, i, ymaxs[i], xmax, ticks; xlabel = "", ystep = 10)
+        rowsize!(f.layout, i, 50)
+    end
+    hidexdecorations!(axs[2])
+    hidespines!(axs[1], :t, :r)
+    hidespines!(axs[2], :b, :r)
+    ylims!(axs[2], ymaxs[2], 0)
+    Label(f[1, 1, Top()], text = "$(titles[1])", textsize = 8)
+    Label(f[2, 1, Bottom()], text = "$(titles[2])", textsize = 8)
+    rowgap!(f.layout, 1)
+    save("figs/miami.png", f, px_per_unit = 4)
+end
+```
+<p align="center"><img width="75%" style="border-radius: 5px;" src="figs/miami.png"></p>
+
+```julia
 # Visualize QQ plot of P values
-let
+@time let
     f = Figure(resolution = (612, 255))
-    axs = [Axis(f[2, i]) for i in 1:3]
+    axs = [Axis(f[2, i]) for i in 1:length(titles)]
     for i in eachindex(titles)
         GM.plotqq!(axs[i], gwas[i]; xlabel = "", ylabel = "", ystep = 5)
         ylims!(axs[i], 0, 40)
@@ -187,7 +228,7 @@ let
     end
     for (i, title) in enumerate(titles)
         Box(f[1, i], color = :gray90)
-        Label(f[1, i], title, tellwidth = false, textsize = 8, padding = (3, 0, 3, 3))
+        Label(f[1, i], title, tellwidth = false, textsize = 8, padding = (0, 0, 3, 3))
     end
     Label(f[3, 1:length(titles)], text = "Expected -log[p]", textsize = 8)
     Label(f[2, 0], text = "Observed -log[p]", textsize = 8, rotation = pi / 2, tellheight = false)
@@ -198,4 +239,4 @@ let
     save("figs/QQ.png", f, px_per_unit = 4)
 end
 ```
-<p align="center"><img width="65%" style="border-radius: 5px;" src="figs/QQ.png"></p>
+<p align="center"><img width="80%" style="border-radius: 5px;" src="figs/QQ.png"></p>
