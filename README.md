@@ -105,6 +105,7 @@ let
     colgap!(f.layout, 2)
     rowgap!(f.layout, 5)
     save("KMT2E-expression.png", f, px_per_unit = 4)
+end
 ```
 <p align="center"><img width="85%" style="border-radius: 5px;" src="figs/KMT2E-expression.png"></p>
 
@@ -150,7 +151,7 @@ LD = LD.^2
     Label(f[1, 1, Top()], "~$(round(range1 / 1e6; digits = 1)) Mb", textsize = 6, halign = :left)
     Label(f[1, 1, Top()], "Chr $(chr)", textsize = 6, halign = :center)
     Label(f[1, 1, Top()], "~$(round(range2 / 1e6; digits = 1)) Mb", textsize = 6, halign = :right)
-    rowsize!(f.layout, 1, 137)
+    rowsize!(f.layout, 1, Aspect(1, 0.5))
     Colorbar(f[2, 1], limits = (0, 1), tellwidth = false, ticklabelsize = 6,
         colormap = cgrad(ColorSchemes.Blues_9, 9, categorical = true),
         label = "LD", labelsize = 6, vertical = false, flipaxis = false,
