@@ -14,7 +14,7 @@ pkg> add https://github.com/mmkim1210/GeneticsMakie.jl.git
 ## Examples
 ```julia
 using GeneticsMakie
-using Makie, CairoMakie, CSV, DataFrames, SnpArrays, Statistics, ColorSchemes
+using Makie, CairoMakie, Makie.GeometryBasics, CSV, DataFrames, SnpArrays, Statistics, ColorSchemes
 
 const GM = GeneticsMakie
 isdir("data") || mkdir("data")
@@ -72,6 +72,43 @@ end
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-isoform.png"></p>
 
 ```julia
+# Visualize KMT2E isoforms w/ expression
+let
+    f = Figure(resolution = (306, 140))
+    ax = Axis(f[1, 1])
+    rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(ax, "KMT2E", gencode; height = 0.1, textpos = :left)
+    hidespines!(ax)
+    rowsize!(f.layout, 1, rs)
+    # Generate random single-cell expression levels 
+    expr = abs.(randn(21, 6))
+    expr = expr / maximum(expr)
+    cell = ["Exc", "In", "End", "Mic", "OPC", "Oligo"]
+    ax2 = Axis(f[1, 2])
+    c = [Circle(Point2f(0.125 * j, 0.95 - (i - 1) * 0.125), expr[i, j] * 0.05) for i in 1:21, j in 1:6]
+    poly!(vec(c), color = vec(expr), colormap = :Purples_9)
+    ax2.xticks = ([0.125 * j for j in 1:6], cell)
+    ax2.xticklabelsize = 4
+    ax2.xticklabelrotation = π / 2
+    ax2.xaxisposition = :top
+    ax2.xticklabelpad = 0
+    ax2.aspect = DataAspect()
+    xlims!(ax2, 0, 0.875)
+    ylims!(ax2, -1.625, 1.05)
+    colsize!(f.layout, 2, Aspect(1, 0.875 / 2.675))
+    hidespines!(ax2)
+    hidexdecorations!(ax2, ticklabels = false)
+    hideydecorations!(ax2)
+    Colorbar(f[2, 2], limits = (0, 100), ticks = 0:100:100, ticklabelsize = 3,
+        tellwidth = false, vertical = false, flipaxis = false,
+        colormap = :Purples_9, label = "% expressed", labelsize = 4,
+        width = 10, spinewidth = 0.25, tickwidth = 0, height = 2, ticksize = 0)
+    colgap!(f.layout, 2)
+    rowgap!(f.layout, 5)
+    save("KMT2E-expression.png", f, px_per_unit = 4)
+```
+<p align="center"><img width="85%" style="border-radius: 5px;" src="figs/KMT2E-expression.png"></p>
+
+```julia
 kgp = let
     # Download 1000 Genomes data for a single chromosome
     beagle = "http://bochet.gcc.biostat.washington.edu/beagle/1000_Genomes_phase3_v5a"
@@ -79,7 +116,7 @@ kgp = let
     vcf = last(split(url, "/"))
     isfile("data/$(vcf)") || download(url, "data/$(vcf)")
     # Convert vcf file to plink bed file (this step takes a while)
-    @time isfile("data/$(replace(vcf, ".vcf.gz" => ".bed"))") || vcf2plink("data/$(vcf)", "data/$(replace(vcf, ".vcf.gz" => ""))")
+    isfile("data/$(replace(vcf, ".vcf.gz" => ".bed"))") || vcf2plink("data/$(vcf)", "data/$(replace(vcf, ".vcf.gz" => ""))")
     # Download sample metadata
     url = joinpath(beagle, "/sample_info/integrated_call_samples_v3.20130502.ALL.panel")
     meta = last(split(url, "/")) 
