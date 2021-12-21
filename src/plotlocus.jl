@@ -5,21 +5,23 @@ Calculate LD between the most significant SNP and other SNPs in `gwas` by using
 `ref`. Optionally, the target SNP can be switched to `snp`.
 """
 function calcluateld!(gwas::DataFrame, ref::SnpData; snp::AbstractString = "index")
+    gwas.ind = findsnps(gwas, ref)
+    dropmissing!(gwas, "ind")
     n = size(gwas, 1)
-    gwas.LD = Vector{Union{Missing, Float64}}(undef, n)
+    gwas.LD = fill(0.0, n)
     if snp == "index"
-        ind = argmin(gwas.P)
-        snp, chr, bp = gwas.SNP[ind], gwas.CHR[ind], gwas.BP[ind]
-        ind = findfirst((ref.snp_info.chromosome .== chr) .& (ref.snp_info.position .== bp))
+        i = argmin(gwas.P)
+        snp, chr, bp = gwas.SNP[i], gwas.CHR[i], gwas.BP[i]
+        i = findfirst((ref.snp_info.chromosome .== chr) .& (ref.snp_info.position .== bp))
     else
-        ind = findfirst(gwas.SNP .== snp)
-        chr, bp = gwas.CHR[ind], gwas.BP[ind]
-        ind = findfirst((ref.snp_info.chromosome .== chr) .& (ref.snp_info.position .== bp))
+        i = findfirst(gwas.SNP .== snp)
+        chr, bp = gwas.CHR[i], gwas.BP[i]
+        i = findfirst((ref.snp_info.chromosome .== chr) .& (ref.snp_info.position .== bp))
     end
     gwas.index = fill(snp, n)
-    for i in 1:n
-        j = findfirst((ref.snp_info.chromosome .== gwas.CHR[i]) .& (ref.snp_info.position .== gwas.BP[i]))
-        isnothing(j) ? gwas.LD[i] == missing : gwas.LD[i] = cor(ref.snparray[:, ind], ref.snparray[:, j])^2
+    for j in 1:n
+        geno = convert(Matrix{Float64}, ref.snparray[:, [i, gwas.ind[j]]])
+        gwas.LD[j] = cor(geno[:, 1], geno[:, 2])^2    
     end
     return
 end
@@ -67,7 +69,6 @@ function plotlocus!(ax::Axis,
     end
     if colorld
         snp == "index" ? calcluateld!(df, ref) : calcluateld!(df, ref; snp = snp)
-        dropmissing!(df)
         scatter!(ax, df.BP, -log.(10, df.P), color = df.LD, colorrange = (0, 1),
             colormap = (:gray60, :red2), markersize = 1.5)
         if snp == "index"
@@ -105,3 +106,13 @@ genomic coordinate `bp`. The default window is 1 Mb.
 """
 plotlocus!(ax::Axis, chromosome::AbstractString, bp::Real, gwas::DataFrame; window::Real = 1e6, kwargs...) =
     plotlocus!(ax, chromosome, bp - window, bp + window, gwas; kwargs...)
+
+"""
+    plotlocus!(ax::Axis, gene::AbstractString, gwas::DataFrame, gencode::DataFrame; window, colorld, ref, snp, ymax, title)
+
+Plot `gwas` results within a certain window around `gene`. The default window is 1 Mb.
+"""
+function plotlocus!(ax::Axis, gene::AbstractString, gwas::DataFrame, gencode::DataFrame; window::Real = 1e6, kwargs...)
+    ind = findfirst(isequal(gene), gencode.gene_name)
+    plotlocus!(ax, gencode.seqnames[ind], gencode.start[ind] - window, gencode[ind, :end] + window, gwas; kwargs...)
+end    

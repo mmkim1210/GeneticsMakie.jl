@@ -1,5 +1,5 @@
 """
-    coordinategenes(chromosome::AbstractString, range1::Real, range2::Real, gencode::DataFrame)
+    coordinategenes(chromosome::AbstractString, range1::Real, range2::Real, gencode::DataFrame, height::Real)
 
 Subset `gencode` to a given `chromosome` and genomic range between `range1` and
 `range2`, and determine coordinates of exons for each gene residing in the genomic region.
@@ -51,12 +51,12 @@ function coordinategenes(chromosome::AbstractString,
         n = size(ranges, 1)
         p = Vector{Polygon}(undef, n)
         for i = 1:n
-            p[i] = Polygon(
-                [Point2f(ranges[i, 1], 1 - height - (rows[j] - 1) * (0.25 + height)),
+            p[i] = Polygon([
+                Point2f(ranges[i, 1], 1 - height - (rows[j] - 1) * (0.25 + height)),
                 Point2f(ranges[i, 1], 1 - (rows[j] - 1) * (0.25 + height)),
                 Point2f(ranges[i, 2], 1 - (rows[j] - 1) * (0.25 + height)),
-                Point2f(ranges[i, 2], 1 - height - (rows[j] - 1) * (0.25 + height))]
-            )
+                Point2f(ranges[i, 2], 1 - height - (rows[j] - 1) * (0.25 + height))
+            ])
         end
         ps[j] = p
     end
@@ -131,7 +131,6 @@ function plotgenes!(ax::Axis,
     return rs
 end
 
-
 """
     plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame; window, height, highlight)
 
@@ -152,4 +151,13 @@ The default window is 1 Mb. Optionally, height of exons can be adjusted using
 function plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame; window::Real = 1e6, kwargs...)
     ind = findfirst(isequal(gene), gencode.gene_name)
     plotgenes!(ax, gencode.seqnames[ind], gencode.start[ind] - window, gencode[ind, :end] + window, gencode; kwargs...)
+end
+
+"""
+    labelgenome(g::GridPosition, chromosome::AbstractString, range1::Real, range2::Real)
+"""
+function labelgenome(g::GridPosition, chromosome::AbstractString, range1::Real, range2::Real)
+    Label(g, "~$(round(range1 / 1e6; digits = 1)) Mb", textsize = 6, halign = :left)
+    Label(g, "Chr $(chromosome)", textsize = 6, halign = :center)
+    Label(g, "~$(round(range2 / 1e6; digits = 1)) Mb", textsize = 6, halign = :right)
 end
