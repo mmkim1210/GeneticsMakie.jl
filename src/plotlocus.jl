@@ -11,17 +11,14 @@ function calcluateld!(gwas::DataFrame, ref::SnpData; snp::AbstractString = "inde
     gwas.LD = fill(0.0, n)
     if snp == "index"
         i = argmin(gwas.P)
-        snp, chr, bp = gwas.SNP[i], gwas.CHR[i], gwas.BP[i]
-        i = findfirst((ref.snp_info.chromosome .== chr) .& (ref.snp_info.position .== bp))
+        snp = gwas.SNP[i]
     else
         i = findfirst(gwas.SNP .== snp)
-        chr, bp = gwas.CHR[i], gwas.BP[i]
-        i = findfirst((ref.snp_info.chromosome .== chr) .& (ref.snp_info.position .== bp))
     end
     gwas.index = fill(snp, n)
+    geno = convert(Matrix{Float64}, ref.snparray[:, gwas.ind])
     for j in 1:n
-        geno = convert(Matrix{Float64}, ref.snparray[:, [i, gwas.ind[j]]])
-        gwas.LD[j] = cor(geno[:, 1], geno[:, 2])^2    
+        gwas.LD[j] = cor(geno[:, i], geno[:, j])^2    
     end
     return
 end

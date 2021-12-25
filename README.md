@@ -34,7 +34,7 @@ end
 size(gencode) # 3_247_110 features
 
 # Parse GENCODE
-GM.parsegtf!(gencode)
+@time GM.parsegtf!(gencode)
 
 # Focus on KMT2E gene as an example
 gene, window = "KMT2E", 1e6
@@ -46,7 +46,7 @@ range1 = start - window
 range2 = stop + window
 
 # Visualize 1 Mb window around KMT2E
-let
+@time let
     f = Figure(resolution = (306, 250))
     ax = Axis(f[1, 1])
     rs = GM.plotgenes!(ax, chr, range1, range2, gencode; height = 0.1)
@@ -61,7 +61,7 @@ end
 
 ```julia
 # Visualize KMT2E isoforms
-let
+@time let
     f = Figure(resolution = (306, 306))
     ax = Axis(f[1, 1])
     rs, chr, range1, range2 = GM.plotisoforms!(ax, gene, gencode; height = 0.1)
@@ -75,7 +75,7 @@ end
 
 ```julia
 # Visualize KMT2E isoforms w/ expression
-let
+@time let
     f = Figure(resolution = (306, 140))
     axs = [Axis(f[1, i]) for i in 1:2]
     rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(axs[1], gene, gencode; height = 0.1, textpos = :left)
@@ -192,7 +192,7 @@ titles = ["Schizophrenia (PGC3)", "Bipolar (Mullins et al. 2021)", "Autism (Grov
 GM.mungesumstats!(gwas)
 
 # Visualize GWAS results for KMT2E locus
-let
+@time let
     n = length(gwas)
     f = Figure(resolution = (306, 350))
     axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
@@ -203,9 +203,7 @@ let
     end
     rs = GM.plotgenes!(axs[n + 1], chr, range1, range2, gencode; height = 0.1)
     rowsize!(f.layout, n + 1, rs)
-    Label(f[n + 1, 1, Bottom()], "~$(round(range1 / 1e6; digits = 1)) Mb", textsize = 6, halign = :left)
-    Label(f[n + 1, 1, Bottom()], "Chr $(chr)", textsize = 6, halign = :center)
-    Label(f[n + 1, 1, Bottom()], "~$(round(range2 / 1e6; digits = 1)) Mb", textsize = 6, halign = :right)
+    GM.labelgenome(f[n + 1, 1, Bottom()], chr, range1, range2)
     Colorbar(f[1:n, 2], limits = (0, 1), ticks = 0:1:1, height = 20,
         colormap = (:gray60, :red2), label = "LD", ticksize = 0, tickwidth = 0,
         tickalign = 0, ticklabelsize = 6, flip_vertical_label = true,
@@ -214,9 +212,12 @@ let
     rowgap!(f.layout, 5)
     colgap!(f.layout, 5)
     for i in 1:(n + 1)
-        vlines!(axs[i], start, color = (:gold, 0.9), linewidth = 0.5)
-        vlines!(axs[i], stop, color = (:gold, 0.9), linewidth = 0.5)
+        vlines!(axs[i], start, color = (:gold, 0.5), linewidth = 0.5)
+        vlines!(axs[i], stop, color = (:gold, 0.5), linewidth = 0.5)
     end
+    for i in 1:n
+		hlines!(axs[i], -log(10, 5e-8), xmin = range1, xmax = range2, color = (:purple, 0.5), linewidth = 0.5)
+	end
     save("figs/$(gene)-locuszoom.png", f, px_per_unit = 4)
     display("image/png", read("figs/$(gene)-locuszoom.png"))
 end

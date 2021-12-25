@@ -47,23 +47,13 @@ end
 
 mungesumstats!(gwas::DataFrame) = mungesumstats!([gwas])
 
-function matchsnps(CHR::AbstractVector, BP::AbstractVector, chr::AbstractString, bp::Real, window)
-    ind = Int[]
-    for i in eachindex(CHR)
-        if CHR[i] == chr && BP[i] < bp + window && BP[i] > bp - window
-            push!(ind, i)
-        end
-    end
-    return ind
-end
-
 function findgwasloci(gwas::DataFrame; p = 5e-8)
     loci = DataFrame(CHR = String[], BP = Int[], P = Float64[])
     df = gwas[findall(x -> x < p, gwas.P), ["CHR", "BP", "P"]]
     while nrow(df) > 0
         ind = argmin(df.P)
         push!(loci, df[ind, :])
-        ind = matchsnps(df.CHR, df.BP, df.CHR[ind], df.BP[ind], 1e6)
+        ind = findlocus(df.CHR, df.BP, df.CHR[ind], df.BP[ind] - 1e6, df.BP[ind] + 1e6)
         isnothing(ind) ? nothing : deleteat!(df, ind)
     end
     return loci
@@ -74,10 +64,12 @@ function findgwasloci(gwas::Vector{DataFrame}; kwargs...)
     for i in eachindex(gwas)
         loci[i] = findgwasloci(gwas[i]; kwargs...)
     end
-    for i in 2:length(gwas)
-        for j in 1:nrow(loci[1])
-            ind = matchsnps(loci[i].CHR, loci[i].BP, loci[1].CHR[j], loci[1].BP[j], 1e6)
-            isnothing(ind) ? nothing : deleteat!(loci[i], ind)
+    for i in 1:length(gwas)
+        for j in (i + 1):length(gwas)
+            for k in 1:nrow(loci[i])
+                ind = findlocus(loci[j].CHR, loci[j].BP, loci[i].CHR[k], loci[i].BP[k] - 1e6, loci[i].BP[k] + 1e6)
+                isnothing(ind) ? nothing : deleteat!(loci[j], ind)
+            end
         end
     end
     return vcat(loci...)
