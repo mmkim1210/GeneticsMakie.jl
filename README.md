@@ -216,8 +216,8 @@ GM.mungesumstats!(gwas)
         vlines!(axs[i], stop, color = (:gold, 0.5), linewidth = 0.5)
     end
     for i in 1:n
-		hlines!(axs[i], -log(10, 5e-8), xmin = range1, xmax = range2, color = (:purple, 0.5), linewidth = 0.5)
-	end
+        lines!(axs[i], [range1, range2], fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
+    end
     save("figs/$(gene)-locuszoom.png", f, px_per_unit = 4)
     display("image/png", read("figs/$(gene)-locuszoom.png"))
 end
@@ -292,3 +292,6 @@ end
 end
 ```
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/QQ.png"></p>
+
+## Further examples
+<p align="center"><img width="80%" style="border-radius: 5px;" src="figs/effect-LD.png"></p>
