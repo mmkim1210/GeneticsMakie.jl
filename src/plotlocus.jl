@@ -83,7 +83,6 @@ function plotlocus!(ax::Axis,
     ax.spinewidth = 0.75
     ax.ytickwidth = 0.75
     ax.ylabelsize = 6
-    ax.ylabelsize = 6
     ax.yticklabelsize = 6
     ax.yticksize = 3
     ax.yticks = setticks(ymax)

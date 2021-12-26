@@ -23,8 +23,5 @@ include("plotqq.jl")
 include("plotgwas.jl")
 #include("plotwas.jl")
 #include("plotrg.jl")
-#include("plotcoloc.jl")
-#include("plotpca.jl")
-#include("plotadmixture.jl")
 
 end

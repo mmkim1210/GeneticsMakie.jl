@@ -79,7 +79,7 @@ end
     f = Figure(resolution = (306, 140))
     axs = [Axis(f[1, i]) for i in 1:2]
     rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(axs[1], gene, gencode; height = 0.1, textpos = :left)
-    hidespines!(axs[1],)
+    hidespines!(axs[1])
     rowsize!(f.layout, 1, rs)
     # Generate random single-cell expression levels
     n = length(unique(gencode[(gencode.feature .== "transcript") .& (gencode.gene_name .== gene), :transcript_id]))
@@ -295,3 +295,5 @@ end
 
 ## Further examples
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/effect-LD.png"></p>
+
+<p align="center"><img width="80%" style="border-radius: 5px;" src="figs/coloc.png"></p>
