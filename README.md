@@ -294,6 +294,12 @@ end
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/QQ.png"></p>
 
 ## Further examples
+```julia
+# Visualize signifiance of association and LD jointly
+```
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/effect-LD.png"></p>
 
+```julia
+# Visualize colocalization of GWAS signals
+```
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/coloc.png"></p>

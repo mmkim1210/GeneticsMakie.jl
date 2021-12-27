@@ -18,12 +18,13 @@ function coordinategenes(chromosome::AbstractString,
     ps = Vector{Vector{Polygon}}(undef, length(genes))
     bs = Matrix{Float64}(undef, length(genes), 2)
     rows = ones(Int64, length(genes))
+    prop =  23000 * (range2 - range1) / 2.2e6
     for j in eachindex(genes)
         ind = findfirst(isequal(genes[j]), dfg.gene_name)
         start1 = dfg.start[ind]
         stop1 = dfg[ind, :end]
         center1 = (start1 + stop1) / 2
-        label1 = center1 + (length(genes[j]) + 1) / 2 * 44000
+        label1 = center1 + (length(genes[j]) + 1) * prop
         bs[j, 1] = start1
         bs[j, 2] = stop1
         for k in (j + 1):length(genes)
@@ -31,17 +32,18 @@ function coordinategenes(chromosome::AbstractString,
             start2 = dfg.start[ind]
             stop2 = dfg[ind, :end]
             center2 = (start2 + stop2) / 2
-            label2 = center2 - (length(genes[k]) + 1)/ 2 * 44000
-            if ((stop1 > start2) || (label1 > start2) || (label1 > label2)) && (rows[j] == rows[k])
+            label2 = center2 - (length(genes[k]) + 1) * prop
+            if ((stop1 > start2) || (label1 > label2)) && (rows[j] == rows[k])
                 rows[k] = rows[j] + 1
-                for l in 1:(j - 1)
+                while true 
+                    l = findprev(isequal(rows[k]), rows, k - 1)
+                    isnothing(l) && break
                     start3 = bs[l, 1]
                     stop3 = bs[l, 2]
                     center3 = (start3 + stop3) / 2
-                    label3 = center3 + (length(genes[l]) + 1) / 2 * 44000
-                    if ((stop3 > start2) || (label3 > start2) || (label3 > label2)) && (rows[l] == rows[k])
-                        rows[k] = rows[l] + 1
-                    end
+                    label3 = center3 + (length(genes[l]) + 1) * prop
+                    ((stop3 < start2) && (label3 < label2)) && break
+                    rows[k] = rows[l] + 1
                 end
             end
         end

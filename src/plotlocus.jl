@@ -5,7 +5,7 @@ Calculate LD between the most significant SNP and other SNPs in `gwas` by using
 `ref`. Optionally, the target SNP can be switched to `snp`.
 """
 function calcluateld!(gwas::DataFrame, ref::SnpData; snp::AbstractString = "index")
-    gwas.ind = findsnps(gwas, ref)
+    gwas.ind = findmissing(findsnps(gwas, ref))
     dropmissing!(gwas, "ind")
     n = size(gwas, 1)
     gwas.LD = fill(0.0, n)
