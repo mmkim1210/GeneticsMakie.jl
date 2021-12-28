@@ -184,7 +184,7 @@ gwas = Dict(
     "smoking" => (url = "https://conservancy.umn.edu/bitstream/handle/11299/201564/CigarettesPerDay.txt.gz",
         PMID = "30643251", title = "Cigarettes per day (Liu et al. 2019)", file = "CigarettesPerDay.txt.gz"),
     "alcohol" => (url = "https://conservancy.umn.edu/bitstream/handle/11299/201564/DrinksPerWeek.txt.gz",
-        PMID = "30643251", title = "Drinks per week (Liu et al. 2019", file = "DrinksPerWeek.txt.gz"),
+        PMID = "30643251", title = "Drinks per week (Liu et al. 2019)", file = "DrinksPerWeek.txt.gz"),
     "intelligence" => (url = "https://ctg.cncr.nl/documents/p1651/SavageJansen_IntMeta_sumstats.zip",
         PMID = "29942086", title = "Intelligence (Savage et al. 2018)", file = "SavageJansen_2018_intelligence_metaanalysis.txt"),
     "insomnia" => (url = "https://ctg.cncr.nl/documents/p1651/Insomnia_sumstats_Jansenetal.txt.gz",
