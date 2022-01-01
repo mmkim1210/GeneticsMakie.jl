@@ -29,7 +29,7 @@ gencode = let
     isdir("data/gencode") || mkdir("data/gencode")
     isfile("data/gencode/$(file)") || download(url, "data/gencode/$(file)")
     header = ["seqnames", "source", "feature", "start", "end", "score", "strand", "phase", "info"]
-    CSV.File("data/gencode/$(file)"; delim = "\t", skipto = 6, header = header) |> DataFrame
+    CSV.read("data/gencode/$(file)", DataFrame; delim = "\t", comment = "#", header = header)
 end
 size(gencode) # 3_247_110 features
 
@@ -180,12 +180,10 @@ gwas = let
         isdir("data/gwas") || mkdir("data/gwas")
         isfile("data/gwas/$(file)") || download(url, "data/gwas/$(file)")
     end
-    scz = CSV.File("data/gwas/$(gwas["scz"][2])"; delim = "\t") |> DataFrame
+    scz = CSV.read("data/gwas/$(gwas["scz"][2])", DataFrame)
     dropmissing!(scz, disallowmissing = true) # row 5,328,757 is funky and contains missing values
-    bd = CSV.File("data/gwas/$(gwas["bd"][2])", delim = "\t", skipto = 74, 
-        header = ["CHROM", "POS", "ID", "A1", "A2", "BETA", "SE", "P", "NGT", 
-            "FCAS", "FCON", "IMPINFO", "NEFFDIV2", "NCAS", "NCON", "DIRE"]) |> DataFrame
-    asd = CSV.File("data/gwas/$(gwas["asd"][2])"; delim = "\t") |> DataFrame
+    bd = CSV.read("data/gwas/$(gwas["bd"][2])", DataFrame; comment = "##")
+    asd = CSV.read("data/gwas/$(gwas["asd"][2])", DataFrame)
     [scz, bd, asd]
 end
 titles = ["Schizophrenia (PGC3)", "Bipolar (Mullins et al. 2021)", "Autism (Grove et al. 2019)"]
