@@ -16,6 +16,7 @@ pkg> add https://github.com/mmkim1210/GeneticsMakie.jl.git
 using Pkg
 Pkg.activate(@__DIR__)
 Pkg.add(["CairoMakie", "Makie", "CSV", "DataFrames", "SnpArrays"])
+
 using GeneticsMakie, CairoMakie, Makie.GeometryBasics, CSV, DataFrames, SnpArrays, Statistics
 
 const GM = GeneticsMakie
@@ -312,3 +313,8 @@ end
 # Visualize colocalization of GWAS signals
 ```
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/coloc.png"></p>
+
+```julia
+# Visualize association results across phenotypes
+```
+<p align="center"><img width="100%" style="border-radius: 5px;" src="figs/KMT2E-phewas.png"></p>
