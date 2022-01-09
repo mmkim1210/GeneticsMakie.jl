@@ -1,7 +1,8 @@
 """
     parsegtf!(gencode::DataFrame)
 
-Parse `gencode` by extracting information from the ninth info column.
+Parse `gencode` by extracting `gene_id`, `gene_name`, `gene_type`, `transcript_id`,
+`transcript_support_level` information from the `info` column.
 """
 function parsegtf!(gencode::DataFrame)
     for col in ["gene_id", "gene_name", "gene_type"]

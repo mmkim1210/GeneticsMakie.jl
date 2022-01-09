@@ -34,10 +34,10 @@ function plotld!(ax::Axis, LD::AbstractMatrix; color::AbstractString = "blue")
             colormap = cgrad(:Greens_9, 9, categorical = true), strokewidth = 0)
     elseif color == "red"
         poly!(ax, ps, color = LDvech, colorrange = (0, 1),
-        colormap = cgrad(:Reds_9, 9, categorical = true), strokewidth = 0)
+            colormap = cgrad(:Reds_9, 9, categorical = true), strokewidth = 0)
     else
         poly!(ax, ps, color = LDvech, colorrange = (0, 1),
-        colormap = cgrad(:Blues_9, 9, categorical = true), strokewidth = 0)
+            colormap = cgrad(:Blues_9, 9, categorical = true), strokewidth = 0)
     end
     ax.aspect = DataAspect()
     ax.spinewidth = 0.75

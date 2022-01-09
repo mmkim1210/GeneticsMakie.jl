@@ -13,7 +13,10 @@ pkg> add https://github.com/mmkim1210/GeneticsMakie.jl.git
 
 ## Examples
 ```julia
-using GeneticsMakie, Makie, CairoMakie, Makie.GeometryBasics, CSV, DataFrames, SnpArrays, Statistics
+using Pkg
+Pkg.activate(@__DIR__)
+Pkg.add(["CairoMakie", "Makie", "CSV", "DataFrames", "SnpArrays"])
+using GeneticsMakie, CairoMakie, Makie.GeometryBasics, CSV, DataFrames, SnpArrays, Statistics
 
 const GM = GeneticsMakie
 CairoMakie.activate!(type = "png")
@@ -22,14 +25,14 @@ set_theme!(font = "Arial")
 isdir("data") || mkdir("data")
 isdir("figs") || mkdir("figs")
 
-# Download the latest GENCODE annotation
+# Download the latest GENCODE annotation to visualize genes and isoforms
 gencode = let
     url = "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/GRCh37_mapping/gencode.v39lift37.annotation.gtf.gz"
-    file = last(split(url, "/"))
+    file = basename(url)
     isdir("data/gencode") || mkdir("data/gencode")
     isfile("data/gencode/$(file)") || download(url, "data/gencode/$(file)")
-    header = ["seqnames", "source", "feature", "start", "end", "score", "strand", "phase", "info"]
-    CSV.read("data/gencode/$(file)", DataFrame; delim = "\t", comment = "#", header = header)
+    h = ["seqnames", "source", "feature", "start", "end", "score", "strand", "phase", "info"]
+    CSV.read("data/gencode/$(file)", DataFrame; delim = "\t", comment = "#", header = h)
 end
 size(gencode) # 3_247_110 features
 
@@ -47,12 +50,13 @@ range2 = stop + window
 
 # Visualize 1 Mb window around KMT2E
 @time let
-    f = Figure(resolution = (306, 250))
+    f = Figure(resolution = (306, 792))
     ax = Axis(f[1, 1])
     rs = GM.plotgenes!(ax, chr, range1, range2, gencode; height = 0.1)
-    vspan!(ax, start, stop, color = (:gray, 0.2))
+    vspan!(ax, start, stop; color = (:gray, 0.2))
     GM.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
     rowsize!(f.layout, 1, rs)
+    resize_to_layout!(f)
     save("figs/$(gene)-gene.png", f, px_per_unit = 4)
     display("image/png", read("figs/$(gene)-gene.png"))
 end
@@ -62,11 +66,12 @@ end
 ```julia
 # Visualize KMT2E isoforms
 @time let
-    f = Figure(resolution = (306, 306))
+    f = Figure(resolution = (306, 792))
     ax = Axis(f[1, 1])
     rs, chr, range1, range2 = GM.plotisoforms!(ax, gene, gencode; height = 0.1)
     GM.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
     rowsize!(f.layout, 1, rs)
+    resize_to_layout!(f)
     save("figs/$(gene)-isoform.png", f, px_per_unit = 4)
     display("image/png", read("figs/$(gene)-isoform.png"))
 end
@@ -76,7 +81,7 @@ end
 ```julia
 # Visualize KMT2E isoforms w/ expression
 @time let
-    f = Figure(resolution = (306, 140))
+    f = Figure(resolution = (306, 792))
     axs = [Axis(f[1, i]) for i in 1:2]
     rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(axs[1], gene, gencode; height = 0.1, textpos = :left)
     hidespines!(axs[1])
@@ -107,6 +112,7 @@ end
         width = 10, spinewidth = 0.25, tickwidth = 0, height = 2, ticksize = 0)
     colgap!(f.layout, 2)
     rowgap!(f.layout, 5)
+    resize_to_layout!(f)
     save("figs/$(gene)-expression.png", f, px_per_unit = 4)
     display("image/png", read("figs/$(gene)-expression.png"))
 end
@@ -118,14 +124,14 @@ kgp = let
     # Download 1000 Genomes data for a single chromosome
     beagle = "http://bochet.gcc.biostat.washington.edu/beagle/1000_Genomes_phase3_v5a"
     url = joinpath(beagle, "b37.vcf/chr$(chr).1kg.phase3.v5a.vcf.gz")
-    vcf = last(split(url, "/"))
+    vcf = basename(url)
     isdir("data/1kg") || mkdir("data/1kg")
     isfile("data/1kg/$(vcf)") || download(url, "data/1kg/$(vcf)")
     # Convert vcf file to plink bed file (this step takes a while)
     isfile("data/1kg/$(replace(vcf, ".vcf.gz" => ".bed"))") || vcf2plink("data/1kg/$(vcf)", "data/1kg/$(replace(vcf, ".vcf.gz" => ""))")
     # Download sample metadata
     url = joinpath(beagle, "/sample_info/integrated_call_samples_v3.20130502.ALL.panel")
-    meta = last(split(url, "/")) 
+    meta = basename(url) 
     isfile("data/1kg/$(meta)") || download(url, "data/1kg/$(meta)")
     # Subset data to the genomic region of interest and European samples
     kgp = SnpData("data/1kg/$(replace(vcf, ".vcf.gz" => ""))")
@@ -152,7 +158,7 @@ end
 
 # Visualize LD for KMT2E locus
 @time let
-    f = Figure(resolution = (306, 200))
+    f = Figure(resolution = (306, 792))
     ax = Axis(f[1, 1])
     GM.plotld!(ax, LD; color = "green")
     GM.labelgenome(f[1, 1, Top()], chr, range1, range2)
@@ -162,6 +168,7 @@ end
         label = "LD", labelsize = 6, vertical = false, flipaxis = false,
         width = 40, spinewidth = 0.5, tickwidth = 0.5, height = 5, ticksize = 3)
     rowgap!(f.layout, 5)
+    resize_to_layout!(f)
     save("figs/$(gene)-LD.png", f, px_per_unit = 4)
     display("image/png", read("figs/$(gene)-LD.png"))
 end
@@ -192,7 +199,7 @@ GM.mungesumstats!(gwas)
 # Visualize GWAS results for KMT2E locus
 @time let
     n = length(gwas)
-    f = Figure(resolution = (306, 350))
+    f = Figure(resolution = (306, 792))
     axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
     for i in 1:n
         GM.plotlocus!(axs[i], chr, range1, range2, gwas[i]; colorld = true, ref = kgp, ymax = 18)
@@ -216,6 +223,7 @@ GM.mungesumstats!(gwas)
     for i in 1:n
         lines!(axs[i], [range1, range2], fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
     end
+    resize_to_layout!(f)
     save("figs/$(gene)-locuszoom.png", f, px_per_unit = 4)
     display("image/png", read("figs/$(gene)-locuszoom.png"))
 end
@@ -225,7 +233,7 @@ end
 ```julia
 # Visualize Manhattan plot
 @time let
-    f = Figure(resolution = (408, 275))
+    f = Figure(resolution = (408, 792))
     axs = [Axis(f[i, 1]) for i in 1:length(titles)]
     coord, ymaxs, xmax, ticks = GM.coordinategwas(gwas) # set up coordinates
     for i in eachindex(titles)
@@ -236,6 +244,7 @@ end
         i == length(titles) ? axs[i].xlabel = "Chromosome" : nothing
     end
     rowgap!(f.layout, 10)
+    resize_to_layout!(f)
     save("figs/manhattan.png", f, px_per_unit = 4)
     display("image/png", read("figs/manhattan.png"))
 end
@@ -245,7 +254,7 @@ end
 ```julia
 # Visualize Miami/Hudson plot
 @time let
-    f = Figure(resolution = (408, 180))
+    f = Figure(resolution = (408, 792))
     axs = [Axis(f[i, 1]) for i in 1:2]
     coord, ymaxs, xmax, ticks = GM.coordinategwas(gwas[1:2])
     for i in 1:2
@@ -259,8 +268,9 @@ end
     Label(f[1, 1, Top()], text = "$(titles[1])", textsize = 8)
     Label(f[2, 1, Bottom()], text = "$(titles[2])", textsize = 8)
     rowgap!(f.layout, 1)
+    resize_to_layout!(f)
     save("figs/miami.png", f, px_per_unit = 4)
-    display("image/png", read("miami.png"))
+    display("image/png", read("figs/miami.png"))
 end
 ```
 <p align="center"><img width="75%" style="border-radius: 5px;" src="figs/miami.png"></p>
@@ -268,7 +278,7 @@ end
 ```julia
 # Visualize QQ plot of P values
 @time let
-    f = Figure(resolution = (612, 255))
+    f = Figure(resolution = (612, 792))
     axs = [Axis(f[2, i]) for i in 1:length(titles)]
     for i in eachindex(titles)
         GM.plotqq!(axs[i], gwas[i]; xlabel = "", ylabel = "", ystep = 5)
@@ -285,6 +295,7 @@ end
     colgap!(f.layout, 5)
     rowgap!(f.layout, 1, 0)
     rowgap!(f.layout, 2, 5)
+    resize_to_layout!(f)
     save("figs/QQ.png", f, px_per_unit = 4)
     display("image/png", read("figs/QQ.png"))
 end

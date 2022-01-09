@@ -4,9 +4,9 @@
 Subset `gencode` to a given `chromosome` and genomic range between `range1` and
 `range2`, and determine coordinates of exons for each gene residing in the genomic region.
 """
-function coordinategenes(chromosome::AbstractString, 
-    range1::Real, 
-    range2::Real, 
+function coordinategenes(chromosome::AbstractString,
+    range1::Real,
+    range2::Real,
     gencode::DataFrame,
     height::Real)
 
@@ -66,11 +66,12 @@ function coordinategenes(chromosome::AbstractString,
 end
 
 """
-    plotgenes!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gencode::DataFrame; height, highlight)
+    plotgenes!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gencode::DataFrame; height, exoncolor, textcolor, highlight)
 
 Plot collapsed gene bodies for genes within a given `chromosome` and genomic range 
 between `range1` and `range2`. Optionally, height of exons can be adjusted using
-`height` and genes can be highlighted via `highlight`.
+`height` and color of exons or gene names adjusted using `exoncolor` and `textcolor`, respectively.
+Certain genes can be highlighted via `highlight`.
 """
 function plotgenes!(ax::Axis,
     chromosome::AbstractString, 
@@ -78,7 +79,9 @@ function plotgenes!(ax::Axis,
     range2::Real,
     gencode::DataFrame;
     height::Real = 0.25,
-    highlight::Union{Nothing, AbstractVector{<:AbstractString}} = nothing)
+    exoncolor = :royalblue,
+    textcolor = :black,
+    highlight::Union{Nothing, Tuple{AbstractVector, AbstractVector}} = nothing)
 
     genes, strand, ps, bs, rows = coordinategenes(chromosome, range1, range2, gencode, height)
     if length(rows) == 0
@@ -92,26 +95,27 @@ function plotgenes!(ax::Axis,
     end
     if isnothing(highlight)
         for j in 1:size(ps, 1)
-            poly!(ax, ps[j], color = :royalblue, strokewidth = 0)
+            poly!(ax, ps[j], color = exoncolor, strokewidth = 0)
             lines!(ax, [bs[j, 1], bs[j, 2]], 
                 [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)], 
-                color = :royalblue, linewidth = 0.5)
+                color = exoncolor, linewidth = 0.5)
             g = (strand[j] == "+" ? genes[j] * "→" : "←" * genes[j])
             text!(ax, "$g", 
                 position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
-                align = (:center, :bottom), textsize = 6)
+                align = (:center, :bottom), textsize = 6, color = textcolor)
         end
     else
         for j in 1:size(ps, 1)
-            if genes[j] in highlight
-                poly!(ax, ps[j], color = "#3484BD", strokewidth = 0)
+            ind = findfirst(isequal(genes[j]), highlight[1])
+            if !isnothing(ind)
+                poly!(ax, ps[j], color = highlight[2][ind], strokewidth = 0)
                 lines!(ax, [bs[j, 1], bs[j, 2]], 
                     [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)], 
-                    color = "#3484BD", linewidth = 0.5)
+                    color = highlight[2][ind], linewidth = 0.5)
                 g = (strand[j] == "+" ? genes[j] * "→" : "←" * genes[j])
                 text!(ax, "$g", 
                     position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
-                    align = (:center, :bottom), textsize = 6, color = "#3484BD")
+                    align = (:center, :bottom), textsize = 6, color = highlight[2][ind])
             else
                 poly!(ax, ps[j], color = "#BEBEBE", strokewidth = 0)
                 lines!(ax, [bs[j, 1], bs[j, 2]], 
@@ -134,21 +138,19 @@ function plotgenes!(ax::Axis,
 end
 
 """
-    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame; window, height, highlight)
+    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame; window)
 
 Plot collapsed gene bodies for genes within a given `chromosome` and a certain
-`window` around a genomic coordinate `bp`. The default window is 1 Mb. Optionally, 
-height of exons can be adjusted using `height` and genes can be highlighted via `highlight`.
+`window` around a genomic coordinate `bp`. The default window is 1 Mb.
 """
 plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame; window::Real = 1e6, kwargs...) =
     plotgenes!(ax, chromosome, bp - window, bp + window, gencode; kwargs...)
 
 """
-    plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame; window, height, highlight)
+    plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame; window)
 
 Plot collapsed gene bodies for genes within a certain window around `gene`. 
-The default window is 1 Mb. Optionally, height of exons can be adjusted using 
-`height` and genes can be highlighted via `highlight`.
+The default window is 1 Mb.
 """
 function plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame; window::Real = 1e6, kwargs...)
     ind = findfirst(isequal(gene), gencode.gene_name)

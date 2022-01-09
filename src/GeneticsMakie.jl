@@ -6,9 +6,6 @@ using Makie.GeometryBasics
 using DataFrames
 using Chain
 using DataFramesMeta
-using CSV
-using Colors
-using ColorSchemes
 using SnpArrays
 using Statistics
 using Distributions
