@@ -21,9 +21,7 @@ function coordinateisforms(gene::AbstractString,
     rows = collect(1:n)
     if !isnothing(orderby)
         dforder = DataFrame(transcript_id = [orderby; filter(!in(orderby), isoforms)], rank = 1:n)
-        dfi = @chain dfi begin
-            leftjoin(_, dforder; on = :transcript_id)
-        end
+        dfi = leftjoin!(dfi, dforder; on = :transcript_id)
         sort!(dfi, [order(:rank)])
         isoforms = unique(dfi.transcript_id)
     end
@@ -65,7 +63,8 @@ end
 
 Plot each isoform of a given `gene` in a separate row. Optionally, order of
 isoforms can be changed by `orderby`, height of exons can be adjusted using
-`height`, and the presence or absence of text label of isoforms can be specified
+`height`, and color of exons or gene names adjusted using `exoncolor` and `textcolor`,
+respectively. The presence or absence of text label of isoforms can be specified
 using `text` with its position `textpos`.
 """
 function plotisoforms!(ax::Axis,
@@ -73,34 +72,40 @@ function plotisoforms!(ax::Axis,
     gencode::DataFrame;
     orderby::Union{Nothing, AbstractVector{<:AbstractString}} = nothing,
     height::Real = 0.25,
+    exoncolor::Union{Symbol, AbstractString} = :royalblue,
+    textcolor::Union{Symbol, AbstractString} = :black,
     text::Bool = true,
     textpos::Symbol = :top)
 
     isoforms, ps, bs, rows, chromosome = coordinateisforms(gene, gencode, orderby, height, text, textpos)
     if text && textpos == :top
         for j in 1:size(ps, 1)
-            poly!(ax, ps[j], color = :royalblue, strokewidth = 0)
+            poly!(ax, ps[j], color = exoncolor, strokewidth = 0)
             lines!(ax, [bs[j, 1], bs[j, 2]], 
                 [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
-                color = :royalblue, linewidth = 0.5)
+                color = exoncolor, linewidth = 0.5)
             text!(ax, "$(isoforms[j])", 
                 position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
-                align = (:center, :bottom), textsize = 6)
+                align = (:center, :bottom), textsize = 6, color = textcolor)
         end
     else
         for j in 1:size(ps, 1)
-            poly!(ax, ps[j], color = :royalblue, strokewidth = 0)
+            poly!(ax, ps[j], color = exoncolor, strokewidth = 0)
             lines!(ax, [bs[j, 1], bs[j, 2]], 
                 [1 - height / 2 - (rows[j] - 1) * (0.025 + height), 1 - height / 2 - (rows[j] - 1) * (0.025 + height)],
-                color = :royalblue, linewidth = 0.5)
+                color = exoncolor, linewidth = 0.5)
         end
     end
     range1 = minimum(bs[:, 1])
     range2 = maximum(bs[:, 2])
     diff = range2 - range1
+    prop = 23000 * diff / 2.2e6
     if text && textpos == :top
-        range1 = range1 - diff / 20
-        range2 = range2 + diff / 20
+        storage = bs[:, 1] + bs[:, 2]
+        ind = argmin(storage)
+        range1 = storage[ind] / 2 - prop * 12
+        ind = argmax(storage)
+        range2 = storage[ind] / 2 + prop * 12
     else 
         range1 = range1 - diff / 50
         range2 = range2 + diff / 50

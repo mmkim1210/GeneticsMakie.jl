@@ -79,8 +79,8 @@ function plotgenes!(ax::Axis,
     range2::Real,
     gencode::DataFrame;
     height::Real = 0.25,
-    exoncolor = :royalblue,
-    textcolor = :black,
+    exoncolor::Union{Symbol, AbstractString} = :royalblue,
+    textcolor::Union{Symbol, AbstractString} = :black,
     highlight::Union{Nothing, Tuple{AbstractVector, AbstractVector}} = nothing)
 
     genes, strand, ps, bs, rows = coordinategenes(chromosome, range1, range2, gencode, height)
