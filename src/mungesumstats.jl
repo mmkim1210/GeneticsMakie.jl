@@ -131,6 +131,7 @@ function mungesumstats!(gwas::Vector{DataFrame})
         mungetypes!(gwas[i])
         mungealleles!(gwas[i])
         mungezscore!(gwas[i])
+        dropmissing!(gwas[i])
         if !("SNP" in names(gwas[i]))
             gwas[i].SNP = string.(gwas[i].CHR, ":", gwas[i].BP, ":", gwas[i].A1, ":", gwas[i].A2)
         end

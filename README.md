@@ -179,9 +179,11 @@ end
 ```julia
 # Download GWAS summary statistics for psychiatric disorders
 gwas = let
-    gwas = Dict("scz" => ("https://figshare.com/ndownloader/files/28169757", "PGC3_SCZ_wave3_public.v2.tsv.gz"),
+    gwas = Dict(
+        "scz" => ("https://figshare.com/ndownloader/files/28169757", "PGC3_SCZ_wave3_public.v2.tsv.gz"),
         "bd" => ("https://figshare.com/ndownloader/files/26603681", "pgc-bip2021-all.vcf.tsv.gz"),
-        "asd" => ("https://figshare.com/ndownloader/files/28169292", "iPSYCH-PGC_ASD_Nov2017.gz"))
+        "asd" => ("https://figshare.com/ndownloader/files/28169292", "iPSYCH-PGC_ASD_Nov2017.gz")
+    )
     for key in keys(gwas)
         url = gwas[key][1]
         file = gwas[key][2]

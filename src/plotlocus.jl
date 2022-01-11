@@ -1,3 +1,17 @@
+function setticks(y::Real)
+    if y <= 10
+        return 0:3:10
+    elseif 10 < y <= 20
+        return 0:5:y
+    elseif 20 < y <= 50
+        return 0:10:y
+    else
+        s = div(y, 4)
+        d, r = divrem(s, 10)
+        return r < 5 ? (0:10d:y) : (0:((d + 1) * 10):y)
+    end
+end
+
 """
     calcluateld!(gwas::DataFrame, ref::SnpData; snp)
 
@@ -23,21 +37,6 @@ function calcluateld!(gwas::DataFrame, ref::SnpData; snp::AbstractString = "inde
     return
 end
 
-function setymax(p::Real)
-    d, r = divrem(p, 10)
-    return (r > 5) ? (d + 1) * 10 + 2.5 : (d * 10 + 5) + 2.5
-end
-
-function setticks(y::Real)
-    if y <= 10
-        return 0:3:10
-    elseif 10 < y < 20
-        return 0:5:y
-    else
-        return 0:10:y
-    end
-end
-
 """
     plotlocus!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gwas::DataFrame; colorld, ref, snp, ymax)
 
@@ -56,10 +55,9 @@ function plotlocus!(ax::Axis,
     ymax::Real = 0)
 
     df = filter(x -> (x.CHR == chromosome) && (x.BP >= range1) && (x.BP <= range2), gwas)
-    offset = (range2 - range1) / 15
     minpval = maximum(-log.(10, df.P))
     if ymax == 0
-        ymax = setymax(minpval)
+        ymax = minpval / 4 * 5
         yticks = setticks(ymax)
     else
         yticks = setticks(ymax)
@@ -92,7 +90,6 @@ function plotlocus!(ax::Axis,
     hidexdecorations!(ax)
     hideydecorations!(ax, ticks = false, label = false, ticklabels = false)
 end
-
 
 """
     plotlocus!(ax::Axis, chromosome::AbstractString, bp::Real, gwas::DataFrame; window, colorld, ref, snp, ymax, title)

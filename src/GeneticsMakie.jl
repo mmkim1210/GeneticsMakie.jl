@@ -19,6 +19,6 @@ include("plotlocus.jl")
 include("plotqq.jl")
 include("plotgwas.jl")
 include("plotrg.jl")
-#include("plotwas.jl")
+include("plotwas.jl")
 
 end
