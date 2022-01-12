@@ -213,6 +213,57 @@ function findmissing(ind::Matrix{Union{Missing, Int64}})
     return storage
 end
 
+function findclosestgene(chr::AbstractString, bp::Real, gencode::DataFrame; start = false, proteincoding = false)
+    if proteincoding
+        df = filter(x -> (x.seqnames == chr) && (x.feature == "gene") && (x.gene_type == "protein_coding"), gencode)
+    else
+        df = filter(x -> (x.seqnames == chr) && (x.feature == "gene"), gencode)
+    end
+    if start
+        df.dist₁ .= 1
+        for i in 1:nrow(df)
+            df.strand[i] == "+" ? df.dist₁[i] = abs(df.start[i] - bp) : df.dist₁[i] = abs(df.end[i] - bp)
+        end
+        ind₁ = argmin(df.dist₁)
+        return df.gene_name[ind₁], df.dist₁[ind₁]
+    else
+        df.dist₁ = abs.(df.start .- bp)
+        df.dist₂ = abs.(df.end .- bp)
+        ind₁ = argmin(df.dist₁)
+        ind₂ = argmin(df.dist₂)
+        if df.dist₁[ind₁] < df.dist₂[ind₂]
+            return df.gene_name[ind₁], df.dist₁[ind₁]
+        elseif df.dist₁[ind₁] > df.dist₂[ind₂]
+            return df.gene_name[ind₂], df.dist₂[ind₂]
+        elseif ind₁ == ind₂
+            return df.gene_name[ind₁], df.dist₁[ind₁]
+        elseif df.strand[ind₁] == "+" && df.strand[ind₂] == "+"
+            return df.gene_name[ind₁], df.dist₁[ind₁]
+        elseif df.strand[ind₁] == "-" && df.strand[ind₂] == "-"
+            return df.gene_name[ind₂], df.dist₁[ind₂]
+        elseif df.gene_type[ind₁] == "protein_coding" && df.gene_type[ind₂] != "protein_coding"
+            return df.gene_name[ind₁], df.dist₁[ind₁]
+        elseif df.gene_type[ind₁] != "protein_coding" && df.gene_type[ind₂] == "protein_coding"
+            return df.gene_name[ind₂], df.dist₁[ind₂]
+        else
+            return df.gene_name[ind₁], df.dist₁[ind₁]
+        end
+    end
+end
+
+function findclosestgene(CHR::AbstractVector, BP::AbstractVector, gencode::DataFrame; kwargs...)
+    gencodeₛ = select(gencode, ["seqnames", "start", "end", "strand", "gene_type", "feature", "gene_name"])
+    filter!(x -> x.feature == "gene", gencodeₛ)
+    storage = DataFrame(CHR = String[], BP = Int[], gene = String[], distance = Int[])
+    for i in eachindex(CHR)
+        gene, dist = findclosestgene(CHR[i], BP[i], gencodeₛ; kwargs...)
+        push!(storage, [CHR[i], BP[i], gene, dist])
+    end
+    return storage
+end
+
+findclosestgene(df::DataFrame, gencode::DataFrame; kwargs...) = findclosestgene(df.CHR, df.BP, gencode; kwargs...)
+
 gwas = Dict(
     "scz" => (url = "https://figshare.com/ndownloader/files/28169757",
         PMID = "", title = "Schizophrenia (PGC3)", file = "PGC3_SCZ_wave3_public.v2.tsv.gz"),
