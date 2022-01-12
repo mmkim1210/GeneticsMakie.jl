@@ -57,6 +57,7 @@ function mungenames!(gwas::DataFrame)
         "P.2GC" => "P",
         "ALL_INV_VAR_META_P" => "P",
         "OR(A1)" => "OR",
+        "OR(MINALLELE)" => "OR",
         "SE_DGC" => "SE",
         "STDERR" => "SE",
         "ALL_INV_VAR_META_SEBETA" => "SE",
@@ -70,6 +71,17 @@ function mungenames!(gwas::DataFrame)
     )
     for name in names(gwas)
         haskey(colnames, name) ? rename!(gwas, name => colnames[name]) : nothing
+    end
+end
+
+function mungesnpid!(gwas::DataFrame)
+    if !("SNP" in names(gwas))
+        gwas[i].SNP = string.(gwas.CHR, ":", gwas.BP, ":", gwas.A1, ":", gwas.A2)
+    end
+    if any(ismissing.(gwas.SNP))
+        ind = ismissing.(gwas.SNP)
+        gwas.SNP = string.(gwas.SNP)
+        gwas.SNP[ind] = string.(gwas.CHR[ind], ":", gwas.BP[ind], ":", gwas.A1[ind], ":", gwas.A2[ind])
     end
 end
 
@@ -125,16 +137,20 @@ function mungezscore!(gwas::DataFrame)
     end
 end 
 
+function mungepvalue!(gwas::DataFrame)
+    filter!(x -> 0 <= x.P <= 1, gwas)
+    gwas.P = clamp.(gwas.P, floatmin(0.0), 1)
+end
+
 function mungesumstats!(gwas::Vector{DataFrame})
     for i in eachindex(gwas)
-        dropmissing!(gwas[i])
         mungenames!(gwas[i])
+        mungesnpid!(gwas[i])
+        dropmissing!(gwas[i])
         mungetypes!(gwas[i])
         mungealleles!(gwas[i])
         mungezscore!(gwas[i])
-        if !("SNP" in names(gwas[i]))
-            gwas[i].SNP = string.(gwas[i].CHR, ":", gwas[i].BP, ":", gwas[i].A1, ":", gwas[i].A2)
-        end
+        mungepvalue!(gwas[i])
         select!(gwas[i], :SNP, :CHR, :BP, :A1, :A2, :Z, :P)
     end
 end

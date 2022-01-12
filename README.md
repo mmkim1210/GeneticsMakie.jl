@@ -190,10 +190,9 @@ gwas = let
         isdir("data/gwas") || mkdir("data/gwas")
         isfile("data/gwas/$(file)") || download(url, "data/gwas/$(file)")
     end
-    scz = CSV.read("data/gwas/$(gwas["scz"][2])", DataFrame)
-    dropmissing!(scz, disallowmissing = true) # row 5,328,757 is funky and contains missing values
-    bd = CSV.read("data/gwas/$(gwas["bd"][2])", DataFrame; comment = "##")
-    asd = CSV.read("data/gwas/$(gwas["asd"][2])", DataFrame)
+    scz = CSV.read("data/gwas/$(gwas["scz"][2])", DataFrame; comment = "##", missingstring = ["NA"])
+    bd = CSV.read("data/gwas/$(gwas["bd"][2])", DataFrame; comment = "##", missingstring = ["NA"])
+    asd = CSV.read("data/gwas/$(gwas["asd"][2])", DataFrame; comment = "##", missingstring = ["NA"])
     [scz, bd, asd]
 end
 titles = ["Schizophrenia (PGC3)", "Bipolar (Mullins et al. 2021)", "Autism (Grove et al. 2019)"]
@@ -306,17 +305,9 @@ end
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/QQ.png"></p>
 
 ## Further examples
-```julia
-# Visualize signifiance of association and LD jointly
-```
+Patterns of association and LD:
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/effect-LD.png"></p>
-
-```julia
-# Visualize colocalization of GWAS signals
-```
-<p align="center"><img width="80%" style="border-radius: 5px;" src="figs/coloc.png"></p>
-
-```julia
-# Visualize association results across phenotypes
-```
+Colocalization of GWAS signals:
+<p align="center"><img width="90%" style="border-radius: 5px;" src="figs/coloc.png"></p>
+Association results across multiple phenotypes:
 <p align="center"><img width="100%" style="border-radius: 5px;" src="figs/KMT2E-phewas.png"></p>
