@@ -1,5 +1,5 @@
 function setticks(y::Real)
-    if y <= 10
+    if y == 10
         return 0:3:10
     elseif 10 < y <= 20
         return 0:5:y
@@ -58,6 +58,7 @@ function plotlocus!(ax::Axis,
     minpval = maximum(-log.(10, df.P))
     if ymax == 0
         ymax = minpval / 4 * 5
+        ymax <= 10 ? ymax = 10 : nothing 
         yticks = setticks(ymax)
     else
         yticks = setticks(ymax)

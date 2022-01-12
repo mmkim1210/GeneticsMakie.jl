@@ -127,11 +127,11 @@ end
 
 function mungesumstats!(gwas::Vector{DataFrame})
     for i in eachindex(gwas)
+        dropmissing!(gwas[i])
         mungenames!(gwas[i])
         mungetypes!(gwas[i])
         mungealleles!(gwas[i])
         mungezscore!(gwas[i])
-        dropmissing!(gwas[i])
         if !("SNP" in names(gwas[i]))
             gwas[i].SNP = string.(gwas[i].CHR, ":", gwas[i].BP, ":", gwas[i].A1, ":", gwas[i].A2)
         end
@@ -236,8 +236,8 @@ gwas = Dict(
         PMID = "30617256", title = "Alzheimer disease (Jansen et al. 2019)", file = "AD_sumstats_Jansenetal_2019sept.txt.gz"),
     "cross" => (url = "https://figshare.com/ndownloader/files/28169382",
         PMID = "31835028", title = "Cross disorder (PGC 2019)", file = "pgc_cdg2_meta_no23andMe_oct2019_v2.txt.daner.txt.gz"),
-    # "mdd" => (url = "https://datashare.ed.ac.uk/bitstream/handle/10283/3203/PGC_UKB_depression_genome-wide.txt?sequence=3&isAllowed=y",
-    #     PMID = "30718901", title = "Major depression (Howard et al. 2019)", file = "PGC_UKB_depression_genome-wide.txt"),
+    "mdd" => (url = "https://datashare.ed.ac.uk/bitstream/handle/10283/3203/PGC_UKB_depression_genome-wide.txt",
+        PMID = "30718901", title = "Major depression (Howard et al. 2019)", file = "PGC_UKB_depression_genome-wide.txt"),
     "lupus" => (url = "http://ftp.ebi.ac.uk/pub/databases/gwas/summary_statistics/GCST003001-GCST004000/GCST003156/bentham_2015_26502338_sle_efo0002690_1_gwas.sumstats.tsv.gz",
         PMID = "26502338", title = "Lupus (Bentham et al. 2015)", file = "bentham_2015_26502338_sle_efo0002690_1_gwas.sumstats.tsv.gz"),
     "height" => (url = "https://portals.broadinstitute.org/collaboration/giant/images/6/63/Meta-analysis_Wood_et_al%2BUKBiobank_2018.txt.gz",
@@ -252,7 +252,7 @@ gwas = Dict(
         PMID = "24390342", title = "Rheumatoid arthritis (Okada et al. 2014)", file = "RA_GWASmeta_European_v2.txt.gz"),
     "als" => (url = "https://surfdrive.surf.nl/files/index.php/s/E5RetKw10hC3jXy/download?path=%2F&files=ALS_GWAS_RVB_SMR_sumstats.tar.gz",
         PMID = "34873335", title = "ALS (van Rheenen et al. 2021)", file = "ALS_sumstats_EUR_only.txt.gz"),
-    "parkinson" => (url = "https://drive.google.com/file/d/1FZ9UL99LAqyWnyNBxxlx6qOUlfAnublN/view?usp=sharing",
+    "parkinson" => (url = "https://drive.google.com/file/d/1FZ9UL99LAqyWnyNBxxlx6qOUlfAnublN",
         PMID = "31701892", title = "Parkinson's disease (Nalls et al. 2019)", file = "nallsEtAl2019_excluding23andMe_allVariants.tab"),
     "cp" => (url = "https://thessgac.com/papers/", PMID = "30038396", title = "Cognitive performance (Lee et al. 2018)", file = "GWAS_CP_all.txt"),
     "ea" => (url = "https://thessgac.com/papers/", PMID = "30038396", title = "Educational attainment (Lee et al. 2018)", file = "GWAS_EA_excl23andMe.txt"),
