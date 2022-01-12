@@ -23,6 +23,7 @@ function mungenames!(gwas::DataFrame)
         "#CHROM" => "CHR",
         "CHROMOSOME" => "CHR",
         "CHROM" => "CHR",
+        "HG19CHR" => "CHR",
         "POSITION" => "BP",
         "POS" => "BP",
         "POSITION(HG19)" => "BP",

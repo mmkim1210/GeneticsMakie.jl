@@ -177,6 +177,26 @@ end
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/KMT2E-LD.png"></p>
 
 ```julia
+# Visualize LD as a square for KMT2E locus
+@time let
+    xs = range(0, 10, length = size(LD, 1))
+    ys = range(10, 0, length = size(LD, 1))
+    f = Figure(resolution = (306, 792))
+    ax = Axis(f[1, 1])
+    heatmap!(ax, xs, ys, LD; colorrange = (0, 1), colormap = cgrad(:Greens_9, 9, categorical = true), strokewidth = 0)
+    hidedecorations!(ax)
+    hidespines!(ax, :t, :r, :l)
+    ax.aspect = DataAspect()
+    rowsize!(f.layout, 1, Aspect(1, 1))
+    GM.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
+    resize_to_layout!(f)
+    save("figs/$(gene)-LD-square.png", f, px_per_unit = 4)
+    display("image/png", read("figs/$(gene)-LD-square.png"))
+end
+```
+<p align="center"><img width="75%" style="border-radius: 5px;" src="figs/KMT2E-LD-square.png"></p>
+
+```julia
 # Download GWAS summary statistics for psychiatric disorders
 gwas = let
     gwas = Dict(
@@ -206,6 +226,7 @@ GM.mungesumstats!(gwas)
     for i in 1:n
         GM.plotlocus!(axs[i], chr, range1, range2, gwas[i]; colorld = true, ref = kgp, ymax = 18)
         rowsize!(f.layout, i, 30)
+        lines!(axs[i], [range1, range2], fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
         Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
     end
     rs = GM.plotgenes!(axs[n + 1], chr, range1, range2, gencode; height = 0.1)
@@ -221,9 +242,6 @@ GM.mungesumstats!(gwas)
     for i in 1:(n + 1)
         vlines!(axs[i], start, color = (:gold, 0.5), linewidth = 0.5)
         vlines!(axs[i], stop, color = (:gold, 0.5), linewidth = 0.5)
-    end
-    for i in 1:n
-        lines!(axs[i], [range1, range2], fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
     end
     resize_to_layout!(f)
     save("figs/$(gene)-locuszoom.png", f, px_per_unit = 4)
