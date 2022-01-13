@@ -12,13 +12,10 @@ function setticks(y::Real)
     end
 end
 
-"""
-    calcluateld!(gwas::DataFrame, ref::SnpData; snp)
+function calcluateld!(gwas::DataFrame, 
+    ref::SnpData; 
+    snp::Union{AbstractString, Tuple{AbstractString, Int}} = "index")
 
-Calculate LD between the most significant SNP and other SNPs in `gwas` by using
-`ref`. Optionally, the target SNP can be switched to `snp`.
-"""
-function calcluateld!(gwas::DataFrame, ref::SnpData; snp::AbstractString = "index")
     gwas.ind = findmissing(findsnps(gwas, ref))
     dropmissing!(gwas, "ind")
     n = size(gwas, 1)
@@ -26,15 +23,32 @@ function calcluateld!(gwas::DataFrame, ref::SnpData; snp::AbstractString = "inde
     if snp == "index"
         i = argmax(gwas.P)
         snp = gwas.SNP[i]
+        geno = convert(Matrix{Float64}, ref.snparray[:, gwas.ind])
+        for j in 1:n
+            gwas.LD[j] = cor(geno[:, i], geno[:, j])^2    
+        end
+        gwas.index = fill(snp, n)
+        return
     else
-        i = findfirst(gwas.SNP .== snp)
+        snp isa AbstractString ? ((chr, bp) = getsnpinfo(snp, ref)) : ((chr, bp) = snp)
+        i = findfirst((gwas.CHR .== chr) .& (gwas.BP .== bp))
+        if isnothing(i)
+            snp = ""
+            i = findfirst((ref.snp_info.chromosome .== chr) .& (ref.snp_info.position .== bp))
+            geno = convert(Matrix{Float64}, ref.snparray[:, [i; gwas.ind]])
+            for j in 1:n
+                gwas.LD[j] = cor(geno[:, 1], geno[:, j + 1])^2    
+            end
+        else
+            snp = gwas.SNP[i]
+            geno = convert(Matrix{Float64}, ref.snparray[:, gwas.ind])
+            for j in 1:n
+                gwas.LD[j] = cor(geno[:, i], geno[:, j])^2    
+            end
+        end
+        gwas.index = fill(snp, n)
+        return
     end
-    gwas.index = fill(snp, n)
-    geno = convert(Matrix{Float64}, ref.snparray[:, gwas.ind])
-    for j in 1:n
-        gwas.LD[j] = cor(geno[:, i], geno[:, j])^2    
-    end
-    return
 end
 
 """
@@ -51,7 +65,7 @@ function plotlocus!(ax::Axis,
     gwas::DataFrame;
     colorld::Bool = false,
     ref::Union{Nothing, SnpData} = nothing,
-    snp::Union{AbstractString, Tuple{Int, Int}} = "index",
+    snp::Union{AbstractString, Tuple{AbstractString, Int}} = "index",
     ymax::Real = 0)
 
     df = filter(x -> (x.CHR == chromosome) && (x.BP >= range1) && (x.BP <= range2), gwas)
@@ -68,14 +82,17 @@ function plotlocus!(ax::Axis,
         scatter!(ax, df.BP, df.P, color = df.LD, colorrange = (0, 1),
             colormap = (:gray60, :red2), markersize = 1.5)
         if snp == "index"
-            bp = getindex(df.BP, argmax(df.P))
-            p = maximum(df.P)
-        else
-            ind = findfirst(df.SNP .== snp)
-            bp, p = df.BP[ind], df.P[ind]    
+            ind = argmax(df.P)
+            bp = df.BP[ind]
+            p = df.P[ind]
+            scatter!(ax, [bp], [p], color = :purple1, markersize = 4.0, marker = '◆')
+            text!(ax, "$(df.index[1])", position = (bp, p), textsize = 6, align = (:center, :bottom))    
+        elseif length(df.index[1]) > 0
+            ind = findfirst(df.SNP .== df.index[1])
+            bp, p = df.BP[ind], df.P[ind]
+            scatter!(ax, [bp], [p], color = :purple1, markersize = 4.0, marker = '◆')
+            text!(ax, "$(df.index[1])", position = (bp, p), textsize = 6, align = (:center, :bottom))    
         end
-        scatter!(ax, [bp], [p], color = :purple1, markersize = 4.0, marker = '◆')
-        text!(ax, "$(df.index[1])", position = (bp, p), textsize = 6, align = (:center, :bottom))
     else
         scatter!(ax, df.BP, df.P, color = :gray60, markersize = 1.5)
     end

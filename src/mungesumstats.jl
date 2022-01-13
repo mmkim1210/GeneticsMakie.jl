@@ -281,6 +281,16 @@ end
 
 findclosestgene(df::DataFrame, gencode::DataFrame; kwargs...) = findclosestgene(df.CHR, df.BP, gencode; kwargs...)
 
+function getsnpinfo(snp::AbstractString, SNP::AbstractVector, CHR::AbstractVector, BP::AbstractVector)
+    ind = findfirst(isequal(snp), SNP)
+    return CHR[ind], BP[ind]
+end
+
+getsnpinfo(snp::AbstractString, df::DataFrame) = getsnpinfo(snp, df.SNP, df.CHR, df.BP)
+
+getsnpinfo(snp::AbstractString, ref::SnpData) =
+    getsnpinfo(snp, ref.snp_info.snpid, ref.snp_info.chromosome, ref.snp_info.position)
+    
 gwas = Dict(
     "scz" => (url = "https://figshare.com/ndownloader/files/28169757",
         PMID = "", title = "Schizophrenia (PGC3)", file = "PGC3_SCZ_wave3_public.v2.tsv.gz"),
