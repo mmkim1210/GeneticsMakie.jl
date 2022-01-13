@@ -1,6 +1,5 @@
 module GeneticsMakie
 
-using Makie
 using CairoMakie
 using Makie.GeometryBasics
 using DataFrames

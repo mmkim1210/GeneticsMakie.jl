@@ -1,5 +1,5 @@
 findlocus(CHR::AbstractVector, BP::AbstractVector, chr::AbstractString, range1::Real, range2::Real) =
-    ind = findall((CHR .== chr) .& (BP .>= range1) .& (BP .<= range2))
+    findall((CHR .== chr) .& (BP .>= range1) .& (BP .<= range2))
 
 findlocus(gwas::DataFrame, chr::AbstractString, range1::Real, range2::Real) =
     findlocus(gwas.CHR, gwas.BP, chr, range1, range2)
@@ -216,7 +216,7 @@ findsnps(ref::SnpData, gwas::DataFrame) =
 
 findsnps(gwas₁::DataFrame, gwas₂::DataFrame) = findsnps(gwas₁.CHR, gwas₁.BP, gwas₁.A1, gwas₁.A2, gwas₂.CHR, gwas₂.BP, gwas₂.A1, gwas₂.A2)
 
-function findmissing(ind::Matrix{Union{Missing, Int64}})
+function findmissing(ind::Matrix{Union{Missing, Int}})
     storage = Vector{Union{Missing, Int}}(undef, size(ind, 1))
     for i in eachindex(storage)
         if sum(ismissing.(ind[i, :])) == 2
@@ -354,14 +354,13 @@ gwas = Dict(
     "covid" => (url = "https://storage.googleapis.com/covid19-hg-public/20210415/results/20210607/COVID19_HGI_A2_ALL_leave_23andme_20210607.b37.txt.gz",
         PMID = "34237774", title = "COVID-19 (2021)", file = "COVID19_HGI_A2_ALL_leave_23andme_20210607.b37.txt.gz")
 )
-# add glaucoma, copd, prostate/breast/colorectal/lung cancers, celiac disease, ptsd, male-pattern baldness,
-# multiple sclerosis, hypertension, neuroimaging measures, beat synchronization, asthma, blood cell phenos
 
 function downloadgwas(path::AbstractString; pheno::Union{AbstractVector, AbstractString, Nothing} = nothing)
+    noteasy = ["als", "menarche", "parkinson", "intelligence", "t2d", "ibd", "stroke", "afib", 
+        "cad", "cp", "ea", "birth", "children", "risk"]
     if isnothing(pheno)
         for key in keys(gwas)
-            key in ["als", "menarche", "parkinson", "intelligence", "t2d", "ibd", "stroke", "afib", "cad",
-                "cp", "ea", "birth", "children", "risk"] ? continue : nothing
+            key in noteasy ? continue : nothing
             @info "Downloading summary statistics for $(key)."
             url = gwas[key].url
             file = gwas[key].file
@@ -370,17 +369,25 @@ function downloadgwas(path::AbstractString; pheno::Union{AbstractVector, Abstrac
         end
     elseif isa(pheno, AbstractVector)
         for key in pheno
-            @info "Downloading summary statistics for $(key)."
-            url = gwas[key].url
-            file = gwas[key].file
+            if !(key in keys(gwas)) || (key in noteasy)
+                @error "Cannot download summary statistics for $(key)."
+            else
+                @info "Downloading summary statistics for $(key)."
+                url = gwas[key].url
+                file = gwas[key].file
+                isdir(path) || mkdir(path)
+                isfile("$(path)/$(file)") || download(url, "$(path)/$(file)")
+            end
+        end
+    else
+        if !(pheno in keys(gwas)) || (pheno in noteasy)
+            @error "Cannot download summary statistics for $(pheno)."
+        else
+            @info "Downloading summary statistics for $(pheno)."
+            url = gwas[pheno].url
+            file = gwas[pheno].file
             isdir(path) || mkdir(path)
             isfile("$(path)/$(file)") || download(url, "$(path)/$(file)")
         end
-    else
-        @info "Downloading summary statistics for $(pheno)."
-        url = gwas[pheno].url
-        file = gwas[pheno].file
-        isdir(path) || mkdir(path)
-        isfile("$(path)/$(file)") || download(url, "$(path)/$(file)")
     end
 end

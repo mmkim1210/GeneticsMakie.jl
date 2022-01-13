@@ -165,3 +165,17 @@ function labelgenome(g::GridPosition, chromosome::AbstractString, range1::Real, 
     Label(g, "Chr $(chromosome)", textsize = 6, halign = :center)
     Label(g, "~$(round(range2 / 1e6; digits = 1)) Mb", textsize = 6, halign = :right)
 end
+
+"""
+    findgene(gene::AbstractString, gencode::DataFrame)
+
+Find chromosome, start, and stop sites for the `gene` of interest.
+"""
+function findgene(gene::AbstractString, gencode::DataFrame)
+    ind = findfirst(isequal(gene), gencode.gene_name)
+    if isnothing(ind)
+        @error "Cannot find $(gene) in the annotation."
+    else
+        return gencode.seqnames[ind], gencode.start[ind], gencode[ind, :end]
+    end
+end
