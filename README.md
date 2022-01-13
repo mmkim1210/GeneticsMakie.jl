@@ -252,7 +252,6 @@ end
 ```
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-locuszoom.png"></p>
 
-  4.772137 seconds (91.15 M allocations: 1.881 GiB, 12.65% gc time, 0.65% compilation time)
 ```julia
 # Visualize Manhattan plot
 @time let
