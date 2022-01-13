@@ -182,7 +182,7 @@ end
 @time let
     xs = range(0, 10, length = size(LD, 1))
     ys = range(10, 0, length = size(LD, 1))
-    f = Figure(resolution = (306, 792))
+    f = Figure(resolution = (306 / sqrt(2), 792))
     ax = Axis(f[1, 1])
     heatmap!(ax, xs, ys, LD; colorrange = (0, 1), colormap = cgrad(:Greens_9, 9, categorical = true))
     hidedecorations!(ax)
@@ -196,7 +196,7 @@ end
     display("image/png", read("figs/$(gene)-LD-square.png"))
 end
 ```
-<p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-LD-square.png"></p>
+<p align="center"><img width="60%" style="border-radius: 5px;" src="figs/KMT2E-LD-square.png"></p>
 
 ```julia
 # Download GWAS summary statistics for psychiatric disorders
