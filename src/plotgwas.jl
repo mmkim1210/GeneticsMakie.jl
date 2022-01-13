@@ -12,17 +12,15 @@ function coordinategwas(gwas::Vector{DataFrame};
 
     for i in 1:length(gwas)
         (all(gwas[i][!, p] .>= 0.0) && all(gwas[i][!, p] .<= 1.0)) || 
-            @error("P values are not between 0 and 1 for phenotype $(i).")
+            @error "P values are not between 0 and 1 for phenotype $(i)."
     end
 
     df = gwas[1][:, [chr, bp, p]]
     rename!(df, p => string(p, 1))    
     for i in 2:length(gwas)
-        df = @chain gwas[i] begin
-            select(chr, bp, p)
-            rename(p => string(p, i))
-            innerjoin(df, _; on = [chr, bp])
-        end
+        storage = select(gwas[i], chr, bp, p)
+        rename!(storage, p => string(p, i))
+        df = innerjoin(df, storage; on = [chr, bp])
     end
     for i in 1:length(gwas)
         df[!, string("log10", p, i)] = -log.(10, df[!, string(p, i)])
@@ -43,20 +41,14 @@ function coordinategwas(gwas::Vector{DataFrame};
         end
     end
     dforder = DataFrame(chr => vcat(string.(1:22), ["X", "Y"]), "rank" => 1:24)
-    df = @chain df begin
-        groupby(chr)
-        combine(bp => maximum => :maxpos)
-        leftjoin(_, dforder; on = chr)
-        sort(order(:rank))
-        @transform(:add = cumsum(:maxpos) - :maxpos)
-        leftjoin(df, _; on = chr)
-    end
+    storage = combine(groupby(df, chr), bp => maximum => :maxpos)
+    storage = leftjoin(storage, dforder; on = chr)
+    sort!(storage, order(:rank))
+    storage.add = cumsum(storage.maxpos) - storage.maxpos
+    df = leftjoin(df, storage; on = chr)
     df[!, :x] = df[!, bp] + df[!, :add]
     xmax = maximum(df.x)
-    ticks = @chain df begin
-        groupby(chr)
-        @combine(:center = middle(:x))
-    end
+    ticks = combine(groupby(df, chr), :x => middle => :center)
     return df, ymaxs, xmax, ticks
 end
 

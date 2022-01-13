@@ -26,7 +26,7 @@ set_theme!(font = "Arial")
 isdir("data") || mkdir("data")
 isdir("figs") || mkdir("figs")
 
-# Download the latest GENCODE annotation to visualize genes and isoforms
+# Download the latest GENCODE annotation
 gencode = let
     url = "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/GRCh37_mapping/gencode.v39lift37.annotation.gtf.gz"
     file = basename(url)
@@ -39,6 +39,7 @@ size(gencode) # 3_247_110 features
 
 # Parse GENCODE
 @time GM.parsegtf!(gencode)
+select!(gencode, :seqnames, :feature, :start, :end, :strand, :gene_name, :gene_type, :transcript_id)
 
 # Focus on KMT2E gene as an example
 gene, window = "KMT2E", 1e6
@@ -183,9 +184,10 @@ end
     ys = range(10, 0, length = size(LD, 1))
     f = Figure(resolution = (306, 792))
     ax = Axis(f[1, 1])
-    heatmap!(ax, xs, ys, LD; colorrange = (0, 1), colormap = cgrad(:Greens_9, 9, categorical = true), strokewidth = 0)
+    heatmap!(ax, xs, ys, LD; colorrange = (0, 1), colormap = cgrad(:Greens_9, 9, categorical = true))
     hidedecorations!(ax)
     hidespines!(ax, :t, :r, :l)
+    ax.spinewidth = 0.75
     ax.aspect = DataAspect()
     rowsize!(f.layout, 1, Aspect(1, 1))
     GM.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
@@ -194,7 +196,7 @@ end
     display("image/png", read("figs/$(gene)-LD-square.png"))
 end
 ```
-<p align="center"><img width="75%" style="border-radius: 5px;" src="figs/KMT2E-LD-square.png"></p>
+<p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-LD-square.png"></p>
 
 ```julia
 # Download GWAS summary statistics for psychiatric disorders
@@ -250,6 +252,7 @@ end
 ```
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-locuszoom.png"></p>
 
+  4.772137 seconds (91.15 M allocations: 1.881 GiB, 12.65% gc time, 0.65% compilation time)
 ```julia
 # Visualize Manhattan plot
 @time let

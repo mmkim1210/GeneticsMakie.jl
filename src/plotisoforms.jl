@@ -11,8 +11,8 @@ function coordinateisforms(gene::AbstractString,
     textpos::Symbol)
 
     df = filter(x -> x.gene_name == gene, gencode)
-    dfi = df[df.feature .== "transcript", :]
-    dfe = df[df.feature .== "exon", :]
+    dfi = view(df, df.feature .== "transcript", :)
+    dfe = view(df, df.feature .== "exon", :)
     chromosome = df.seqnames[1]
     isoforms = unique(dfi.transcript_id)
     n = length(isoforms)
@@ -26,7 +26,7 @@ function coordinateisforms(gene::AbstractString,
         isoforms = unique(dfi.transcript_id)
     end
     for j in eachindex(isoforms)
-        ranges = Matrix{Float32}(dfe[findall(isequal(isoforms[j]), dfe.transcript_id), [:start, :end]])
+        ranges = view(dfe, findall(isequal(isoforms[j]), dfe.transcript_id), [:start, :end])
         m = size(ranges, 1)
         p = Vector{Polygon}(undef, m)
         if text && textpos == :top

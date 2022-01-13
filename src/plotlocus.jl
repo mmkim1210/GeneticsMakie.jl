@@ -24,7 +24,7 @@ function calcluateld!(gwas::DataFrame, ref::SnpData; snp::AbstractString = "inde
     n = size(gwas, 1)
     gwas.LD = fill(0.0, n)
     if snp == "index"
-        i = argmin(gwas.P)
+        i = argmax(gwas.P)
         snp = gwas.SNP[i]
     else
         i = findfirst(gwas.SNP .== snp)
@@ -51,13 +51,13 @@ function plotlocus!(ax::Axis,
     gwas::DataFrame;
     colorld::Bool = false,
     ref::Union{Nothing, SnpData} = nothing,
-    snp::AbstractString = "index",
+    snp::Union{AbstractString, Tuple{Int, Int}} = "index",
     ymax::Real = 0)
 
     df = filter(x -> (x.CHR == chromosome) && (x.BP >= range1) && (x.BP <= range2), gwas)
-    minpval = maximum(-log.(10, df.P))
+    df.P = -log.(10, df.P)
     if ymax == 0
-        ymax = minpval / 4 * 5
+        ymax = maximum(df.P) / 4 * 5
         ymax <= 10 ? ymax = 10 : nothing 
         yticks = setticks(ymax)
     else
@@ -65,19 +65,19 @@ function plotlocus!(ax::Axis,
     end
     if colorld
         snp == "index" ? calcluateld!(df, ref) : calcluateld!(df, ref; snp = snp)
-        scatter!(ax, df.BP, -log.(10, df.P), color = df.LD, colorrange = (0, 1),
+        scatter!(ax, df.BP, df.P, color = df.LD, colorrange = (0, 1),
             colormap = (:gray60, :red2), markersize = 1.5)
         if snp == "index"
-            bp = getindex(df.BP, argmin(df.P))
-            p = -log10(minimum(df.P))
+            bp = getindex(df.BP, argmax(df.P))
+            p = maximum(df.P)
         else
             ind = findfirst(df.SNP .== snp)
-            bp, p = df.BP[ind], -log(10, df.P[ind])    
+            bp, p = df.BP[ind], df.P[ind]    
         end
         scatter!(ax, [bp], [p], color = :purple1, markersize = 4.0, marker = '◆')
         text!(ax, "$(df.index[1])", position = (bp, p), textsize = 6, align = (:center, :bottom))
     else
-        scatter!(ax, df.BP, -log.(10, df.P), color = :gray60, markersize = 1.5)
+        scatter!(ax, df.BP, df.P, color = :gray60, markersize = 1.5)
     end
     ax.spinewidth = 0.75
     ax.ytickwidth = 0.75

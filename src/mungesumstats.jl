@@ -77,7 +77,7 @@ end
 
 function mungesnpid!(gwas::DataFrame)
     if !("SNP" in names(gwas))
-        gwas[i].SNP = string.(gwas.CHR, ":", gwas.BP, ":", gwas.A1, ":", gwas.A2)
+        gwas.SNP = string.(gwas.CHR, ":", gwas.BP, ":", gwas.A1, ":", gwas.A2)
     end
     if any(ismissing.(gwas.SNP))
         ind = ismissing.(gwas.SNP)
@@ -160,7 +160,7 @@ mungesumstats!(gwas::DataFrame) = mungesumstats!([gwas])
 
 function findgwasloci(gwas::DataFrame; p = 5e-8)
     loci = DataFrame(CHR = String[], BP = Int[], P = Float64[])
-    df = gwas[findall(x -> x < p, gwas.P), ["CHR", "BP", "P"]]
+    df = gwas[findall(x -> x < p, gwas.P), [:CHR, :BP, :P]]
     while nrow(df) > 0
         ind = argmin(df.P)
         push!(loci, df[ind, :])
@@ -269,7 +269,7 @@ function findclosestgene(chr::AbstractString, bp::Real, gencode::DataFrame; star
 end
 
 function findclosestgene(CHR::AbstractVector, BP::AbstractVector, gencode::DataFrame; kwargs...)
-    gencodeₛ = select(gencode, ["seqnames", "start", "end", "strand", "gene_type", "feature", "gene_name"])
+    gencodeₛ = select(gencode, :seqnames, :start, :end, :strand, :gene_type, :feature, :gene_name)
     filter!(x -> x.feature == "gene", gencodeₛ)
     storage = DataFrame(CHR = String[], BP = Int[], gene = String[], distance = Int[])
     for i in eachindex(CHR)
@@ -362,7 +362,7 @@ function downloadgwas(path::AbstractString; pheno::Union{AbstractVector, Abstrac
         for key in keys(gwas)
             key in ["als", "menarche", "parkinson", "intelligence", "t2d", "ibd", "stroke", "afib", "cad",
                 "cp", "ea", "birth", "children", "risk"] ? continue : nothing
-            @info("Downloading summary statistics for $(key)")
+            @info "Downloading summary statistics for $(key)."
             url = gwas[key].url
             file = gwas[key].file
             isdir(path) || mkdir(path)
@@ -370,14 +370,14 @@ function downloadgwas(path::AbstractString; pheno::Union{AbstractVector, Abstrac
         end
     elseif isa(pheno, AbstractVector)
         for key in pheno
-            @info("Downloading summary statistics for $(key)")
+            @info "Downloading summary statistics for $(key)."
             url = gwas[key].url
             file = gwas[key].file
             isdir(path) || mkdir(path)
             isfile("$(path)/$(file)") || download(url, "$(path)/$(file)")
         end
     else
-        @info("Downloading summary statistics for $(pheno)")
+        @info "Downloading summary statistics for $(pheno)."
         url = gwas[pheno].url
         file = gwas[pheno].file
         isdir(path) || mkdir(path)

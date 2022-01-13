@@ -4,8 +4,6 @@ using Makie
 using CairoMakie
 using Makie.GeometryBasics
 using DataFrames
-using Chain
-using DataFramesMeta
 using SnpArrays
 using Statistics
 using Distributions

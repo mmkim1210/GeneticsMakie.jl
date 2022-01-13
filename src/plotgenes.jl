@@ -11,8 +11,8 @@ function coordinategenes(chromosome::AbstractString,
     height::Real)
 
     df = filter(x -> (x.seqnames == chromosome) && (x.end >= range1) && (x.start <= range2), gencode)
-    dfg = df[df.feature .== "gene", :]
-    dfe = df[df.feature .== "exon", :]
+    dfg = view(df, df.feature .== "gene", :)
+    dfe = view(df, df.feature .== "exon", :)
     genes = unique(dfg.gene_name)
     strand = [dfg.strand[findfirst(isequal(gene), dfg.gene_name)] for gene in genes]
     ps = Vector{Vector{Polygon}}(undef, length(genes))
@@ -49,7 +49,7 @@ function coordinategenes(chromosome::AbstractString,
         end
     end
     for j in eachindex(genes)
-        ranges = Matrix{Float32}(dfe[findall(isequal(genes[j]), dfe.gene_name), [:start, :end]])
+        ranges = view(dfe, findall(isequal(genes[j]), dfe.gene_name), [:start, :end])
         n = size(ranges, 1)
         p = Vector{Polygon}(undef, n)
         for i = 1:n
