@@ -43,10 +43,7 @@ select!(gencode, :seqnames, :feature, :start, :end, :strand, :gene_name, :gene_t
 
 # Focus on KMT2E gene as an example
 gene, window = "KMT2E", 1e6
-chr, start, stop = let
-    ind = findfirst(isequal(gene), gencode.gene_name)
-    gencode.seqnames[ind], gencode.start[ind], gencode[ind, :end]
-end
+chr, start, stop = GM.findgene(gene, gencode)
 range1 = start - window
 range2 = stop + window
 
@@ -64,6 +61,21 @@ range2 = stop + window
 end
 ```
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-gene.png"></p>
+
+```julia
+# Highlight KMT2E and several nearby genes
+@time let
+    f = Figure(resolution = (306, 792))
+    ax = Axis(f[1, 1])
+    rs = GM.plotgenes!(ax, gene, (["KMT2E", "SRPK2", "ORC5", "ATXN7L1"], ["#4062D8", "#CB3C33", "#389826", "#9658B2"]), gencode; height = 0.1)
+    GM.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
+    rowsize!(f.layout, 1, rs)
+    resize_to_layout!(f)
+    save("figs/$(gene)-gene-highlight.png", f, px_per_unit = 4)
+    display("image/png", read("figs/$(gene)-gene-highlight.png"))
+end
+```
+<p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-gene-highlight.png"></p>
 
 ```julia
 # Visualize KMT2E isoforms

@@ -31,3 +31,17 @@ function parsegtf!(gencode::DataFrame)
         return
     end
 end
+
+"""
+    findgene(gene::AbstractString, gencode::DataFrame)
+
+Find chromosome, gene start, and gene stop sites for the `gene` of interest.
+"""
+function findgene(gene::AbstractString, gencode::DataFrame)
+    ind = findfirst(isequal(gene), gencode.gene_name)
+    if isnothing(ind)
+        @error "Cannot find $(gene) in the annotation."
+    else
+        return gencode.seqnames[ind], gencode.start[ind], gencode[ind, :end]
+    end
+end

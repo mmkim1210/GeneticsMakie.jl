@@ -63,7 +63,7 @@ end
 
 Plot each isoform of a given `gene` in a separate row. Optionally, order of
 isoforms can be changed by `orderby`, height of exons can be adjusted using
-`height`, and color of exons or gene names adjusted using `exoncolor` and `textcolor`,
+`height`, and color of exons or gene names adjusted using `genecolor` and `textcolor`,
 respectively. The presence or absence of text label of isoforms can be specified
 using `text` with its position `textpos`.
 """
@@ -72,28 +72,28 @@ function plotisoforms!(ax::Axis,
     gencode::DataFrame;
     orderby::Union{Nothing, AbstractVector{<:AbstractString}} = nothing,
     height::Real = 0.25,
-    exoncolor::Union{Symbol, AbstractString} = :royalblue,
-    textcolor::Union{Symbol, AbstractString} = :black,
+    genecolor = :royalblue,
+    textcolor = :black,
     text::Bool = true,
     textpos::Symbol = :top)
 
     isoforms, ps, bs, rows, chromosome = coordinateisforms(gene, gencode, orderby, height, text, textpos)
     if text && textpos == :top
         for j in 1:size(ps, 1)
-            poly!(ax, ps[j], color = exoncolor, strokewidth = 0)
+            poly!(ax, ps[j], color = genecolor, strokewidth = 0)
             lines!(ax, [bs[j, 1], bs[j, 2]], 
                 [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
-                color = exoncolor, linewidth = 0.5)
+                color = genecolor, linewidth = 0.5)
             text!(ax, "$(isoforms[j])", 
                 position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
                 align = (:center, :bottom), textsize = 6, color = textcolor)
         end
     else
         for j in 1:size(ps, 1)
-            poly!(ax, ps[j], color = exoncolor, strokewidth = 0)
+            poly!(ax, ps[j], color = genecolor, strokewidth = 0)
             lines!(ax, [bs[j, 1], bs[j, 2]], 
                 [1 - height / 2 - (rows[j] - 1) * (0.025 + height), 1 - height / 2 - (rows[j] - 1) * (0.025 + height)],
-                color = exoncolor, linewidth = 0.5)
+                color = genecolor, linewidth = 0.5)
         end
     end
     range1 = minimum(bs[:, 1])
