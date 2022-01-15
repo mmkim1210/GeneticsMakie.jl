@@ -103,9 +103,11 @@ function plotisoforms!(ax::Axis,
     if text && textpos == :top
         storage = bs[:, 1] + bs[:, 2]
         ind = argmin(storage)
-        range1 = storage[ind] / 2 - prop * 12
+        low = storage[ind] / 2 - prop * 12
+        low < range1 ? range1 = low : range1 -= prop * 4.5
         ind = argmax(storage)
-        range2 = storage[ind] / 2 + prop * 12
+        high = storage[ind] / 2 + prop * 12
+        high > range2 ? range2 = high : range2 += prop * 4.5
     else 
         range1 = range1 - diff / 50
         range2 = range2 + diff / 50

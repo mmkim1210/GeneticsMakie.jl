@@ -24,48 +24,63 @@ using Statistics
     GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
     save("gene.png", f)
     @test isfile("gene.png")
+    rm("gene.png")
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotgenes!(ax, "6", range1, range2, gencode)
+    save("gene.png", f)
+    @test isfile("gene.png")
+    rm("gene.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotgenes!(ax, chr, start, gencode)
     save("gene.png", f)
     @test isfile("gene.png")
+    rm("gene.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotgenes!(ax, gene, gencode)
     save("gene.png", f)
     @test isfile("gene.png")
+    rm("gene.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotgenes!(ax, chr, range1, range2, (["KMT2E", "SETD1A"], ["red", "blue"]), gencode)
     save("gene.png", f)
     @test isfile("gene.png")
+    rm("gene.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotgenes!(ax, chr, start, (["KMT2E", "SETD1A"], ["red", "blue"]), gencode)
     save("gene.png", f)
     @test isfile("gene.png")
+    rm("gene.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotgenes!(ax, gene, (["KMT2E", "SETD1A"], ["red", "blue"]), gencode)
     save("gene.png", f)
     @test isfile("gene.png")
+    rm("gene.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotgenes!(ax, chr, range1, range2, ("KMT2E", "red"), gencode)
     save("gene.png", f)
     @test isfile("gene.png")
+    rm("gene.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotgenes!(ax, chr, start, ("KMT2E", "red"), gencode)
     save("gene.png", f)
     @test isfile("gene.png")
+    rm("gene.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
@@ -101,10 +116,34 @@ end
 end
 
 @testset "Plotting QQ plot" begin
+    P = rand(1000)
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotqq!(ax, P)
+    save("qq.png", f)
+    @test isfile("qq.png")
+    rm("qq.png")
+
+    df = DataFrame(P = P)
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotqq!(ax, P)
+    save("qq.png", f)
+    @test isfile("qq.png")
+    rm("qq.png")
 end
 
 @testset "Plotting TWAS" begin
 end
 
 @testset "Plotting correlation" begin
+    f = Figure()
+    ax = Axis(f[1, 1])
+    n = 10
+    GeneticsMakie.plotrg!(ax, (rand(n, n) .* 2 .- 1), string.(1:n), circle = true)
+    colsize!(f.layout, 1, Aspect(1, 1))
+    rowsize!(f.layout, 1, 18 * n)
+    save("cor.png", f)
+    @test isfile("cor.png")
+    rm("cor.png")
 end

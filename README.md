@@ -82,7 +82,7 @@ end
 @time let
     f = Figure(resolution = (306, 792))
     ax = Axis(f[1, 1])
-    rs, chr, range1, range2 = GM.plotisoforms!(ax, gene, gencode; height = 0.1)
+    rs, chr, range1, range2= GM.plotisoforms!(ax, gene, gencode; height = 0.1)
     GM.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
     rowsize!(f.layout, 1, rs)
     resize_to_layout!(f)
@@ -91,6 +91,28 @@ end
 end
 ```
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-isoform.png"></p>
+
+```julia
+# Visualize KMT2E and nearby isoforms simultaneously
+@time let
+    f = Figure(resolution = (612, 792))
+    axs = [Axis(f[i, 1]) for i in 1:2]
+    rs, _, range1, _ = GM.plotisoforms!(axs[1], gene, gencode; height = 0.1, genecolor = "#4062D8")
+    rowsize!(f.layout, 1, rs)
+    hidespines!(axs[1], :b)
+    rs, _, _, range2 = GM.plotisoforms!(axs[2], "SRPK2", gencode; height = 0.1, genecolor = "#CB3C33")
+    rowsize!(f.layout, 2, rs)
+    hidespines!(axs[2], :t)
+    xlims!(axs[1], range1 - 0.5e4, range2 - 1e4)
+    xlims!(axs[2], range1 - 0.5e4, range2 - 1e4)
+    GM.labelgenome(f[2, 1, Bottom()], chr, range1 - 0.5e4, range2 - 1e4)
+    rowgap!(f.layout, 1, 0)
+    resize_to_layout!(f)
+    save("figs/$(gene)-isoform-others.png", f, px_per_unit = 4)
+    display("image/png", read("figs/$(gene)-isoform-others.png"))
+end
+```
+<p align="center"><img width="90%" style="border-radius: 5px;" src="figs/KMT2E-isoform-others.png"></p>
 
 ```julia
 # Visualize KMT2E isoforms w/ expression
