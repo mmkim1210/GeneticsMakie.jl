@@ -290,7 +290,34 @@ getsnpinfo(snp::AbstractString, df::DataFrame) = getsnpinfo(snp, df.SNP, df.CHR,
 
 getsnpinfo(snp::AbstractString, ref::SnpData) =
     getsnpinfo(snp, ref.snp_info.snpid, ref.snp_info.chromosome, ref.snp_info.position)
-    
+
+highld = [
+    (chr = "1", range1 = 48000000, range2 = 52000000),
+    (chr = "2", range1 = 86000000, range2 = 100500000),
+    (chr = "2", range1 = 134500000, range2 = 138000000),
+    (chr = "2", range1 = 183000000, range2 = 190000000),
+    (chr = "3", range1 = 47500000, range2 = 50000000),
+    (chr = "3", range1 = 83500000, range2 = 87000000),
+    (chr = "3", range1 = 89000000, range2 = 97500000),
+    (chr = "5", range1 = 44500000, range2 = 50500000),
+    (chr = "5", range1 = 98000000, range2 = 100500000),
+    (chr = "5", range1 = 129000000, range2 = 132000000),
+    (chr = "5", range1 = 135500000, range2 = 138500000),
+    (chr = "6", range1 = 24000000, range2 = 36000000),
+    (chr = "6", range1 = 57000000, range2 = 64000000),
+    (chr = "6", range1 = 140000000, range2 = 142500000),
+    (chr = "7", range1 = 55000000, range2 = 66000000),
+    (chr = "8", range1 = 7000000, range2 = 13000000),
+    (chr = "8", range1 = 43000000, range2 = 50000000),
+    (chr = "8", range1 = 112000000, range2 = 115000000),
+    (chr = "10", range1 = 37000000, range2 = 43000000),
+    (chr = "11", range1 = 46000000, range2 = 57000000),
+    (chr = "11", range1 = 87500000, range2 = 90500000),
+    (chr = "12", range1 = 33000000, range2 = 40000000),
+    (chr = "12", range1 = 109500000, range2 = 112000000),
+    (chr = "20", range1 = 32000000, range2 = 34500000)
+]
+
 gwas = Dict(
     "scz" => (url = "https://figshare.com/ndownloader/files/28169757",
         PMID = "", title = "Schizophrenia (PGC3)", file = "PGC3_SCZ_wave3_public.v2.tsv.gz"),

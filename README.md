@@ -218,7 +218,7 @@ gwas = let
     [scz, bd, asd]
 end
 titles = ["Schizophrenia (PGC3)", "Bipolar (Mullins et al. 2021)", "Autism (Grove et al. 2019)"]
-GM.mungesumstats!(gwas)
+@time GM.mungesumstats!(gwas)
 
 # Visualize GWAS results for KMT2E locus
 @time let

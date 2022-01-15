@@ -1,54 +1,42 @@
 """
-    coordinategwas(gwas::Vector{DataFrame}; ymax, chr, bp, p, freey)
+    coordinategwas(gwas::Vector{DataFrame}; ymax, freey)
 
 Determine shared coordinates for a set of `gwas`.
 """
-function coordinategwas(gwas::Vector{DataFrame};
-    ymax::Real = 0,
-    chr::AbstractString = "CHR",
-    bp::AbstractString = "BP",
-    p::AbstractString = "P", 
-    freey::Bool = false)
-
-    for i in 1:length(gwas)
-        (all(gwas[i][!, p] .>= 0.0) && all(gwas[i][!, p] .<= 1.0)) || 
-            @error "P values are not between 0 and 1 for phenotype $(i)."
-    end
-
-    df = gwas[1][:, [chr, bp, p]]
-    rename!(df, p => string(p, 1))    
+function coordinategwas(gwas::Vector{DataFrame}; ymax::Real = 0, freey::Bool = false)
+    df = gwas[1][:, [:CHR, :BP, :P]]
+    rename!(df, :P => string("P", 1))    
     for i in 2:length(gwas)
-        storage = select(gwas[i], chr, bp, p)
-        rename!(storage, p => string(p, i))
-        df = innerjoin(df, storage; on = [chr, bp])
+        storage = select(gwas[i], :CHR, :BP, :P)
+        rename!(storage, :P => string("P", i))
+        df = innerjoin(df, storage; on = [:CHR, :BP])
     end
     for i in 1:length(gwas)
-        df[!, string("log10", p, i)] = -log.(10, df[!, string(p, i)])
-        df[!, string("log10", p, i)] = clamp.(df[!, string("log10", p, i)], 0.0, -log(10, floatmin(0.0)))
+        df[!, string("log10P", i)] = -log.(10, df[!, string("P", i)])
     end
     if ymax == 0
         if !freey
             for i in 1:length(gwas)
-                storage = ceil(maximum(df[:, string("log10", p, i)])) + 2.5
+                storage = ceil(maximum(df[!, string("log10P", i)])) + 2.5
                 ymax = max(ymax, storage)
             end
             ymaxs = fill(ymax, length(gwas))
         else
             ymaxs = Vector{Float64}(undef, length(gwas))
             for i in 1:length(gwas)
-                ymaxs[i] = ceil(maximum(df[:, string("log10", p, i)])) + 2.5
+                ymaxs[i] = ceil(maximum(df[:, string("log10P", i)])) + 2.5
             end
         end
     end
-    dforder = DataFrame(chr => vcat(string.(1:22), ["X", "Y"]), "rank" => 1:24)
-    storage = combine(groupby(df, chr), bp => maximum => :maxpos)
-    storage = leftjoin(storage, dforder; on = chr)
+    dforder = DataFrame("CHR" => vcat(string.(1:22), ["X", "Y"]), "rank" => 1:24)
+    storage = combine(groupby(df, :CHR), :BP => maximum => :maxpos)
+    storage = leftjoin(storage, dforder; on = :CHR)
     sort!(storage, order(:rank))
     storage.add = cumsum(storage.maxpos) - storage.maxpos
-    df = leftjoin(df, storage; on = chr)
-    df[!, :x] = df[!, bp] + df[!, :add]
+    df = leftjoin(df, storage; on = :CHR)
+    df.x = df.BP + df.add
     xmax = maximum(df.x)
-    ticks = combine(groupby(df, chr), :x => middle => :center)
+    ticks = combine(groupby(df, :CHR), :x => middle => :center)
     return df, ymaxs, xmax, ticks
 end
 
@@ -56,8 +44,7 @@ end
     plotgwas!(ax::Axis, df::DataFrame, i::Int, ymax::Real, xmax::Real, ticks::DataFrame; xlabel, ylabel, ystep, chr, p, sigline, sigcolor)
 
 Plot gwas results with coordinates from `coordinategwas`, namely `df` for phenotype `i` with
-x and y limits, `xmax` and `ymax`, respectively. The position of x ticks are
-determined by `ticks`.
+x and y limits, `xmax` and `ymax`, respectively. The position of x ticks are determined by `ticks`.
 """
 function plotgwas!(ax::Axis,
     df::DataFrame,
@@ -68,20 +55,19 @@ function plotgwas!(ax::Axis,
     xlabel::AbstractString = "Chromosome",
     ylabel::AbstractString = "-log[p]",
     ystep::Real = 2,
-    chr::AbstractString = "CHR",
-    p::AbstractString = "P",
     sigline::Bool = false,
     sigcolor::Bool = true)
 
-    indeven = findall(in(vcat(string.(1:2:22), "X")), df[!, chr])
-    indodd = findall(in(vcat(string.(2:2:23), "Y")), df[!, chr])
-    scatter!(ax, df[indeven, :x], df[indeven, string("log10", p, i)], 
+    indeven = findall(in(vcat(string.(1:2:22), "X")), df.CHR)
+    indodd = findall(in(vcat(string.(2:2:23), "Y")), df.CHR)
+    scatter!(ax, view(df, indeven, :x), view(df, indeven, string("log10P", i)), 
         markersize = 1.5, color = "#0D0D66")
-    scatter!(ax, df[indodd, :x], df[indodd, string("log10", p, i)], 
+    scatter!(ax, view(df, indodd, :x), view(df, indodd, string("log10P", i)), 
         markersize = 1.5, color = "#7592C8")
     if sigcolor
-        dfsig = df[df[!, string("log10", p, i)] .> -log(10, 5e-8), :]
-        scatter!(ax, dfsig[!, :x], dfsig[!, string("log10", p, i)], 
+        ind = df[!, string("log10P", i)] .> -log(10, 5e-8)
+        dfsig = view(df, ind, :)
+        scatter!(ax, dfsig.x, dfsig[!, string("log10P", i)], 
             markersize = 1.5, color = "#4DB069")
     end
     if sigline
@@ -93,7 +79,7 @@ function plotgwas!(ax::Axis,
     hideydecorations!(ax, label = false, ticklabels = false, ticks = false)
     hidexdecorations!(ax, label = false, ticklabels = false)
     xticks = ticks.center
-    xticklabels = unique(ticks[!, chr])
+    xticklabels = unique(ticks.CHR)
     ax.xlabel = xlabel
     ax.ylabel = ylabel
     ax.xticks = (xticks, xticklabels)
