@@ -66,7 +66,7 @@ function coordinategenes(chromosome::AbstractString,
 end
 
 """
-    plotgenes!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gencode::DataFrame; height, genecolor, textcolor)
+    plotgenes!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gencode::DataFrame; height::Real, genecolor, textcolor)
 
 Plot collapsed gene bodies for genes within a given `chromosome` and genomic range 
 between `range1` and `range2`. Optionally, height of exons can be adjusted using

@@ -110,7 +110,7 @@ function plotlocus!(ax::Axis,
 end
 
 """
-    plotlocus!(ax::Axis, chromosome::AbstractString, bp::Real, gwas::DataFrame; window, colorld, ref, snp, ymax, title)
+    plotlocus!(ax::Axis, chromosome::AbstractString, bp::Real, gwas::DataFrame; window::Real, kwargs...)
 
 Plot `gwas` results within a given `chromosome` and a certain `window` around a 
 genomic coordinate `bp`. The default window is 1 Mb.
@@ -119,11 +119,11 @@ plotlocus!(ax::Axis, chromosome::AbstractString, bp::Real, gwas::DataFrame; wind
     plotlocus!(ax, chromosome, bp - window, bp + window, gwas; kwargs...)
 
 """
-    plotlocus!(ax::Axis, gene::AbstractString, gwas::DataFrame, gencode::DataFrame; window, colorld, ref, snp, ymax, title)
+    plotlocus!(ax::Axis, gene::AbstractString, gwas::DataFrame, gencode::DataFrame; window::Real, kwargs...)
 
 Plot `gwas` results within a certain window around `gene`. The default window is 1 Mb.
 """
 function plotlocus!(ax::Axis, gene::AbstractString, gwas::DataFrame, gencode::DataFrame; window::Real = 1e6, kwargs...)
-    ind = findfirst(isequal(gene), gencode.gene_name)
-    plotlocus!(ax, gencode.seqnames[ind], gencode.start[ind] - window, gencode[ind, :end] + window, gwas; kwargs...)
+    chr, start, stop = findgene(gene, gencode)
+    plotlocus!(ax, chr, start - window, stop + window, gwas; kwargs...)
 end    

@@ -82,7 +82,7 @@ end
 @time let
     f = Figure(resolution = (306, 792))
     ax = Axis(f[1, 1])
-    rs, chr, range1, range2= GM.plotisoforms!(ax, gene, gencode; height = 0.1)
+    rs, chr, range1, range2 = GM.plotisoforms!(ax, gene, gencode; height = 0.1)
     GM.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
     rowsize!(f.layout, 1, rs)
     resize_to_layout!(f)
@@ -285,6 +285,43 @@ titles = ["Schizophrenia (PGC3)", "Bipolar (Mullins et al. 2021)", "Autism (Grov
 end
 ```
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-locuszoom.png"></p>
+
+```julia
+# Visualize GWAS results for KMT2E locus with the same reference SNPs for LD
+@time let
+    snps = ["rs2252074", "rs11764361", "rs111931861"]
+    n = length(gwas)
+    f = Figure(resolution = (700, 792))
+    axs = [Axis(f[i, j]) for i in 1:(n + 1), j in 1:n]
+    for j in 1:n
+        (chr, bp) = GM.getsnpinfo(snps[j], gwas[j])
+        for i in 1:n
+            GM.plotlocus!(axs[i, j], chr, range1, range2, gwas[i]; colorld = true, ref = kgp, ymax = 18, snp = (chr, bp))
+            rowsize!(f.layout, i, 30)
+            lines!(axs[i, j], [range1, range2], fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
+            Label(f[i, j, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+        end
+        rs = GM.plotgenes!(axs[n + 1, j], chr, range1, range2, gencode; height = 0.1)
+        rowsize!(f.layout, n + 1, rs)
+        GM.labelgenome(f[n + 1, j, Bottom()], chr, range1, range2)
+    end
+    Colorbar(f[1:n, n + 1], limits = (0, 1), ticks = 0:1:1, height = 20,
+        colormap = (:gray60, :red2), label = "LD", ticksize = 0, tickwidth = 0,
+        tickalign = 0, ticklabelsize = 6, flip_vertical_label = true,
+        labelsize = 6, width = 5, spinewidth = 0.5)
+    Label(f[1:n, 0], text = "-log[p]", textsize = 6, rotation = pi / 2)
+    rowgap!(f.layout, 5)
+    colgap!(f.layout, 5)
+    for i in 1:(n + 1), j in 1:n
+        vlines!(axs[i, j], start, color = (:gold, 0.5), linewidth = 0.5)
+        vlines!(axs[i, j], stop, color = (:gold, 0.5), linewidth = 0.5)
+    end
+    resize_to_layout!(f)
+    save("figs/$(gene)-locuszoom-index.png", f, px_per_unit = 4)
+    display("image/png", read("figs/$(gene)-locuszoom-index.png"))
+end
+```
+<p align="center"><img width="100%" style="border-radius: 5px;" src="figs/KMT2E-locuszoom-index.png"></p>
 
 ```julia
 # Visualize Manhattan plot

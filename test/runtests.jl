@@ -77,6 +77,13 @@ using Statistics
 
     f = Figure()
     ax = Axis(f[1, 1])
+    GeneticsMakie.plotgenes!(ax, "6", range1, range2, ("KMT2E", "red"), gencode)
+    save("gene.png", f)
+    @test isfile("gene.png")
+    rm("gene.png")
+
+    f = Figure()
+    ax = Axis(f[1, 1])
     GeneticsMakie.plotgenes!(ax, chr, start, ("KMT2E", "red"), gencode)
     save("gene.png", f)
     @test isfile("gene.png")
@@ -89,7 +96,33 @@ using Statistics
     @test isfile("gene.png")
     rm("gene.png")
 
-    # plotisoforms
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotisoforms!(ax, gene, gencode; orderby = ["ENST00000667857", "ENST00000482560", "Random"])
+    save("isoform.png", f)
+    @test isfile("isoform.png")
+    rm("isoform.png")
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotisoforms!(ax, gene, gencode; text = :l)
+    save("isoform.png", f)
+    @test isfile("isoform.png")
+    rm("isoform.png")
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotisoforms!(ax, gene, gencode; text = :b)
+    save("isoform.png", f)
+    @test isfile("isoform.png")
+    rm("isoform.png")
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotisoforms!(ax, gene, gencode; text = :r)
+    save("isoform.png", f)
+    @test isfile("isoform.png")
+    rm("isoform.png")
 end
 
 @testset "Munging summmary stats" begin
