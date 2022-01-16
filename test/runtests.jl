@@ -129,7 +129,7 @@ end
 
 end
 
-@testset "Plotting GWAS / QQ" begin
+@testset "Plotting GWAS" begin
     gwas = DataFrame(CHR = rand(string.(collect(1:22)), 1000),
         BP = rand(1:1000, 1000),
         P = rand(1000))
@@ -141,13 +141,6 @@ end
     save("manhattan.png", f)
     @test isfile("manhattan.png")
     rm("manhattan.png")
-
-    f = Figure()
-    ax = Axis(f[1, 1])
-    GeneticsMakie.plotqq!(ax, gwas)
-    save("qq.png", f)
-    @test isfile("qq.png")
-    rm("qq.png")
 end
 
 @testset "Plotting LD" begin
@@ -167,38 +160,39 @@ end
 @testset "Plotting LocusZoom" begin
     kgp = SnpData("data/kgp")
     gwas = CSV.read("data/locus.csv", DataFrame)
-
+    gwas.CHR = string.(gwas.CHR)
+    
     f = Figure()
     ax = Axis(f[1, 1])
-    GeneticsMakie.plotlocus!(ax, "7", 104581390, 104755466, gwas)
+    GeneticsMakie.plotlocus!(ax, "7", 103581390, 105755466, gwas)
     save("locuszoom.png", f)
     @test isfile("locuszoom.png")
     rm("locuszoom.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
-    GeneticsMakie.plotlocus!(ax, "7", 104755466, 104581390, gwas)
+    GeneticsMakie.plotlocus!(ax, "7", 105755466, 103581390, gwas)
     save("locuszoom.png", f)
     @test isfile("locuszoom.png")
     rm("locuszoom.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
-    GeneticsMakie.plotlocus!(ax, "7", 104581390, 104755466, gwas; ld = kgp)
+    GeneticsMakie.plotlocus!(ax, "7", 103581390, 105755466, gwas; ld = kgp)
     save("locuszoom.png", f)
     @test isfile("locuszoom.png")
     rm("locuszoom.png")    
 
     f = Figure()
     ax = Axis(f[1, 1])
-    GeneticsMakie.plotlocus!(ax, "7", 104581390, 104755466, gwas; ld = (kgp, "rs11764361"))
+    GeneticsMakie.plotlocus!(ax, "7", 103581390, 105755466, gwas; ld = (kgp, "rs11764361"))
     save("locuszoom.png", f)
     @test isfile("locuszoom.png")
     rm("locuszoom.png")    
 
     f = Figure()
     ax = Axis(f[1, 1])
-    GeneticsMakie.plotlocus!(ax, "7", 104581390, 104755466, gwas; ld = (kgp, "rs111931861"))
+    GeneticsMakie.plotlocus!(ax, "7", 103581390, 105755466, gwas; ld = (kgp, "rs111931861"))
     save("locuszoom.png", f)
     @test isfile("locuszoom.png")
     rm("locuszoom.png")
