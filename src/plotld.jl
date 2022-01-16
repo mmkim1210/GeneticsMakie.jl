@@ -1,7 +1,7 @@
 """
-    plotld!(ax::Axis, LD::AbstractMatrix; color)
+    plotld!(ax::Axis, LD::AbstractMatrix; color::AbstractString)
 
-Visualize a correlation matrix `LD` with the diagonal elements on the x-axis.
+Visualize a symmetric correlation matrix `LD` with the diagonal elements on the x-axis.
 """
 function plotld!(ax::Axis, LD::AbstractMatrix; color::AbstractString = "blue")
     n = size(LD, 1)

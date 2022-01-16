@@ -52,7 +52,7 @@ function calcluateld!(gwas::DataFrame,
 end
 
 """
-    plotlocus!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gwas::DataFrame; colorld, ref, snp, ymax)
+    plotlocus!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gwas::DataFrame; colorld::Bool, ref::Union{Nothing, SnpData}, snp::Union{AbstractString, Tuple{AbstractString, Int}}, ymax::Real)
 
 Plot `gwas` results within a given `chromosome` and genomic range between `range1` 
 and `range2`. Optionally, SNPs can be colored by LD via `colorld` using `ref`.
@@ -126,4 +126,4 @@ Plot `gwas` results within a certain window around `gene`. The default window is
 function plotlocus!(ax::Axis, gene::AbstractString, gwas::DataFrame, gencode::DataFrame; window::Real = 1e6, kwargs...)
     chr, start, stop = findgene(gene, gencode)
     plotlocus!(ax, chr, start - window, stop + window, gwas; kwargs...)
-end    
+end

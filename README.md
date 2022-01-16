@@ -374,7 +374,9 @@ end
     f = Figure(resolution = (612, 792))
     axs = [Axis(f[2, i]) for i in 1:length(titles)]
     for i in eachindex(titles)
-        GM.plotqq!(axs[i], gwas[i]; xlabel = "", ylabel = "", ystep = 5)
+        GM.plotqq!(axs[i], gwas[i]; ystep = 5)
+        axs[i].xlabel = ""
+        axs[i].ylabel = ""
         ylims!(axs[i], 0, 40)
         i > 1 ? hideydecorations!(axs[i]) : nothing
     end

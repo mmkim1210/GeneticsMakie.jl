@@ -1,12 +1,10 @@
 """
-    plotqq!(ax::Axis, p::AbstractVector; xlabel, ylabel, xstep, ystep)
+    plotqq!(ax::Axis, P::AbstractVector; xstep::Real, ystep::Real)
 
-Plot QQ plot of `p` values where the expected distribution is the uniform distribution. 
+Plot QQ plot of `P` values where the expected distribution is the uniform distribution. 
 """
 function plotqq!(ax::Axis,
     P::AbstractVector; 
-    xlabel::AbstractString = "Expected -log[p]",
-    ylabel::AbstractString = "Observed -log[p]",
     xstep::Real = 1,
     ystep::Real = 2)
 
@@ -35,8 +33,8 @@ function plotqq!(ax::Axis,
     ylims!(ax, 0, ymax)
     hidedecorations!(ax, label = false, ticklabels = false, ticks = false)
     ax.aspect = AxisAspect(1)
-    ax.xlabel = xlabel
-    ax.ylabel = ylabel
+    ax.xlabel = "Expected -log[p]"
+    ax.ylabel = "Observed -log[p]"
     ax.xticklabelsize = 6
     ax.yticklabelsize = 6
     ax.xlabelsize = 8

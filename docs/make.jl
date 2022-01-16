@@ -1,5 +1,6 @@
 using GeneticsMakie
 using Documenter
+# using other stuff
 
 DocMeta.setdocmeta!(GeneticsMakie, :DocTestSetup, :(using GeneticsMakie); recursive=true)
 
@@ -15,6 +16,14 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
+        "Examples" =>
+            ["Parsing GENCODE" => "examples/gtf.md",
+            "Munging summary stats" => "examples/summary.md",
+            "Plotting genes" => "examples/genes.md",
+            "Plotting isoforms" => "examples/isoforms.md",
+            "Plotting LocusZoom" => "examples/locus.md",
+            "Plotting GWAS" => "examples/gwas.md",
+            "Plotting TWAS" => "examples/twas.md"],
     ],
 )
 
