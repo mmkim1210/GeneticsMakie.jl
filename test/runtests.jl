@@ -143,6 +143,43 @@ end
 end
 
 @testset "Plotting LocusZoom" begin
+    kgp = SnpData("data/kgp")
+    gwas = CSV.read("data/locus.csv", DataFrame)
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotlocus!(ax, "7", 104581390, 104755466, gwas)
+    save("locuszoom.png", f)
+    @test isfile("locuszoom.png")
+    rm("locuszoom.png")
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotlocus!(ax, "7", 104755466, 104581390, gwas)
+    save("locuszoom.png", f)
+    @test isfile("locuszoom.png")
+    rm("locuszoom.png")
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotlocus!(ax, "7", 104755466, 104581390, gwas; ld = kgp)
+    save("locuszoom.png", f)
+    @test isfile("locuszoom.png")
+    rm("locuszoom.png")    
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotlocus!(ax, "7", 104755466, 104581390, gwas; ld = (kgp, "rs11764361"))
+    save("locuszoom.png", f)
+    @test isfile("locuszoom.png")
+    rm("locuszoom.png")    
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotlocus!(ax, "7", 104755466, 104581390, gwas; ld = (kgp, "rs111931861"))
+    save("locuszoom.png", f)
+    @test isfile("locuszoom.png")
+    rm("locuszoom.png")
 end
 
 @testset "Plotting GWAS" begin
@@ -166,9 +203,6 @@ end
     rm("qq.png")
 end
 
-@testset "Plotting TWAS" begin
-end
-
 @testset "Plotting correlation" begin
     f = Figure()
     ax = Axis(f[1, 1])
@@ -179,4 +213,7 @@ end
     save("cor.png", f)
     @test isfile("cor.png")
     rm("cor.png")
+end
+
+@testset "Plotting TWAS" begin
 end

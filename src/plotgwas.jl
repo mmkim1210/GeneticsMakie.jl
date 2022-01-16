@@ -1,9 +1,9 @@
 """
-    coordinategwas(gwas::Vector{DataFrame}; ymax, freey)
+    coordinategwas(gwas::Vector{DataFrame}; freey::Bool)
 
 Determine shared coordinates for a set of `gwas`.
 """
-function coordinategwas(gwas::Vector{DataFrame}; ymax::Real = 0, freey::Bool = false)
+function coordinategwas(gwas::Vector{DataFrame}; freey::Bool = false)
     df = gwas[1][:, [:CHR, :BP, :P]]
     rename!(df, :P => string("P", 1))    
     for i in 2:length(gwas)
@@ -14,18 +14,17 @@ function coordinategwas(gwas::Vector{DataFrame}; ymax::Real = 0, freey::Bool = f
     for i in 1:length(gwas)
         df[!, string("log10P", i)] = -log.(10, df[!, string("P", i)])
     end
-    if ymax == 0
-        if !freey
-            for i in 1:length(gwas)
-                storage = ceil(maximum(df[!, string("log10P", i)])) + 2.5
-                ymax = max(ymax, storage)
-            end
-            ymaxs = fill(ymax, length(gwas))
-        else
-            ymaxs = Vector{Float64}(undef, length(gwas))
-            for i in 1:length(gwas)
-                ymaxs[i] = ceil(maximum(df[:, string("log10P", i)])) + 2.5
-            end
+    if !freey
+        ymax = 0
+        for i in 1:length(gwas)
+            storage = ceil(maximum(df[!, string("log10P", i)])) + 2.5
+            ymax = max(ymax, storage)
+        end
+        ymaxs = fill(ymax, length(gwas))
+    else
+        ymaxs = Vector{Float64}(undef, length(gwas))
+        for i in 1:length(gwas)
+            ymaxs[i] = ceil(maximum(df[:, string("log10P", i)])) + 2.5
         end
     end
     dforder = DataFrame("CHR" => vcat(string.(1:22), ["X", "Y"]), "rank" => 1:24)
@@ -41,7 +40,7 @@ function coordinategwas(gwas::Vector{DataFrame}; ymax::Real = 0, freey::Bool = f
 end
 
 """
-    plotgwas!(ax::Axis, df::DataFrame, i::Int, ymax::Real, xmax::Real, ticks::DataFrame; xlabel, ylabel, ystep, chr, p, sigline, sigcolor)
+    plotgwas!(ax::Axis, df::DataFrame, i::Int, ymax::Real, xmax::Real, ticks::DataFrame; ystep::Real, sigline::Bool, sigcolor::Bool)
 
 Plot gwas results with coordinates from `coordinategwas`, namely `df` for phenotype `i` with
 x and y limits, `xmax` and `ymax`, respectively. The position of x ticks are determined by `ticks`.
@@ -52,8 +51,6 @@ function plotgwas!(ax::Axis,
     ymax::Real,
     xmax::Real,
     ticks::DataFrame; 
-    xlabel::AbstractString = "Chromosome",
-    ylabel::AbstractString = "-log[p]",
     ystep::Real = 2,
     sigline::Bool = false,
     sigcolor::Bool = true)
@@ -80,8 +77,8 @@ function plotgwas!(ax::Axis,
     hidexdecorations!(ax, label = false, ticklabels = false)
     xticks = ticks.center
     xticklabels = unique(ticks.CHR)
-    ax.xlabel = xlabel
-    ax.ylabel = ylabel
+    ax.xlabel = "Chromosome"
+    ax.ylabel = "-log[p]"
     ax.xticks = (xticks, xticklabels)
     ax.yticks = 0:ystep:ymax
     ax.xticklabelsize = 6

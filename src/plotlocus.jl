@@ -30,7 +30,11 @@ function calcluateld!(gwas::DataFrame,
         gwas.index = fill(snp, n)
         return
     else
-        snp isa AbstractString ? ((chr, bp) = getsnpinfo(snp, ref)) : ((chr, bp) = snp)
+        if snp isa AbstractString 
+            ((chr, bp) = getsnpinfo(snp, ref))
+        else 
+            ((chr, bp) = snp)
+        end
         i = findfirst((gwas.CHR .== chr) .& (gwas.BP .== bp))
         if isnothing(i)
             snp = ""
@@ -63,12 +67,26 @@ function plotlocus!(ax::Axis,
     range1::Real,
     range2::Real,
     gwas::DataFrame;
-    colorld::Bool = false,
-    ref::Union{Nothing, SnpData} = nothing,
-    snp::Union{AbstractString, Tuple{AbstractString, Int}} = "index",
+    ld::Union{Bool, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}} = false,
     ymax::Real = 0)
 
     df = filter(x -> (x.CHR == chromosome) && (x.BP >= range1) && (x.BP <= range2), gwas)
+    if nrow(df) == 0
+        ymax == 0 ? ymax = 10 : nothing
+        yticks = setticks(ymax)
+        ax.spinewidth = 0.75
+        ax.ytickwidth = 0.75
+        ax.ylabelsize = 6
+        ax.yticklabelsize = 6
+        ax.yticksize = 3
+        ax.yticks = setticks(ymax)
+        xlims!(ax, range1, range2)
+        ylims!(ax, 0, ymax)
+        hidespines!(ax, :t, :r)
+        hidexdecorations!(ax)
+        hideydecorations!(ax, ticks = false, label = false, ticklabels = false)
+        return
+    end
     df.P = -log.(10, df.P)
     if ymax == 0
         ymax = maximum(df.P) / 4 * 5
@@ -77,11 +95,11 @@ function plotlocus!(ax::Axis,
     else
         yticks = setticks(ymax)
     end
-    if colorld
-        snp == "index" ? calcluateld!(df, ref) : calcluateld!(df, ref; snp = snp)
+    if ld != false
+        typeof(ld) == SnpData ? calcluateld!(df, ld) : calcluateld!(df, ld[1]; snp = ld[2])
         scatter!(ax, df.BP, df.P, color = df.LD, colorrange = (0, 1),
             colormap = (:gray60, :red2), markersize = 1.5)
-        if snp == "index"
+        if typeof(ld) == SnpData
             ind = argmax(df.P)
             bp = df.BP[ind]
             p = df.P[ind]

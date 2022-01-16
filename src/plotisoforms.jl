@@ -10,6 +10,7 @@ function coordinateisforms(gene::AbstractString,
     text::Union{Bool, Symbol})
 
     df = filter(x -> x.gene_name == gene, gencode)
+    nrow(df) == 0 ? error("Cannot find $(gene) in the annotation.") : nothing
     dfi = view(df, df.feature .== "transcript", :)
     dfe = view(df, df.feature .== "exon", :)
     chromosome = df.seqnames[1]

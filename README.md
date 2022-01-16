@@ -260,7 +260,7 @@ titles = ["Schizophrenia (PGC3)", "Bipolar (Mullins et al. 2021)", "Autism (Grov
     f = Figure(resolution = (306, 792))
     axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
     for i in 1:n
-        GM.plotlocus!(axs[i], chr, range1, range2, gwas[i]; colorld = true, ref = kgp, ymax = 18)
+        GM.plotlocus!(axs[i], chr, range1, range2, gwas[i]; ld = kgp, ymax = 18)
         rowsize!(f.layout, i, 30)
         lines!(axs[i], [range1, range2], fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
         Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
@@ -296,7 +296,7 @@ end
     for j in 1:n
         (chr, bp) = GM.getsnpinfo(snps[j], gwas[j])
         for i in 1:n
-            GM.plotlocus!(axs[i, j], chr, range1, range2, gwas[i]; colorld = true, ref = kgp, ymax = 18, snp = (chr, bp))
+            GM.plotlocus!(axs[i, j], chr, range1, range2, gwas[i]; ld = (kgp, (chr, bp)), ymax = 18)
             rowsize!(f.layout, i, 30)
             lines!(axs[i, j], [range1, range2], fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
             Label(f[i, j, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
@@ -330,11 +330,11 @@ end
     axs = [Axis(f[i, 1]) for i in 1:length(titles)]
     coord, ymaxs, xmax, ticks = GM.coordinategwas(gwas) # set up coordinates
     for i in eachindex(titles)
-        GM.plotgwas!(axs[i], coord, i, ymaxs[i], xmax, ticks; xlabel = "", ystep = 10)
+        GM.plotgwas!(axs[i], coord, i, ymaxs[i], xmax, ticks; ystep = 10)
         hidespines!(axs[i], :t, :r)
         Label(f[i, 1, Top()], text = "$(titles[i])", textsize = 8)
         rowsize!(f.layout, i, 50)
-        i == length(titles) ? axs[i].xlabel = "Chromosome" : nothing
+        i == length(titles) ? axs[i].xlabel = "Chromosome" : axs[i].xlabel = ""
     end
     rowgap!(f.layout, 10)
     resize_to_layout!(f)
@@ -351,7 +351,8 @@ end
     axs = [Axis(f[i, 1]) for i in 1:2]
     coord, ymaxs, xmax, ticks = GM.coordinategwas(gwas[1:2])
     for i in 1:2
-        GM.plotgwas!(axs[i], coord, i, ymaxs[i], xmax, ticks; xlabel = "", ystep = 10)
+        GM.plotgwas!(axs[i], coord, i, ymaxs[i], xmax, ticks; ystep = 10)
+        axs[i].xlabel = ""
         rowsize!(f.layout, i, 50)
     end
     hidexdecorations!(axs[2])

@@ -283,7 +283,7 @@ findclosestgene(df::DataFrame, gencode::DataFrame; kwargs...) = findclosestgene(
 
 function getsnpinfo(snp::AbstractString, SNP::AbstractVector, CHR::AbstractVector, BP::AbstractVector)
     ind = findfirst(isequal(snp), SNP)
-    return CHR[ind], BP[ind]
+    isnothing(ind) ? nothing : (CHR[ind], BP[ind])
 end
 
 getsnpinfo(snp::AbstractString, df::DataFrame) = getsnpinfo(snp, df.SNP, df.CHR, df.BP)
