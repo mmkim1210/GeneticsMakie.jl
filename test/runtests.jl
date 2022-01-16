@@ -126,6 +126,28 @@ using Statistics
 end
 
 @testset "Munging summmary stats" begin
+
+end
+
+@testset "Plotting GWAS / QQ" begin
+    gwas = DataFrame(CHR = rand(string.(collect(1:22)), 1000),
+        BP = rand(1:1000, 1000),
+        P = rand(1000))
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    coord, ymaxs, xmax, ticks = GeneticsMakie.coordinategwas([gwas])
+    GeneticsMakie.plotgwas!(ax, coord, 1, ymaxs[1], xmax, ticks)
+    save("manhattan.png", f)
+    @test isfile("manhattan.png")
+    rm("manhattan.png")
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotqq!(ax, gwas)
+    save("qq.png", f)
+    @test isfile("qq.png")
+    rm("qq.png")
 end
 
 @testset "Plotting LD" begin
@@ -162,27 +184,24 @@ end
 
     f = Figure()
     ax = Axis(f[1, 1])
-    GeneticsMakie.plotlocus!(ax, "7", 104755466, 104581390, gwas; ld = kgp)
+    GeneticsMakie.plotlocus!(ax, "7", 104581390, 104755466, gwas; ld = kgp)
     save("locuszoom.png", f)
     @test isfile("locuszoom.png")
     rm("locuszoom.png")    
 
     f = Figure()
     ax = Axis(f[1, 1])
-    GeneticsMakie.plotlocus!(ax, "7", 104755466, 104581390, gwas; ld = (kgp, "rs11764361"))
+    GeneticsMakie.plotlocus!(ax, "7", 104581390, 104755466, gwas; ld = (kgp, "rs11764361"))
     save("locuszoom.png", f)
     @test isfile("locuszoom.png")
     rm("locuszoom.png")    
 
     f = Figure()
     ax = Axis(f[1, 1])
-    GeneticsMakie.plotlocus!(ax, "7", 104755466, 104581390, gwas; ld = (kgp, "rs111931861"))
+    GeneticsMakie.plotlocus!(ax, "7", 104581390, 104755466, gwas; ld = (kgp, "rs111931861"))
     save("locuszoom.png", f)
     @test isfile("locuszoom.png")
     rm("locuszoom.png")
-end
-
-@testset "Plotting GWAS" begin
 end
 
 @testset "Plotting QQ plot" begin
