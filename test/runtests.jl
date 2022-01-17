@@ -126,7 +126,24 @@ using Statistics
 end
 
 @testset "Munging summmary stats" begin
+    gwas = CSV.read("data/sumstats.csv", DataFrame)
+    GeneticsMakie.mungesumstats!(gwas)
+    @test ncol(gwas) == 7
 
+    gwas = CSV.read("data/sumstats.csv", DataFrame)
+    select!(gwas, Not("BETA"))
+    GeneticsMakie.mungesumstats!(gwas)
+    @test ncol(gwas) == 6
+
+    gwas = CSV.read("data/sumstats.csv", DataFrame)
+    select!(gwas, "#CHROM", :POS, :PVAL)
+    GeneticsMakie.mungesumstats!(gwas)
+    @test ncol(gwas) == 4
+
+    df = GeneticsMakie.findgwasloci(gwas)
+    @test nrow(df) == 1
+    df = GeneticsMakie.findgwasloci([gwas, gwas])
+    @test nrow(df) == 1
 end
 
 @testset "Plotting GWAS" begin

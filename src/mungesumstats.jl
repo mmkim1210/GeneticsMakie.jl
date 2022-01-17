@@ -77,12 +77,12 @@ end
 
 function mungesnpid!(gwas::DataFrame)
     if !("SNP" in names(gwas))
-        gwas.SNP = string.(gwas.CHR, ":", gwas.BP, ":", gwas.A1, ":", gwas.A2)
+        gwas.SNP = string.(gwas.CHR, ":", gwas.BP)
     end
     if any(ismissing.(gwas.SNP))
         ind = ismissing.(gwas.SNP)
         gwas.SNP = string.(gwas.SNP)
-        gwas.SNP[ind] = string.(gwas.CHR[ind], ":", gwas.BP[ind], ":", gwas.A1[ind], ":", gwas.A2[ind])
+        gwas.SNP[ind] = string.(gwas.CHR[ind], ":", gwas.BP[ind])
     end
 end
 
@@ -135,6 +135,8 @@ function mungezscore!(gwas::DataFrame)
                 gwas.Z[i] = -sqrt(cquantile(Chisq(1), gwas.P[i]))
             end
         end
+    else
+        return
     end
 end 
 
@@ -149,10 +151,24 @@ function mungesumstats!(gwas::Vector{DataFrame})
         mungesnpid!(gwas[i])
         dropmissing!(gwas[i])
         mungetypes!(gwas[i])
-        mungealleles!(gwas[i])
+        if "A1" in names(gwas[i]) && "A2" in names(gwas[i])
+            mungealleles!(gwas[i])
+        end
         mungezscore!(gwas[i])
         mungepvalue!(gwas[i])
-        select!(gwas[i], :SNP, :CHR, :BP, :A1, :A2, :Z, :P)
+        if "A1" in names(gwas[i]) && "A2" in names(gwas[i])
+            if "Z" in names(gwas[i])
+                select!(gwas[i], :SNP, :CHR, :BP, :A1, :A2, :Z, :P)
+            else
+                select!(gwas[i], :SNP, :CHR, :BP, :A1, :A2, :P)
+            end
+        else
+            if "Z" in names(gwas[i])
+                select!(gwas[i], :SNP, :CHR, :BP, :Z, :P)
+            else
+                select!(gwas[i], :SNP, :CHR, :BP, :P)
+            end
+        end
     end
 end
 
