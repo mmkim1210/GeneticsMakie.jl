@@ -18,7 +18,7 @@ makedocs(;
         "Home" => "index.md",
         "Examples" =>
             ["Parsing GENCODE" => "examples/gtf.md",
-            "Munging summary stats" => "examples/summary.md",
+            "Munging summary statistics" => "examples/summary.md",
             "Plotting genes" => "examples/genes.md",
             "Plotting isoforms" => "examples/isoforms.md",
             "Plotting LocusZoom" => "examples/locus.md",
