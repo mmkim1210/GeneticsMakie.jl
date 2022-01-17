@@ -56,11 +56,11 @@ function calcluateld!(gwas::DataFrame,
 end
 
 """
-    plotlocus!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gwas::DataFrame; colorld::Bool, ref::Union{Nothing, SnpData}, snp::Union{AbstractString, Tuple{AbstractString, Int}}, ymax::Real)
+    plotlocus!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gwas::DataFrame; ld::Union{Bool, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}}, ymax::Real)
 
 Plot `gwas` results within a given `chromosome` and genomic range between `range1` 
-and `range2`. Optionally, SNPs can be colored by LD via `colorld` using `ref`.
-The default SNP for which LD is calculated is index SNP, which can be changed to `snp`.
+and `range2`. Optionally, SNPs can be colored by LD via `ld`.
+The default SNP for which LD is calculated is index SNP.
 """
 function plotlocus!(ax::Axis,
     chromosome::AbstractString,
