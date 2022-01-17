@@ -7,8 +7,8 @@
 
 ## Installation
 ```julia
-julia>]
-pkg> add https://github.com/mmkim1210/GeneticsMakie.jl.git
+julia> ]
+pkg> add GeneticsMakie
 ```
 
 ## Examples
