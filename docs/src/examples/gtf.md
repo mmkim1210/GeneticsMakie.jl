@@ -35,7 +35,7 @@ GeneticsMakie.parsegtf!(gencode)
 ```
 
 !!! info "Chromosome names"
-    Chromosome names are munged to not contain “chr” prefix, and their type is a `String`,
+    Chromosome names are munged to not contain “chr” prefix, and their type is `String`,
     since there could be non-numerical chromosome names, such as sex chromosomes and mitochondrial genome.
 
 To reduce memory intake, we can also subset `gencode` to most commonly used columns
