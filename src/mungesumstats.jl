@@ -174,7 +174,7 @@ end
 
 mungesumstats!(gwas::DataFrame) = mungesumstats!([gwas])
 
-function findgwasloci(gwas::DataFrame; p = 5e-8)
+function findgwasloci(gwas::DataFrame; p::Real = 5e-8)
     loci = DataFrame(CHR = String[], BP = Int[], P = Float64[])
     df = gwas[findall(x -> x < p, gwas.P), [:CHR, :BP, :P]]
     while nrow(df) > 0
@@ -246,7 +246,7 @@ function findmissing(ind::Matrix{Union{Missing, Int}})
     return storage
 end
 
-function findclosestgene(chr::AbstractString, bp::Real, gencode::DataFrame; start = false, proteincoding = false)
+function findclosestgene(chr::AbstractString, bp::Real, gencode::DataFrame; start::Bool = false, proteincoding::Bool = false)
     if proteincoding
         df = filter(x -> (x.seqnames == chr) && (x.feature == "gene") && (x.gene_type == "protein_coding"), gencode)
     else
