@@ -11,7 +11,7 @@ The package provides convenient wrapper functions for wrangling genetic associat
 plotting them using [__Makie.jl__](https://makie.juliaplots.org/stable/). Every component of a figure 
 can be easily customized and extended, and the package generates high-quality, publication-ready figures. 
 
-!["mhc"](../figs/mhc.png)
+!["mhc"](figs/mhc.png)
 
 !!! tip "Getting started"
     Please peruse the documentations of 
