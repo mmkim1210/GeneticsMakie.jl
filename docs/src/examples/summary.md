@@ -17,7 +17,8 @@ for key in keys(gwas)
 end
 ```
 
-To harmonize summary statistics, we run a single command.
+To harmonize summary statistics, we run a single command. For all downstream plotting 
+functions, we note that GWAS summary statistics should be pre-harmonized.
 ```julia
 GeneticsMakie.mungesumstats!(df)
 ```
