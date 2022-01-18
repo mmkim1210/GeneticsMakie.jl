@@ -20,7 +20,12 @@ function coordinateisforms(gene::AbstractString,
     bs = Matrix{Float64}(undef, n, 2)
     rows = collect(1:n)
     if !isnothing(orderby)
-        prior = filter(in(orderby), isoforms)
+        prior = []
+        for k in 1:length(orderby)
+            if any(isoforms .== orderby[k])
+                push!(prior, orderby[k])
+            end
+        end
         if length(prior) > 0
             dforder = DataFrame(transcript_id = [prior; filter(!in(orderby), isoforms)], rank = 1:n)
             dfi = leftjoin(dfi, dforder; on = :transcript_id)

@@ -24,7 +24,7 @@ rowsize!(f.layout, 1, rs)
 resize_to_layout!(f)
 f
 ```
-!["cacna1g"](../figs/CACNA1G-gene.png)
+![](../figs/CACNA1G-gene.png)
 Here, `GeneticsMakie.plotgenes!` plots all genes within a given `chr` and ± 100 Kb window around
 `gene` `start` and `stop` sites. `GeneticsMakie.labelgenome` then labels the genomic range.
 
@@ -37,7 +37,7 @@ rowsize!(f.layout, 1, rs)
 resize_to_layout!(f)
 f
 ```
-!["cacna1g"](../figs/CACNA1G-gene-height0.1.png)
+![](../figs/CACNA1G-gene-height0.1.png)
 We can adjust the height of exons using the `height` keyword argument.
 
 ```julia
@@ -49,7 +49,7 @@ rowsize!(f.layout, 1, rs)
 resize_to_layout!(f)
 f
 ```
-!["cacna1g"](../figs/CACNA1G-gene-height0.1-color.png)
+![](../figs/CACNA1G-gene-height0.1-color.png)
 We can change the color of genes and text using the `genecolor` and `textcolor` keyword arguments, respectively.
 
 ```julia
@@ -61,7 +61,7 @@ rowsize!(f.layout, 1, rs)
 resize_to_layout!(f)
 f
 ```
-!["cacna1g"](../figs/CACNA1G-gene2.png)
+![](../figs/CACNA1G-gene2.png)
 Alternatively, we can visualize this locus by passing `gene` as a positional argument and 
 `window` as a keyword argument.
 
@@ -74,7 +74,7 @@ rowsize!(f.layout, 1, rs)
 resize_to_layout!(f)
 f
 ```
-!["cacna1g"](../figs/CACNA1G-gene3.png)
+![](../figs/CACNA1G-gene3.png)
 There is no limit to the number of genes we can visualize. Here, we visualize a larger 
 ± 2 Mb window around `gene`.
 
@@ -91,7 +91,7 @@ rowsize!(f.layout, 1, rs)
 resize_to_layout!(f)
 f
 ```
-!["cacna1g"](../figs/CACNA1G-gene-highlight.png)
+![](../figs/CACNA1G-gene-highlight.png)
 
 ```julia
 f = Figure(resolution = (306, 792))
@@ -102,7 +102,7 @@ rowsize!(f.layout, 1, rs)
 resize_to_layout!(f)
 f
 ```
-!["cacna1g"](../figs/CACNA1G-gene-highlights.png)
+![](../figs/CACNA1G-gene-highlights.png)
 We can highlight a gene or sets of genes as above. This can be useful when highlighting genes 
 by certain characteristics such as those that are protein coding and those that are 
 [loss-of-function intolerant](https://gnomad.broadinstitute.org/). 
@@ -118,6 +118,6 @@ vlines!(ax, start, color = (:gold, 0.5), linewidth = 0.5)
 vlines!(ax, stop, color = (:gold, 0.5), linewidth = 0.5)
 f
 ```
-!["cacna1g"](../figs/CACNA1G-gene-line.png)
+![](../figs/CACNA1G-gene-line.png)
 Finally, we can make additional modifications on top of the figure as needed using
 [__Makie.jl__](https://makie.juliaplots.org/stable/).
