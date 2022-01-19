@@ -13,6 +13,7 @@ makedocs(;
         prettyurls=get(ENV, "CI", "false") == "true",
         canonical="https://mmkim1210.github.io/GeneticsMakie.jl",
         assets=String[],
+        sidebar_sitename = false,
     ),
     pages=[
         "Home" => "index.md",

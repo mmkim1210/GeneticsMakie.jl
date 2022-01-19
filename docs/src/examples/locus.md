@@ -46,6 +46,11 @@ read in PLINK bed files. If not, we can download one as below. For the time bein
 we only download and convert a single chromosome. 
 
 ```julia
+using Pkg
+Pkg.add("SnpArrays")
+```
+
+```julia
 using SnpArrays
 # Download 1000 Genomes data for a single chromosome
 beagle = "http://bochet.gcc.biostat.washington.edu/beagle/1000_Genomes_phase3_v5a"
@@ -140,7 +145,7 @@ the variants could be colored or have varying sizes depending on their minor all
 In another example, the variants could be colored based on their inclusion in a 
 credible set post-fine-mapping.
 
-!!! note "Plotting the intersection of SNPs, not union"
+!!! note "Plotting the intersection of SNPs, not the union"
     `GeneticsMakie.plotlocus!` plots only the variants that are present in the reference panel, 
     when the `ld` keyword argument is specified. Although SNPs that are missing in the
     reference panel could be plotted differently (e.g. with varying transparency and shape),

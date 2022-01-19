@@ -104,7 +104,7 @@ f
 ```
 ![](../figs/CACNA1G-gene-highlights.png)
 We can highlight a gene or sets of genes as above. This can be useful when highlighting genes 
-by certain characteristics such as those that are protein coding and those that are 
+by certain properties such as those that are protein coding or those that are 
 [loss-of-function intolerant](https://gnomad.broadinstitute.org/). 
 
 ```julia

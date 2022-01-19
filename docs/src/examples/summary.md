@@ -12,7 +12,7 @@ isdir("data/gwas") || mkdir("data/gwas")
 df = DataFrame[]
 for key in keys(gwas)
     url = gwas[key]
-    isfile("data/gwas/$(file)") || download(url, "data/gwas/$(basename(url))")
+    isfile("data/gwas/$(basename(url))") || download(url, "data/gwas/$(basename(url))")
     push!(df, CSV.read("data/gwas/$(basename(url))", DataFrame; comment = "##", missingstring = ["NA"]))
 end
 ```
