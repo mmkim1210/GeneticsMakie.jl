@@ -405,3 +405,6 @@ Colocalization of GWAS signals:
 <p align="center"><img width="90%" style="border-radius: 5px;" src="figs/coloc.png"></p>
 Association results across multiple phenotypes:
 <p align="center"><img width="100%" style="border-radius: 5px;" src="figs/KMT2E-phewas.png"></p>
+MHC association for schizophrenia with increasing sample size:
+<p align="center"><img width="100%" style="border-radius: 5px;" src="figs/C4A-locuszoom1.png"></p>
+<p align="center"><img width="100%" style="border-radius: 5px;" src="figs/C4A-locuszoom2.png"></p>
