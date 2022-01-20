@@ -61,7 +61,7 @@ isfile("data/1kg/$(vcf)") || download(url, "data/1kg/$(vcf)")
 # Convert vcf file to plink bed file (this step takes a while)
 isfile("data/1kg/$(replace(vcf, ".vcf.gz" => ".bed"))") || vcf2plink("data/1kg/$(vcf)", "data/1kg/$(replace(vcf, ".vcf.gz" => ""))")
 # Download sample metadata
-url = joinpath(beagle, "/sample_info/integrated_call_samples_v3.20130502.ALL.panel")
+url = joinpath(beagle, "sample_info/integrated_call_samples_v3.20130502.ALL.panel")
 meta = basename(url) 
 isfile("data/1kg/$(meta)") || download(url, "data/1kg/$(meta)")
 # Subset data to the genomic region of interest and European samples

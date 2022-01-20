@@ -97,10 +97,10 @@ end
 @time let
     f = Figure(resolution = (612, 792))
     axs = [Axis(f[i, 1]) for i in 1:2]
-    rs, _, range1, _ = GM.plotisoforms!(axs[1], gene, gencode; height = 0.1, genecolor = "#4062D8")
+    rs, _, range1, _ = GM.plotisoforms!(axs[1], gene, gencode; height = 0.1, isoformcolor = "#4062D8")
     rowsize!(f.layout, 1, rs)
     hidespines!(axs[1], :b)
-    rs, _, _, range2 = GM.plotisoforms!(axs[2], "SRPK2", gencode; height = 0.1, genecolor = "#CB3C33")
+    rs, _, _, range2 = GM.plotisoforms!(axs[2], "SRPK2", gencode; height = 0.1, isoformcolor = "#CB3C33")
     rowsize!(f.layout, 2, rs)
     hidespines!(axs[2], :t)
     xlims!(axs[1], range1 - 0.5e4, range2 - 1e4)
@@ -119,7 +119,7 @@ end
 @time let
     f = Figure(resolution = (306, 792))
     axs = [Axis(f[1, i]) for i in 1:2]
-    rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(axs[1], gene, gencode; height = 0.1, textpos = :left)
+    rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(axs[1], gene, gencode; height = 0.1, text = :left)
     hidespines!(axs[1])
     rowsize!(f.layout, 1, rs)
     # Generate random single-cell expression levels
@@ -166,7 +166,7 @@ kgp = let
     # Convert vcf file to plink bed file (this step takes a while)
     isfile("data/1kg/$(replace(vcf, ".vcf.gz" => ".bed"))") || vcf2plink("data/1kg/$(vcf)", "data/1kg/$(replace(vcf, ".vcf.gz" => ""))")
     # Download sample metadata
-    url = joinpath(beagle, "/sample_info/integrated_call_samples_v3.20130502.ALL.panel")
+    url = joinpath(beagle, "sample_info/integrated_call_samples_v3.20130502.ALL.panel")
     meta = basename(url) 
     isfile("data/1kg/$(meta)") || download(url, "data/1kg/$(meta)")
     # Subset data to the genomic region of interest and European samples
