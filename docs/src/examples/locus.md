@@ -2,8 +2,8 @@
 
 After [Parsing GENCODE](@ref) and [Munging summary statistics](@ref),
 we can now put the pieces together to draw the backbone of a LocusZoom plot. 
-We can focus on _JAZF1_ locus as our initial example. `GeneticsMakie.plotlocus!` returns 
-a straightforward scatter plot by default.
+We can focus on _JAZF1_ locus as an example, which reaches strong genome-wide significance
+in GWAS for height. By default, `GeneticsMakie.plotlocus!` returns a straightforward scatter plot.
 
 ```julia
 gene = "JAZF1"
@@ -152,5 +152,5 @@ credible set post-fine-mapping.
     reference panel could be plotted differently (e.g. with varying transparency and shape),
     [__GeneticsMakie.jl__](https://github.com/mmkim1210/GeneticsMakie.jl) is designed to
     visualize 100s of phenotypes simultaneously in which case such discrepancy is hard to tell and 
-    becomes confusing. Hence, for more direct comparison of loci across phenotypes, 
+    is confusing. Hence, for more direct comparison of loci across phenotypes, 
     only the variants that are found in the reference panel are shown.

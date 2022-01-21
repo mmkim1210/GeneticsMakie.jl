@@ -32,6 +32,7 @@ f
 ![](../figs/NRXN1-isoform-left.png)
 
 We can change the color of isoforms and text using the `isoformcolor` and `textcolor` keyword arguments, respectively.
+We look at a different gene, _GRIN2A_.
 
 ```julia
 gene = "GRIN2A"
