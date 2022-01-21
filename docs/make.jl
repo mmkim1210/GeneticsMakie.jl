@@ -25,6 +25,7 @@ makedocs(;
             "Plotting LocusZoom" => "examples/locus.md",
             "Plotting GWAS" => "examples/gwas.md",
             "Plotting TWAS" => "examples/twas.md"],
+        "API" => "api.md",
     ],
 )
 

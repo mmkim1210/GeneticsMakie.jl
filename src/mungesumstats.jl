@@ -145,6 +145,13 @@ function mungepvalue!(gwas::DataFrame)
     gwas.P = clamp.(gwas.P, floatmin(0.0), 1)
 end
 
+"""
+    mungesumstats!(gwas::Vector{DataFrame})
+
+Munge multiple `gwas` by harmonizing names of columns, their types, and P values, among others.
+The output contains at least four columns: `SNP`, `CHR`, `BP`, and `P` corresponding to 
+SNP ID's, chromosome, base pair, and P values.
+"""
 function mungesumstats!(gwas::Vector{DataFrame})
     for i in eachindex(gwas)
         mungenames!(gwas[i])
@@ -172,8 +179,17 @@ function mungesumstats!(gwas::Vector{DataFrame})
     end
 end
 
+"""
+    mungesumstats!(gwas::DataFrame)
+"""
 mungesumstats!(gwas::DataFrame) = mungesumstats!([gwas])
 
+"""
+    findgwasloci(gwas::DataFrame; p::Real)
+
+Find genome-wide significant loci for `gwas` based on `p` threshold that is separated from each
+other by at least 1 Mb. The default `p` is 5e-8.
+"""
 function findgwasloci(gwas::DataFrame; p::Real = 5e-8)
     loci = DataFrame(CHR = String[], BP = Int[], P = Float64[])
     df = gwas[findall(x -> x < p, gwas.P), [:CHR, :BP, :P]]
@@ -186,6 +202,12 @@ function findgwasloci(gwas::DataFrame; p::Real = 5e-8)
     return loci
 end
 
+"""
+    findgwasloci(gwas::Vector{DataFrame}; p::Real)
+
+Find genome-wide significant loci across multiple `gwas` based on `p` threshold that 
+is separated from each other by at least 1 Mb. The default `p` is 5e-8.
+"""
 function findgwasloci(gwas::Vector{DataFrame}; kwargs...)
     loci = Vector{DataFrame}(undef, length(gwas))
     for i in eachindex(gwas)
@@ -246,6 +268,13 @@ function findmissing(ind::Matrix{Union{Missing, Int}})
     return storage
 end
 
+"""
+    findclosestgene(chr::AbstractString, bp::Real, gencode::DataFrame; start::Bool, proteincoding::Bool)
+
+Find the closest gene to a genomic coordinate with `chr` and `bp` using `gencode`. 
+Optionally, the closest gene can be defined from the gene start site considering the strand using `start`,
+and only protein coding genes can be considred using `proteincoding`. The default `start` and `proteincoding` are `false`.
+"""
 function findclosestgene(chr::AbstractString, bp::Real, gencode::DataFrame; start::Bool = false, proteincoding::Bool = false)
     if proteincoding
         df = filter(x -> (x.seqnames == chr) && (x.feature == "gene") && (x.gene_type == "protein_coding"), gencode)
@@ -295,6 +324,13 @@ function findclosestgene(CHR::AbstractVector, BP::AbstractVector, gencode::DataF
     return storage
 end
 
+"""
+    findclosestgene(df::DataFrame, gencode::DataFrame; kwargs...)
+
+Find the closest genes to each SNP in `df` using `gencode`. Optionally, the closest gene can be defined from 
+the gene start site considering the strand using `start`, and only protein coding genes can be considred 
+using `proteincoding`. The default `start` and `proteincoding` are `false`.
+"""
 findclosestgene(df::DataFrame, gencode::DataFrame; kwargs...) = findclosestgene(df.CHR, df.BP, gencode; kwargs...)
 
 function getsnpinfo(snp::AbstractString, SNP::AbstractVector, CHR::AbstractVector, BP::AbstractVector)

@@ -9,6 +9,10 @@ using Pkg
 Pkg.add("CairoMakie")
 ```
 
+We can focus on _CACNA1G_ gene as our initial example. We can use `GeneticsMakie.plotgenes!` 
+to plot all genes within a given `chr` and ± 100 Kb window around `gene` `start` and `stop` sites. 
+We can then use `GeneticsMakie.labelgenome` to label the genomic range.
+
 ```julia
 using CairoMakie
 isdir("figs") || mkdir("figs")
@@ -25,9 +29,12 @@ resize_to_layout!(f)
 f
 ```
 ![](../figs/CACNA1G-gene.png)
-Here, `GeneticsMakie.plotgenes!` plots all genes within a given `chr` and ± 100 Kb window around
-`gene` `start` and `stop` sites. `GeneticsMakie.labelgenome` then labels the genomic range.
 
+```@docs
+plotgenes!
+```
+
+We can adjust the height of exons using the `height` keyword argument.
 ```julia
 f = Figure(resolution = (306, 792))
 ax = Axis(f[1, 1])
@@ -38,8 +45,8 @@ resize_to_layout!(f)
 f
 ```
 ![](../figs/CACNA1G-gene-height0.1.png)
-We can adjust the height of exons using the `height` keyword argument.
 
+We can change the color of genes and text using the `genecolor` and `textcolor` keyword arguments, respectively.
 ```julia
 f = Figure(resolution = (306, 792))
 ax = Axis(f[1, 1])
@@ -50,8 +57,9 @@ resize_to_layout!(f)
 f
 ```
 ![](../figs/CACNA1G-gene-height0.1-color.png)
-We can change the color of genes and text using the `genecolor` and `textcolor` keyword arguments, respectively.
 
+Alternatively, we can visualize this locus by passing `gene` as a positional argument and 
+`window` as a keyword argument.
 ```julia
 f = Figure(resolution = (306, 792))
 ax = Axis(f[1, 1])
@@ -62,9 +70,9 @@ resize_to_layout!(f)
 f
 ```
 ![](../figs/CACNA1G-gene2.png)
-Alternatively, we can visualize this locus by passing `gene` as a positional argument and 
-`window` as a keyword argument.
 
+There is no limit to the number of genes we can visualize. Below we visualize a larger 
+± 2 Mb window around `gene`.
 ```julia
 f = Figure(resolution = (306, 792))
 ax = Axis(f[1, 1])
@@ -75,12 +83,15 @@ resize_to_layout!(f)
 f
 ```
 ![](../figs/CACNA1G-gene3.png)
-There is no limit to the number of genes we can visualize. Here, we visualize a larger 
-± 2 Mb window around `gene`.
 
 !!! note "Gene density"
     As some regions have higher gene density than the others, it would be wise (for
     publication purpose) to visualize a smaller genomic window for such gene-dense regions.
+
+We can highlight a gene or sets of genes as below. This can be useful when highlighting genes 
+by certain properties such as those that are protein coding or those that are 
+[loss-of-function intolerant](https://gnomad.broadinstitute.org/) or those that are 
+significant in some sort of gene-level association. 
 
 ```julia
 f = Figure(resolution = (306, 792))
@@ -103,9 +114,9 @@ resize_to_layout!(f)
 f
 ```
 ![](../figs/CACNA1G-gene-highlights.png)
-We can highlight a gene or sets of genes as above. This can be useful when highlighting genes 
-by certain properties such as those that are protein coding or those that are 
-[loss-of-function intolerant](https://gnomad.broadinstitute.org/). 
+
+Finally, we can make additional modifications on top of the figure as needed using
+[__Makie.jl__](https://makie.juliaplots.org/stable/).
 
 ```julia
 f = Figure(resolution = (306, 792))
@@ -119,5 +130,3 @@ vlines!(ax, stop, color = (:gold, 0.5), linewidth = 0.5)
 f
 ```
 ![](../figs/CACNA1G-gene-line.png)
-Finally, we can make additional modifications on top of the figure as needed using
-[__Makie.jl__](https://makie.juliaplots.org/stable/).

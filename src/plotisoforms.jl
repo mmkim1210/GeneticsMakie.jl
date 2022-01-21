@@ -69,7 +69,7 @@ end
 """
     plotisoforms!(ax::Axis, gene::AbstractString, gencode::DataFrame; orderby::Union{Nothing, AbstractVector{<:AbstractString}}, height::Real, isoformcolor, textcolor, text::Union{Bool, Symbol})
 
-Plot each isoform of a given `gene` in a separate row. Optionally, order of
+Plot each isoform of a given `gene` in a separate row. Optionally, the order of
 isoforms can be changed by `orderby`, height of exons can be adjusted using
 `height`, and color of isoforms or isoform names adjusted using `isoformcolor` and `textcolor`,
 respectively. The position of text label of isoforms can be specified using `text`.

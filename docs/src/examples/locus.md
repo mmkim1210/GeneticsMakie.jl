@@ -2,6 +2,8 @@
 
 After [Parsing GENCODE](@ref) and [Munging summary statistics](@ref),
 we can now put the pieces together to draw the backbone of a LocusZoom plot. 
+We can focus on _JAZF1_ locus as our initial example. `GeneticsMakie.plotlocus!` returns 
+a straightforward scatter plot by default.
 
 ```julia
 gene = "JAZF1"
@@ -38,12 +40,14 @@ f
 ```
 ![](../figs/JAZF1-locuszoom.png)
 
-`GeneticsMakie.plotlocus!` returns a straightforward scatter plot by default.
+```@docs
+plotlocus!
+```
 
 To color variants by linkage disequilibrium (LD), we need a reference panel. If we already have
 one, we can use [__SnpArrays.jl__](https://openmendel.github.io/SnpArrays.jl/latest/) to
 read in PLINK bed files. If not, we can download one as below. For the time being, 
-we only download and convert a single chromosome. 
+we only download and convert a single chromosome from the 1000 Genomes Project. 
 
 ```julia
 using Pkg
@@ -80,6 +84,8 @@ SnpArrays.filter(kgp, trues(size(kgp)[1]), colinds; des = "data/1kg/$(file)")
 kgp = SnpData("data/1kg/$(file)")
 ```
 
+We can color variants by LD with the index/sentinel SNP by using the `ld` keyword argument.
+
 ```julia
 f = Figure(resolution = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
@@ -108,7 +114,7 @@ f
 ```
 ![](../figs/JAZF1-locuszoom-ld.png)
 
-We can color variants by LD with the index/sentinel SNP by using the `ld` keyword argument.
+We can also color variants by LD with the same SNP by using the `ld` keyword argument.
 
 ```julia
 f = Figure(resolution = (306, 792))
@@ -137,19 +143,18 @@ resize_to_layout!(f)
 f
 ```
 ![](../figs/JAZF1-locuszoom-ld-snp.png)
-We can also color variants by LD with the same SNP by using the `ld` keyword argument.
 
 By using [__Makie.jl__](https://makie.juliaplots.org/stable/)'s layout tools, 
 it becomes easy to draw additional tracks. For example, in a separate track, 
-the variants could be colored or have varying sizes depending on their minor allele frequency. 
+the variants could be colored or could have varying sizes depending on their minor allele frequency. 
 In another example, the variants could be colored based on their inclusion in a 
 credible set post-fine-mapping.
 
 !!! note "Plotting the intersection of SNPs, not the union"
     `GeneticsMakie.plotlocus!` plots only the variants that are present in the reference panel, 
     when the `ld` keyword argument is specified. Although SNPs that are missing in the
-    reference panel could be plotted differently (e.g. with varying transparency and shape),
+    reference panel could be plotted differently (e.g. with varying transparency, color, and shape),
     [__GeneticsMakie.jl__](https://github.com/mmkim1210/GeneticsMakie.jl) is designed to
-    visualize 100s of phenotypes simultaneously in which case such discrepancy is hard to tell.
-    Hence, for more direct comparison of loci across phenotypes, only the variants that are found in the
-    reference panel are shown.
+    visualize 100s of phenotypes simultaneously in which case such discrepancy is hard to tell and 
+    becomes confusing. Hence, for more direct comparison of loci across phenotypes, 
+    only the variants that are found in the reference panel are shown.

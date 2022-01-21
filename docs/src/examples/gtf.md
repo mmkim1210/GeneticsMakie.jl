@@ -33,6 +33,9 @@ contains rich information about features, so we can parse this column.
 ```julia
 GeneticsMakie.parsegtf!(gencode)
 ```
+```@docs
+parsegtf!
+```
 
 !!! info "Chromosome names"
     Chromosome names are munged to not contain “chr” prefix, and their type is `String`,
@@ -50,4 +53,7 @@ as long as they contain the above columns with the right column names.
 Once `gencode` is ready, we can look up where the gene is on the human genome.
 ```julia
 GeneticsMakie.findgene("RBFOX1", gencode)
+```
+```@docs
+findgene
 ```
