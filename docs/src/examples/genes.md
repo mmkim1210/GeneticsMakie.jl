@@ -10,7 +10,7 @@ Pkg.add("CairoMakie")
 ```
 
 We can focus on _CACNA1G_ gene as our initial example. We can use `GeneticsMakie.plotgenes!` 
-to plot all genes within a given `chr` and ± 100 Kb window around `gene` `start` and `stop` sites. 
+to plot all genes within a given chromosome and ± 100 Kb window around gene start and stop sites. 
 We can then use `GeneticsMakie.labelgenome` to label the genomic range.
 
 ```julia

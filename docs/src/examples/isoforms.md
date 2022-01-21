@@ -1,8 +1,8 @@
 # Plotting isoforms
 
 We can focus on _NRXN1_ gene as our initial example. `GeneticsMakie.plotisoforms!` returns 
-genomic coordinates for `gene` so that an appropriate label can be passed onto 
-`GeneticsMakie.labelgenome`. _NRXN1_ gene has many isoforms as we see, and even more 
+genomic coordinates for the gene of interest so that an appropriate label can be passed onto 
+`GeneticsMakie.labelgenome`. _NRXN1_ gene has many isoforms as we see below, and even more 
 isoforms are likely to be discovered in the future. For this reason, plotting isoforms of multiple genes is not available. 
 
 ```julia
@@ -16,10 +16,6 @@ resize_to_layout!(f)
 f
 ```
 ![](../figs/NRXN1-isoform.png)
-
-```@docs
-plotisoforms!
-```
 
 To save some space, we can plot the isoform labels on the left by using the `text` keyword argument. 
 

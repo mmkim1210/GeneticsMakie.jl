@@ -149,7 +149,7 @@ credible set post-fine-mapping.
 !!! note "Plotting the intersection of SNPs, not the union"
     `GeneticsMakie.plotlocus!` plots only the variants that are present in the reference panel, 
     when the `ld` keyword argument is specified. Although SNPs that are missing in the
-    reference panel could be plotted differently (e.g. with varying transparency, color, and shape),
+    reference panel could be plotted differently (e.g. with varying transparency and shape),
     [__GeneticsMakie.jl__](https://github.com/mmkim1210/GeneticsMakie.jl) is designed to
     visualize 100s of phenotypes simultaneously in which case such discrepancy is hard to tell and 
     becomes confusing. Hence, for more direct comparison of loci across phenotypes, 
