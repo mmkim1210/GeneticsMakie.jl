@@ -28,9 +28,6 @@ For all downstream plotting functions, we note that GWAS summary statistics shou
 ```julia
 GeneticsMakie.mungesumstats!(df)
 ```
-```@docs
-mungesumstats!
-```
 
 To find GWAS loci for each phenotype that are separated by at least 1 Mb, 
 we can execute the following command.
@@ -44,9 +41,6 @@ we can instead run the following command.
 ```julia
 GeneticsMakie.findgwasloci(df)
 ```
-```@docs
-findgwasloci
-```
 
 Such an exhaustive list of loci can then be iterated through and visualized by 
 [Plotting LocusZooom](@ref).
@@ -57,7 +51,4 @@ loci = GeneticsMakie.findgwasloci(df[1])
 GeneticsMakie.findclosestgene(loci, gencode)
 GeneticsMakie.findclosestgene(loci, gencode; start = true) # closest gene from gene start site
 GeneticsMakie.findclosestgene(loci, gencode; proteincoding = true) # closest "protein-coding" gene
-```
-```@docs
-findclosestgene
 ```

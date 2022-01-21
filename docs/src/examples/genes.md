@@ -30,10 +30,6 @@ f
 ```
 ![](../figs/CACNA1G-gene.png)
 
-```@docs
-plotgenes!
-```
-
 We can adjust the height of exons using the `height` keyword argument.
 ```julia
 f = Figure(resolution = (306, 792))

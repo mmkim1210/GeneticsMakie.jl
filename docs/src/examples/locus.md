@@ -40,10 +40,6 @@ f
 ```
 ![](../figs/JAZF1-locuszoom.png)
 
-```@docs
-plotlocus!
-```
-
 To color variants by linkage disequilibrium (LD), we need a reference panel. If we already have
 one, we can use [__SnpArrays.jl__](https://openmendel.github.io/SnpArrays.jl/latest/) to
 read in PLINK bed files. If not, we can download one as below. For the time being, 
