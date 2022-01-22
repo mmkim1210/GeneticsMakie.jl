@@ -1,5 +1,11 @@
-function plotrg!(ax::Axis, r::AbstractMatrix, cols::AbstractVector; 
-    p::Union{AbstractMatrix, Nothing} = nothing, circle::Bool = true)
+function plotrg!(
+    ax::Axis,
+    r::AbstractMatrix,
+    cols::AbstractVector; 
+    p::Union{AbstractMatrix, Nothing} = nothing,
+    circle::Bool = true
+)
+
     n = size(r, 1)
     ps = Vector{Polygon}(undef, n^2)
     counter = 1

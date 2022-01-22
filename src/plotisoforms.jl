@@ -1,8 +1,10 @@
-function coordinateisforms(gene::AbstractString, 
+function coordinateisforms(
+    gene::AbstractString, 
     gencode::DataFrame,
     orderby::Union{Nothing, AbstractVector{<:AbstractString}},
     height::Real,
-    text::Union{Bool, Symbol})
+    text::Union{Bool, Symbol}
+)
 
     df = filter(x -> x.gene_name == gene, gencode)
     nrow(df) == 0 ? error("Cannot find $(gene) in the annotation.") : nothing
@@ -62,21 +64,27 @@ function coordinateisforms(gene::AbstractString,
 end
 
 """
-    plotisoforms!(ax::Axis, gene::AbstractString, gencode::DataFrame; orderby::Union{Nothing, AbstractVector{<:AbstractString}}, height::Real, isoformcolor, textcolor, text::Union{Bool, Symbol})
+    plotisoforms!(ax::Axis, gene::AbstractString, gencode::DataFrame; kwargs)
 
-Plot each isoform of a given `gene` in a separate row. Optionally, the order of
-isoforms can be changed by `orderby`, height of exons can be adjusted using
-`height`, and color of isoforms or isoform names adjusted using `isoformcolor` and `textcolor`,
-respectively. The position of text label of isoforms can be specified using `text`.
+Plot each isoform of a given `gene` on a separate row.
+
+# Arguments
+- `orderby::Union{Nothing, AbstractVector{<:AbstractString}} = nothing`: the order of isoforms.
+- `height::Real = 0.25`: the height of exons.
+- `isoformcolor = :royalblue`: the color of isoforms.
+- `textcolor = :black`: the color of isoform labels.
+- `text::Union{Bool, Symbol} = :top`: the position of isoform labels. 
 """
-function plotisoforms!(ax::Axis,
+function plotisoforms!(
+    ax::Axis,
     gene::AbstractString,
     gencode::DataFrame;
     orderby::Union{Nothing, AbstractVector{<:AbstractString}} = nothing,
     height::Real = 0.25,
     isoformcolor = :royalblue,
     textcolor = :black,
-    text::Union{Bool, Symbol} = :top)
+    text::Union{Bool, Symbol} = :top
+)
 
     isoforms, ps, bs, rows, chromosome = coordinateisforms(gene, gencode, orderby, height, text)
     if text == true || text == :top || text == :t

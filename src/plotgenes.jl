@@ -1,8 +1,10 @@
-function coordinategenes(chromosome::AbstractString,
+function coordinategenes(
+    chromosome::AbstractString,
     range1::Real,
     range2::Real,
     gencode::DataFrame,
-    height::Real)
+    height::Real
+)
 
     df = filter(x -> (x.seqnames == chromosome) && (x.end >= range1) && (x.start <= range2), gencode)
     dfg = view(df, df.feature .== "gene", :)
@@ -60,20 +62,32 @@ function coordinategenes(chromosome::AbstractString,
 end
 
 """
-    plotgenes!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gencode::DataFrame; height::Real, genecolor, textcolor)
+    plotgenes!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gencode::DataFrame; kwargs)
+    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame; kwargs)
+    plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame; kwargs)
 
 Plot collapsed gene bodies for genes within a given `chromosome` and genomic range 
-between `range1` and `range2`. Optionally, the height of exons can be adjusted using
-`height` and color of genes or gene names adjusted using `genecolor` and `textcolor`, respectively.
+between `range1` and `range2`.
+
+Alternatively, plot within a given `chromosome` and a certain `window` around a 
+genomic coordinate `bp` or plot within a certain `window` around `gene`.
+
+# Arguments
+- `height::Real = 0.25`: the height of exons.
+- `genecolor = :royalblue`: the color of genes.
+- `textcolor = :black`: the color of gene labels.
+- `window::Real = 1e6`: the window around `bp` or `gene`.                                       
 """
-function plotgenes!(ax::Axis,
+function plotgenes!(
+    ax::Axis,
     chromosome::AbstractString, 
     range1::Real,
     range2::Real,
     gencode::DataFrame;
     height::Real = 0.25,
     genecolor = :royalblue,
-    textcolor = :black)
+    textcolor = :black
+)
 
     genes, strand, ps, bs, rows = coordinategenes(chromosome, range1, range2, gencode, height)
     if length(rows) == 0
@@ -104,39 +118,30 @@ function plotgenes!(ax::Axis,
     return rs
 end
 
-"""
-    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame; window::Real, kwargs...)
-
-Plot collapsed gene bodies for genes within a given `chromosome` and a certain
-`window` around a genomic coordinate `bp`. The default `window` is 1 Mb.
-"""
 plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame; window::Real = 1e6, kwargs...) =
     plotgenes!(ax, chromosome, bp - window, bp + window, gencode; kwargs...)
 
-"""
-    plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame; window::Real, kwargs...)
-
-Plot collapsed gene bodies for genes within a certain window around `gene`. The default `window` is 1 Mb.
-"""
 function plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame; window::Real = 1e6, kwargs...)
     chr, start, stop = findgene(gene::AbstractString, gencode::DataFrame)
     plotgenes!(ax, chr, start - window, stop + window, gencode; kwargs...)
 end
 
 """
-    plotgenes!(ax::Axis, chromosome::AbstractString, range1::Real, highlight::Tuple{AbstractVector, AbstractVector}, range2::Real, gencode::DataFrame; height::Real)
+    plotgenes!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, highlight::Tuple{AbstractVector, AbstractVector}, gencode::DataFrame; height::Real)
+    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, highlight::Tuple{AbstractVector, AbstractVector}, gencode::DataFrame; window::Real, height::Real)
+    plotgenes!(ax::Axis, gene::AbstractString, highlight::Tuple{AbstractVector, AbstractVector}, gencode::DataFrame; window::Real, height::Real)
 
-Plot collapsed gene bodies for genes within a given `chromosome` and genomic range 
-between `range1` and `range2`. Optionally, the height of exons can be adjusted using
-`height`. Genes to be highlighted and their colors can be specified via `highlight`.
+Plot gene bodies with a vector of genes highlighted by a vector of colors via `highlight`.
 """
-function plotgenes!(ax::Axis,
+function plotgenes!(
+    ax::Axis,
     chromosome::AbstractString, 
     range1::Real,
     range2::Real,
     highlight::Tuple{AbstractVector, AbstractVector},
     gencode::DataFrame;
-    height::Real = 0.25)
+    height::Real = 0.25
+)
 
     genes, strand, ps, bs, rows = coordinategenes(chromosome, range1, range2, gencode, height)
     if length(rows) == 0
@@ -179,22 +184,9 @@ function plotgenes!(ax::Axis,
     return rs
 end
 
-"""
-    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, highlight::Tuple{AbstractVector, AbstractVector}, gencode::DataFrame; window::Real, kwargs...)
-
-Plot collapsed gene bodies for genes within a given `chromosome` and a certain
-`window` around a genomic coordinate `bp`. The default `window` is 1 Mb.
-Genes to be highlighted and their colors can be specified via `highlight`.
-"""
 plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, highlight::Tuple{AbstractVector, AbstractVector}, gencode::DataFrame; window::Real = 1e6, kwargs...) =
     plotgenes!(ax, chromosome, bp - window, bp + window, highlight, gencode; kwargs...)
 
-"""
-    plotgenes!(ax::Axis, gene::AbstractString, highlight::Tuple{AbstractVector, AbstractVector}, gencode::DataFrame; window::Real, kwargs...)
-
-Plot collapsed gene bodies for genes within a certain window around `gene`. The default `window` is 1 Mb.
-Genes to be highlighted and their colors can be specified via `highlight`.
-"""
 function plotgenes!(ax::Axis, gene::AbstractString, highlight::Tuple{AbstractVector, AbstractVector}, gencode::DataFrame; window::Real = 1e6, kwargs...)
     chr, start, stop = findgene(gene::AbstractString, gencode::DataFrame)
     plotgenes!(ax, chr, start - window, stop + window, highlight, gencode; kwargs...)

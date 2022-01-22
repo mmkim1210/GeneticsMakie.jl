@@ -12,9 +12,11 @@ function setticks(y::Real)
     end
 end
 
-function calcluateld!(gwas::DataFrame, 
+function calcluateld!(
+    gwas::DataFrame, 
     ref::SnpData; 
-    snp::Union{AbstractString, Tuple{AbstractString, Int}} = "index")
+    snp::Union{AbstractString, Tuple{AbstractString, Int}} = "index"
+)
 
     gwas.ind = findmissing(findsnps(gwas, ref))
     dropmissing!(gwas, "ind")
@@ -56,19 +58,31 @@ function calcluateld!(gwas::DataFrame,
 end
 
 """
-    plotlocus!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gwas::DataFrame; ld::Union{Nothing, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}}, ymax::Real)
+    plotlocus!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gwas::DataFrame; kwargs)
+    plotlocus!(ax::Axis, chromosome::AbstractString, bp::Real, gwas::DataFrame; kwargs)
+    plotlocus!(ax::Axis, gene::AbstractString, gwas::DataFrame, gencode::DataFrame; kwargs)
 
 Plot `gwas` results within a given `chromosome` and genomic range between `range1` 
-and `range2`. Optionally, SNPs can be colored by LD via `ld`.
-The default SNP for which LD is calculated is index SNP.
+and `range2`.
+
+Alternatively, plot within a given `chromosome` and a certain `window` around a 
+genomic coordinate `bp` or plot within a certain `window` around `gene`.
+
+# Arguments
+- `ld::Union{Nothing, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}} = nothing`: 
+    the reference panel for which LD is calculated.
+- `ymax::Real`: the maximum value for y axis. 
+- `window::Real = 1e6`: the window around `bp` or `gene`. 
 """
-function plotlocus!(ax::Axis,
+function plotlocus!(
+    ax::Axis,
     chromosome::AbstractString,
     range1::Real,
     range2::Real,
     gwas::DataFrame;
     ld::Union{Nothing, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}} = nothing,
-    ymax::Real = 0)
+    ymax::Real = 0
+)
 
     df = filter(x -> (x.CHR == chromosome) && (x.BP >= range1) && (x.BP <= range2), gwas)
     if nrow(df) == 0
@@ -127,20 +141,9 @@ function plotlocus!(ax::Axis,
     hideydecorations!(ax, ticks = false, label = false, ticklabels = false)
 end
 
-"""
-    plotlocus!(ax::Axis, chromosome::AbstractString, bp::Real, gwas::DataFrame; window::Real, kwargs...)
-
-Plot `gwas` results within a given `chromosome` and a certain `window` around a 
-genomic coordinate `bp`. The default `window` is 1 Mb.
-"""
 plotlocus!(ax::Axis, chromosome::AbstractString, bp::Real, gwas::DataFrame; window::Real = 1e6, kwargs...) =
     plotlocus!(ax, chromosome, bp - window, bp + window, gwas; kwargs...)
 
-"""
-    plotlocus!(ax::Axis, gene::AbstractString, gwas::DataFrame, gencode::DataFrame; window::Real, kwargs...)
-
-Plot `gwas` results within a certain window around `gene`. The default `window` is 1 Mb.
-"""
 function plotlocus!(ax::Axis, gene::AbstractString, gwas::DataFrame, gencode::DataFrame; window::Real = 1e6, kwargs...)
     chr, start, stop = findgene(gene, gencode)
     plotlocus!(ax, chr, start - window, stop + window, gwas; kwargs...)

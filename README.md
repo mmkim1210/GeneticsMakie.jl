@@ -15,7 +15,7 @@ pkg> add GeneticsMakie
 ```julia
 using Pkg
 Pkg.activate(@__DIR__)
-Pkg.add(["CairoMakie", "Makie", "CSV", "DataFrames", "SnpArrays"])
+Pkg.add(["GeneticsMakie", "CairoMakie", "Makie", "CSV", "DataFrames", "SnpArrays"])
 
 using GeneticsMakie, CairoMakie, Makie.GeometryBasics, CSV, DataFrames, SnpArrays, Statistics
 

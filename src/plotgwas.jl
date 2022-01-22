@@ -45,7 +45,8 @@ end
 Plot gwas results with coordinates from `coordinategwas`, namely `df` for phenotype `i` with
 x and y limits, `xmax` and `ymax`, respectively. The position of x ticks are determined by `ticks`.
 """
-function plotgwas!(ax::Axis,
+function plotgwas!(
+    ax::Axis,
     df::DataFrame,
     i::Int,
     ymax::Real,
@@ -53,7 +54,8 @@ function plotgwas!(ax::Axis,
     ticks::DataFrame; 
     ystep::Real = 2,
     sigline::Bool = false,
-    sigcolor::Bool = true)
+    sigcolor::Bool = true
+)
 
     indeven = findall(in(vcat(string.(1:2:22), "X")), df.CHR)
     indodd = findall(in(vcat(string.(2:2:23), "Y")), df.CHR)

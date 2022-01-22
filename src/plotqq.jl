@@ -1,7 +1,9 @@
-function plotqq!(ax::Axis,
+function plotqq!(
+    ax::Axis,
     P::AbstractVector; 
     xstep::Real = 1,
-    ystep::Real = 2)
+    ystep::Real = 2
+)
 
     n = length(P)
     high = Array{Float64}(undef, n)
@@ -44,8 +46,11 @@ function plotqq!(ax::Axis,
 end
 
 """
-    plotqq!(ax::Axis, df::DataFrame; xstep::Real, ystep::Real)
+    plotqq!(ax::Axis, df::DataFrame; kwargs)
+    plotqq!(ax::Axis, P::AbstractVector; kwargs)
 
-Plot QQ plot of P values in `df` where the expected distribution is the uniform distribution.
+Plot QQ plot of `P` values where the expected distribution is the uniform distribution.
+
+Keyword arguments include `xstep::Real` and `ystep::Real` for x and y axes ticks step sizes.
 """
 plotqq!(ax::Axis, df::DataFrame; kwargs...) = plotqq!(ax, df.P; kwargs...)

@@ -1,8 +1,8 @@
 """
     plotld!(ax::Axis, LD::AbstractMatrix; color::AbstractString)
 
-Visualize a symmetric correlation matrix `LD` with the diagonal elements on the x-axis.
-`color` can be either red, green, blue, or black.
+Visualize a symmetric correlation matrix `LD` with the diagonal elements on the x axis.
+`color` can be either "red", "green", "blue", or "black".
 """
 function plotld!(ax::Axis, LD::AbstractMatrix; color::AbstractString = "blue")
     n = size(LD, 1)
