@@ -1,8 +1,3 @@
-"""
-    plotqq!(ax::Axis, P::AbstractVector; xstep::Real, ystep::Real)
-
-Plot QQ plot of `P` values where the expected distribution is the uniform distribution. 
-"""
 function plotqq!(ax::Axis,
     P::AbstractVector; 
     xstep::Real = 1,
@@ -48,4 +43,9 @@ function plotqq!(ax::Axis,
     ax.yticks = yticks
 end
 
+"""
+    plotqq!(ax::Axis, df::DataFrame; xstep::Real, ystep::Real)
+
+Plot QQ plot of P values in `df` where the expected distribution is the uniform distribution.
+"""
 plotqq!(ax::Axis, df::DataFrame; kwargs...) = plotqq!(ax, df.P; kwargs...)

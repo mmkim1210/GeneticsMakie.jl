@@ -1,9 +1,3 @@
-"""
-    coordinategenes(chromosome::AbstractString, range1::Real, range2::Real, gencode::DataFrame, height::Real)
-
-Subset `gencode` to a given `chromosome` and genomic range between `range1` and `range2`, 
-and determine coordinates of exons for each gene residing in the genomic region.
-"""
 function coordinategenes(chromosome::AbstractString,
     range1::Real,
     range2::Real,
@@ -111,7 +105,7 @@ function plotgenes!(ax::Axis,
 end
 
 """
-    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame; window::Real)
+    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame; window::Real, kwargs...)
 
 Plot collapsed gene bodies for genes within a given `chromosome` and a certain
 `window` around a genomic coordinate `bp`. The default `window` is 1 Mb.
@@ -120,7 +114,7 @@ plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame; w
     plotgenes!(ax, chromosome, bp - window, bp + window, gencode; kwargs...)
 
 """
-    plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame; window::Real)
+    plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame; window::Real, kwargs...)
 
 Plot collapsed gene bodies for genes within a certain window around `gene`. The default `window` is 1 Mb.
 """
@@ -186,7 +180,7 @@ function plotgenes!(ax::Axis,
 end
 
 """
-    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, highlight::Tuple{AbstractVector, AbstractVector}, gencode::DataFrame; window::Real)
+    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, highlight::Tuple{AbstractVector, AbstractVector}, gencode::DataFrame; window::Real, kwargs...)
 
 Plot collapsed gene bodies for genes within a given `chromosome` and a certain
 `window` around a genomic coordinate `bp`. The default `window` is 1 Mb.
@@ -196,7 +190,7 @@ plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, highlight::Tuple{Abst
     plotgenes!(ax, chromosome, bp - window, bp + window, highlight, gencode; kwargs...)
 
 """
-    plotgenes!(ax::Axis, gene::AbstractString, highlight::Tuple{AbstractVector, AbstractVector}, gencode::DataFrame; window::Real)
+    plotgenes!(ax::Axis, gene::AbstractString, highlight::Tuple{AbstractVector, AbstractVector}, gencode::DataFrame; window::Real, kwargs...)
 
 Plot collapsed gene bodies for genes within a certain window around `gene`. The default `window` is 1 Mb.
 Genes to be highlighted and their colors can be specified via `highlight`.
@@ -217,6 +211,8 @@ plotgenes!(ax::Axis, gene::AbstractString, highlight::Tuple{AbstractString, Any}
 
 """
     labelgenome(g::GridPosition, chromosome::AbstractString, range1::Real, range2::Real)
+
+Label `g` with a given `chromosome` and genomic range between `range1` and `range2`.
 """
 function labelgenome(g::GridPosition, chromosome::AbstractString, range1::Real, range2::Real)
     Label(g, "~$(round(range1 / 1e6; digits = 1)) Mb", textsize = 6, halign = :left)

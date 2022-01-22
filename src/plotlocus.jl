@@ -56,7 +56,7 @@ function calcluateld!(gwas::DataFrame,
 end
 
 """
-    plotlocus!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gwas::DataFrame; ld::Union{Bool, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}}, ymax::Real)
+    plotlocus!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gwas::DataFrame; ld::Union{Nothing, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}}, ymax::Real)
 
 Plot `gwas` results within a given `chromosome` and genomic range between `range1` 
 and `range2`. Optionally, SNPs can be colored by LD via `ld`.
@@ -67,7 +67,7 @@ function plotlocus!(ax::Axis,
     range1::Real,
     range2::Real,
     gwas::DataFrame;
-    ld::Union{Bool, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}} = false,
+    ld::Union{Nothing, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}} = nothing,
     ymax::Real = 0)
 
     df = filter(x -> (x.CHR == chromosome) && (x.BP >= range1) && (x.BP <= range2), gwas)
@@ -95,7 +95,7 @@ function plotlocus!(ax::Axis,
     else
         yticks = setticks(ymax)
     end
-    if ld != false
+    if !isnothing(ld)
         typeof(ld) == SnpData ? calcluateld!(df, ld) : calcluateld!(df, ld[1]; snp = ld[2])
         scatter!(ax, df.BP, df.P, color = df.LD, colorrange = (0, 1),
             colormap = (:gray60, :red2), markersize = 1.5)
