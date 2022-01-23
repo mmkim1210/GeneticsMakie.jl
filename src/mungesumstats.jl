@@ -1,12 +1,3 @@
-findlocus(CHR::AbstractVector, BP::AbstractVector, chr::AbstractString, range1::Real, range2::Real) =
-    findall((CHR .== chr) .& (BP .>= range1) .& (BP .<= range2))
-
-findlocus(gwas::DataFrame, chr::AbstractString, range1::Real, range2::Real) =
-    findlocus(gwas.CHR, gwas.BP, chr, range1, range2)
-
-findlocus(ref::SnpData, chr::AbstractString, range1::Real, range2::Real) =
-    findlocus(ref.snp_info.chromosome, ref.snp_info.position, chr, range1, range2)
-
 function mungenames!(gwas::DataFrame)
     rename!(uppercase, gwas)
     if "RSID" in names(gwas) && "SNP" in names(gwas)
@@ -18,6 +9,8 @@ function mungenames!(gwas::DataFrame)
         "MARKERNAME" => "SNP",
         "RSID" => "SNP",
         "RS_ID" => "SNP",
+        "RS_NUMBER" => "SNP",
+        "RS_NUMBERS" => "SNP",
         "ID" => "SNP",
         "#CHR" => "CHR",
         "#CHROM" => "CHR",
@@ -40,6 +33,7 @@ function mungenames!(gwas::DataFrame)
         "REF" => "A1",
         "REFERENCE_ALLELE" => "A1",
         "EA" => "A1",
+        "INC_ALLELE" => "A1",
         "ALLELE2" => "A2",
         "ALLELE_2" => "A2",
         "OTHER_ALLELE" => "A2",
@@ -48,7 +42,10 @@ function mungenames!(gwas::DataFrame)
         "NONEFFECT_ALLELE" => "A2",
         "ALT" => "A2",
         "NEA" => "A2",
+        "DEC_ALLELE" => "A2",
         "ZSCORE" => "Z",
+        "GC_ZSCORE" => "Z",
+        "Z-SCORE" => "Z",
         "T-STATISTIC" => "Z",
         "PVAL" => "P",
         "PVALUE" => "P",
@@ -57,6 +54,7 @@ function mungenames!(gwas::DataFrame)
         "P_DGC" => "P",
         "P_VALUE" => "P",
         "GC.PVALUE" => "P",
+        "GC_PVALUE" => "P",
         "P.VALUE" => "P",
         "P.2GC" => "P",
         "ALL_INV_VAR_META_P" => "P",
@@ -64,14 +62,54 @@ function mungenames!(gwas::DataFrame)
         "OR(MINALLELE)" => "OR",
         "SE_DGC" => "SE",
         "STDERR" => "SE",
+        "STANDARD_ERROR" => "SE",
         "ALL_INV_VAR_META_SEBETA" => "SE",
         "STDERRLOGOR" => "SE",
         "SE.2GC" => "SE",
         "EFFECT" => "BETA",
+        "EFFECTS" => "BETA",
         "STDBETA" => "BETA",
         "B" => "BETA",
         "LOGOR" => "BETA",
-        "ALL_INV_VAR_META_BETA" => "BETA"
+        "LOG_ODDS" => "BETA",
+        "ALL_INV_VAR_META_BETA" => "BETA",
+        "EAF" => "FRQ",
+        "AF" => "FRQ",
+        "FREQ1" => "FRQ",
+        "FREQ" => "FRQ",
+        "EAF_A1" => "FRQ",
+        "EAF_UKB" => "FRQ",
+        "MAF" => "FRQ",
+        "EFFECT_ALLELE_FREQ" => "FRQ",
+        "EFFECT_ALLELE_FREQUENCY" => "FRQ",
+        "FREQ_TESTED_ALLELE_IN_HRS" => "FRQ",
+        "EAF_EUR_UKB" => "FRQ",
+        "FREQ_HAPMAP" => "FRQ",
+        "EAF_HRC" => "FRQ",
+        "NUMBER_OF_STUDIES" => "NSTUDY",
+        "NSTUDIES" => "NSTUDY",
+        "N_STUDIES" => "NSTUDY",
+        "N_STUDY" => "NSTUDY",
+        "NCASES" => "N_CAS",
+        "NCASE" => "N_CAS",
+        "N_CASE" => "N_CAS",
+        "NCAS" => "N_CAS",
+        "NCA" => "N_CAS",
+        "N_CASES" => "N_CAS",
+        "CASES_N" => "N_CAS",
+        "NCONTROLS" => "N_CON",
+        "NCONTROL" => "N_CON",
+        "N_CONTROLS" => "N_CON",
+        "CONTROLS_N" => "N_CON",
+        "NCON" => "N_CON",
+        "NCO" => "N_CON",
+        "N_CONTROL" => "N_CON",
+        "ALL_META_N" => "N",
+        "N_ANALYZED" => "N",
+        "IMPINFO" => "INFO",
+        "INFO_UKB" => "INFO",
+        "MEDIAN_INFO" => "INFO",
+        "MININFO" => "INFO"
     )
     for name in names(gwas)
         haskey(colnames, name) ? rename!(gwas, name => colnames[name]) : nothing
@@ -104,12 +142,12 @@ function mungealleles!(gwas::DataFrame)
 end
 
 function mungezscore!(gwas::DataFrame)
-    if "Z" in names(gwas)
-        return
-    elseif "BETA" in names(gwas) && "SE" in names(gwas)
+    if "BETA" in names(gwas) && "SE" in names(gwas)
         gwas.Z = gwas.BETA ./ gwas.SE
+        filter!(x -> !isnan(x.Z), gwas)
     elseif "OR" in names(gwas) && "SE" in names(gwas)
         gwas.Z = log.(gwas.OR) ./ gwas.SE
+        filter!(x -> !isnan(x.Z), gwas)
     elseif "BETA" in names(gwas)
         gwas.Z .= 0.0
         for i in 1:nrow(gwas)
@@ -152,14 +190,13 @@ end
     mungesumstats!(gwas::DataFrame)
     mungesumstats!(gwas::Vector{DataFrame})
 
-Munge `gwas` by harmonizing names of columns, their types, and P values, among others.
-
-The output contains at least four columns: `SNP`, `CHR`, `BP`, and `P` corresponding to 
-SNP ID's, chromosomes, base pairs, and P values.
+Munge `gwas` by harmonizing the names of columns, their types, and P values, among others.
 """
 function mungesumstats!(gwas::Vector{DataFrame})
     for i in eachindex(gwas)
         mungenames!(gwas[i])
+        ind = findall(in(["SNP", "CHR", "BP", "A1", "A2", "Z", "P", "BETA", "OR", "SE", "OVERALL"]), names(gwas[i]))
+        select!(gwas[i], ind)
         mungesnpid!(gwas[i])
         dropmissing!(gwas[i])
         mungetypes!(gwas[i])
@@ -168,29 +205,39 @@ function mungesumstats!(gwas::Vector{DataFrame})
         end
         mungezscore!(gwas[i])
         mungepvalue!(gwas[i])
-        if "A1" in names(gwas[i]) && "A2" in names(gwas[i])
-            if "Z" in names(gwas[i])
-                select!(gwas[i], :SNP, :CHR, :BP, :A1, :A2, :Z, :P)
-            else
-                select!(gwas[i], :SNP, :CHR, :BP, :A1, :A2, :P)
-            end
+        if "A1" in names(gwas[i]) && "A2" in names(gwas[i]) && "Z" in names(gwas[i])
+            select!(gwas[i], :SNP, :CHR, :BP, :A1, :A2, :Z, :P)
+        elseif "A1" in names(gwas[i]) && "A2" in names(gwas[i])
+            select!(gwas[i], :SNP, :CHR, :BP, :A1, :A2, :P)
+        elseif "Z" in names(gwas[i])
+            select!(gwas[i], :SNP, :CHR, :BP, :Z, :P)
         else
-            if "Z" in names(gwas[i])
-                select!(gwas[i], :SNP, :CHR, :BP, :Z, :P)
-            else
-                select!(gwas[i], :SNP, :CHR, :BP, :P)
-            end
+            select!(gwas[i], :SNP, :CHR, :BP, :P)
         end
     end
 end
 
 mungesumstats!(gwas::DataFrame) = mungesumstats!([gwas])
 
+findlocus(CHR::AbstractVector, BP::AbstractVector, chr::AbstractString, range1::Real, range2::Real) =
+    findall((CHR .== chr) .& (BP .>= range1) .& (BP .<= range2))
+
+findlocus(gwas::DataFrame, chr::AbstractString, range1::Real, range2::Real) =
+    findlocus(gwas.CHR, gwas.BP, chr, range1, range2)
+
+findlocus(ref::SnpData, chr::AbstractString, range1::Real, range2::Real) =
+    findlocus(ref.snp_info.chromosome, ref.snp_info.position, chr, range1, range2)
+
 """
     findgwasloci(gwas::DataFrame; p::Real)
+    findgwasloci(gwas::Vector{DataFrame}; p::Real)
 
-Find genome-wide significant loci for `gwas` based on threshold `p` that is separated from each
-other by at least 1 Mb. The default `p` is 5e-8.
+Find genome-wide significant loci for `gwas` that are separated from each
+other by at least 1 Mb.
+
+Alternatively, find genome-wide significant loci across multiple `gwas` that 
+are all separated by at least 1 Mb. `p` determines the genome-wide significance threshold, 
+which is 5e-8 by default.
 """
 function findgwasloci(gwas::DataFrame; p::Real = 5e-8)
     loci = DataFrame(CHR = String[], BP = Int[], P = Float64[])
@@ -204,12 +251,6 @@ function findgwasloci(gwas::DataFrame; p::Real = 5e-8)
     return loci
 end
 
-"""
-    findgwasloci(gwas::Vector{DataFrame}; p::Real)
-
-Find genome-wide significant loci across multiple `gwas` based on threshold `p` that 
-is separated from each other by at least 1 Mb. The default `p` is 5e-8.
-"""
 function findgwasloci(gwas::Vector{DataFrame}; kwargs...)
     loci = Vector{DataFrame}(undef, length(gwas))
     for i in eachindex(gwas)
@@ -226,6 +267,15 @@ function findgwasloci(gwas::Vector{DataFrame}; kwargs...)
     return vcat(loci...)
 end
 
+function findsnps(CHR₁::AbstractVector, BP₁::AbstractVector, CHR₂::AbstractVector, BP₂::AbstractVector)
+    ind = Vector{Union{Missing, Int}}(undef, length(CHR₁))
+    for i in 1:length(ind)
+        j = findfirst((CHR₂ .== CHR₁[i]) .& (BP₂ .== BP₁[i]))
+        isnothing(j) ? ind[i] = missing : ind[i] = j
+    end
+    return ind
+end
+
 function findsnps(
     CHR₁::AbstractVector,
     BP₁::AbstractVector,
@@ -234,55 +284,63 @@ function findsnps(
     CHR₂::AbstractVector,
     BP₂::AbstractVector,
     A1₂::AbstractVector,
-    A2₂::AbstractVector
+    A2₂::AbstractVector;
+    matchalleles::Bool = true
 )
     
-    ind = Matrix{Union{Missing, Int}}(undef, length(CHR₁), 2)
-    for i in 1:size(ind, 1)
-        j = findfirst((CHR₂ .== CHR₁[i]) .& (BP₂ .== BP₁[i]))
-        if isnothing(j)
-            ind[i, :] .= missing
-        else
-            if A1₂[j] == A1₁[i] && A2₂[j] == A2₁[i]
-                ind[i, 1], ind[i, 2] = j, missing
-            elseif A2₂[j] == A1₁[i] && A1₂[j] == A2₁[i]
-                ind[i, 1], ind[i, 2] = missing, j
-            else
+    if matchalleles
+        ind = Matrix{Union{Missing, Int}}(undef, length(CHR₁), 2)
+        for i in 1:size(ind, 1)
+            j = findfirst((CHR₂ .== CHR₁[i]) .& (BP₂ .== BP₁[i]))
+            if isnothing(j)
                 ind[i, :] .= missing
+            else
+                if A1₂[j] == A1₁[i] && A2₂[j] == A2₁[i]
+                    ind[i, 1], ind[i, 2] = j, missing
+                elseif A2₂[j] == A1₁[i] && A1₂[j] == A2₁[i]
+                    ind[i, 1], ind[i, 2] = missing, j
+                else
+                    ind[i, :] .= missing
+                end
             end
         end
+        return ind
+    else
+        return findsnps(CHR₁, BP₁, CHR₂, BP₂)
     end
-    return ind
 end
 
-findsnps(gwas::DataFrame, ref::SnpData) = findsnps(gwas.CHR, gwas.BP, gwas.A1, gwas.A2, 
-    ref.snp_info.chromosome, ref.snp_info.position, ref.snp_info.allele1, ref.snp_info.allele2)
-
-findsnps(ref::SnpData, gwas::DataFrame) = 
-    findsnps(ref.snp_info.chromosome, ref.snp_info.position, ref.snp_info.allele1, ref.snp_info.allele2,
-        gwas.CHR, gwas.BP, gwas.A1, gwas.A2)
-
-findsnps(gwas₁::DataFrame, gwas₂::DataFrame) = findsnps(gwas₁.CHR, gwas₁.BP, gwas₁.A1, gwas₁.A2, gwas₂.CHR, gwas₂.BP, gwas₂.A1, gwas₂.A2)
-
-function findmissing(ind::Matrix{Union{Missing, Int}})
-    storage = Vector{Union{Missing, Int}}(undef, size(ind, 1))
-    for i in eachindex(storage)
-        if sum(ismissing.(ind[i, :])) == 2
-            storage[i] = missing
-        elseif ismissing(ind[i, 1])
-            storage[i] = ind[i, 2]
-        else
-            storage[i] = ind[i, 1]
-        end
+function findsnps(gwas::DataFrame, ref::SnpData; matchalleles::Bool = true)
+    if matchalleles
+        return findsnps(gwas.CHR, gwas.BP, gwas.A1, gwas.A2, 
+            ref.snp_info.chromosome, ref.snp_info.position, ref.snp_info.allele1, ref.snp_info.allele2)
+    else
+        return findsnps(gwas.CHR, gwas.BP, ref.snp_info.chromosome, ref.snp_info.position)
     end
-    return storage
+end
+
+function findsnps(ref::SnpData, gwas::DataFrame; matchalleles::Bool = true)
+    if matchalleles
+        return findsnps(ref.snp_info.chromosome, ref.snp_info.position, ref.snp_info.allele1, ref.snp_info.allele2,
+            gwas.CHR, gwas.BP, gwas.A1, gwas.A2)
+    else
+        return findsnps(ref.snp_info.chromosome, ref.snp_info.position, gwas.CHR, gwas.BP)
+    end
+end
+
+function findsnps(gwas₁::DataFrame, gwas₂::DataFrame; matchalleles::Bool = true)
+    if matchalleles
+        return findsnps(gwas₁.CHR, gwas₁.BP, gwas₁.A1, gwas₁.A2, gwas₂.CHR, gwas₂.BP, gwas₂.A1, gwas₂.A2)
+    else
+        return findsnps(gwas₁.CHR, gwas₁.BP, gwas₂.CHR, gwas₂.BP)
+    end
 end
 
 """
     findclosestgene(chr::AbstractString, bp::Real, gencode::DataFrame; start::Bool, proteincoding::Bool)
     findclosestgene(df::DataFrame, gencode::DataFrame; start::Bool, proteincoding::Bool)
 
-Find the closest gene to a genomic coordinate or a list of genomic coordinates using `gencode`. 
+Find the closest gene(s) to a genomic coordinate or a list of genomic coordinates using `gencode`. 
 
 Optionally, the closest gene can be defined from the gene start site using `start`,
 and only protein coding genes can be considered using `proteincoding`. 
@@ -355,6 +413,16 @@ getsnpinfo(snp::AbstractString, df::DataFrame) = getsnpinfo(snp, df.SNP, df.CHR,
 
 getsnpinfo(snp::AbstractString, ref::SnpData) =
     getsnpinfo(snp, ref.snp_info.snpid, ref.snp_info.chromosome, ref.snp_info.position)
+
+function getsnpinfo(chr::AbstractString, bp::Real, SNP::AbstractVector, CHR::AbstractVector, BP::AbstractVector)
+    ind = findfirst((CHR .== chr) .& (BP .== bp))
+    isnothing(ind) ? nothing : SNP[ind]
+end
+
+getsnpinfo(chr::AbstractString, bp::Real, df::DataFrame) = getsnpinfo(chr, bp, df.SNP, df.CHR, df.BP)
+
+getsnpinfo(chr::AbstractString, bp::Real, ref::SnpData) =
+    getsnpinfo(chr, bp, ref.snp_info.snpid, ref.snp_info.chromosome, ref.snp_info.position)
 
 highld = [
     (chr = "1", range1 = 48000000, range2 = 52000000),

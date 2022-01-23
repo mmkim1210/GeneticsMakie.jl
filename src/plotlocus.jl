@@ -18,7 +18,7 @@ function calcluateld!(
     snp::Union{AbstractString, Tuple{AbstractString, Int}} = "index"
 )
 
-    gwas.ind = findmissing(findsnps(gwas, ref))
+    gwas.ind = findsnps(gwas, ref; matchalleles = false)
     dropmissing!(gwas, "ind")
     n = size(gwas, 1)
     gwas.LD = fill(0.0, n)
@@ -33,9 +33,9 @@ function calcluateld!(
         return
     else
         if snp isa AbstractString 
-            ((chr, bp) = getsnpinfo(snp, ref))
+            (chr, bp) = getsnpinfo(snp, ref)
         else 
-            ((chr, bp) = snp)
+            (chr, bp) = snp
         end
         i = findfirst((gwas.CHR .== chr) .& (gwas.BP .== bp))
         if isnothing(i)
