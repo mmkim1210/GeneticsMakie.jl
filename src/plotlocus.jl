@@ -12,7 +12,7 @@ function setticks(y::Real)
     end
 end
 
-function calcluateld!(
+function calculateld!(
     gwas::DataFrame, 
     ref::SnpData; 
     snp::Union{AbstractString, Tuple{AbstractString, Int}} = "index"
@@ -110,7 +110,7 @@ function plotlocus!(
         yticks = setticks(ymax)
     end
     if !isnothing(ld)
-        typeof(ld) == SnpData ? calcluateld!(df, ld) : calcluateld!(df, ld[1]; snp = ld[2])
+        typeof(ld) == SnpData ? calculateld!(df, ld) : calculateld!(df, ld[1]; snp = ld[2])
         scatter!(ax, df.BP, df.P, color = df.LD, colorrange = (0, 1),
             colormap = (:gray60, :red2), markersize = 1.5)
         if typeof(ld) == SnpData

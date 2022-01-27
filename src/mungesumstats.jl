@@ -176,8 +176,6 @@ function mungezscore!(gwas::DataFrame)
                 gwas.Z[i] = -sqrt(cquantile(Chisq(1), gwas.P[i]))
             end
         end
-    else
-        return
     end
 end 
 
@@ -448,7 +446,8 @@ highld = [
     (chr = "11", range1 = 87500000, range2 = 90500000),
     (chr = "12", range1 = 33000000, range2 = 40000000),
     (chr = "12", range1 = 109500000, range2 = 112000000),
-    (chr = "20", range1 = 32000000, range2 = 34500000)
+    (chr = "20", range1 = 32000000, range2 = 34500000),
+    (chr = "17", range1 = 42900000, range2 = 45100000)
 ]
 
 gwas = Dict(

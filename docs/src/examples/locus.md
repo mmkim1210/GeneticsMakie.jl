@@ -154,3 +154,20 @@ credible set post-fine-mapping.
     visualize 100s of phenotypes simultaneously in which case such discrepancy is hard to tell and 
     is confusing. Hence, for more direct comparison of loci across phenotypes, 
     only the variants that are found in the reference panel are shown.
+
+!!! warning "Extremely small P values"
+    There are several GWAS loci that harbor extremely small P values, in which cases
+    the P values will be clamped to be the smallest floating point number.
+    Such cases are going to be more common in phenotypes that are reaching saturation
+    in terms of GWAS discovery (e.g. height). In those cases, it is more commonplace to
+    observe allelic heterogneity, and it might be more appropriate to
+    plot alternative measures of strength of association (e.g. Z score).
+
+!!! note "Patterns of LD"
+    Oftentimes, chunks of LD blocks hug the gene boundaries.
+
+!!! tip "Covering the entire genome"
+    Visualizing 1,500 genomic regions with 2 Mb window will more or less cover the
+    entire human genome. Note that empirically speaking, the probability of an arbitrary 2 Mb window 
+    harboring at least one genome-wide significant hit across multiple phenotypes is 
+    higher than not harboring any significant association.
