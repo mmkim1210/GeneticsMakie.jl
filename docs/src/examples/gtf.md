@@ -51,3 +51,7 @@ Once `gencode` is ready, we can look up where the gene is on the human genome.
 ```julia
 GeneticsMakie.findgene("RBFOX1", gencode)
 ```
+
+!!! tip "Gene names"
+    Make sure to use the correct gene name in case the gene cannot be found.
+    Gene names can be looked up in databases such as [GeneCards](https://www.genecards.org/).
