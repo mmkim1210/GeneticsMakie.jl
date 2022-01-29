@@ -157,11 +157,11 @@ credible set post-fine-mapping.
 
 !!! warning "Extremely small P values"
     There are several GWAS loci that harbor extremely small P values, in which cases
-    the P values will be clamped to be the smallest floating point number.
+    the P values will be clamped to the smallest floating point number.
     Such cases are going to be more common in phenotypes that are reaching saturation
     in terms of GWAS discovery (e.g. height). In those cases, it is more commonplace to
     observe allelic heterogneity, and it might be more appropriate to
-    plot alternative measures of strength of association (e.g. Z score).
+    plot alternative measures of strength of association (e.g. Z scores).
 
 !!! note "Patterns of LD"
     Oftentimes, chunks of LD blocks hug the gene boundaries.
