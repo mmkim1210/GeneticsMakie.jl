@@ -12,12 +12,12 @@ the human genome (GRCh37), where we download the comprehensive
 gene annotation file in [GTF format](https://www.gencodegenes.org/pages/data_format.html).
 
 ```julia
-using GeneticsMakie, CSV, DataFrames
+using GeneticsMakie, CSV, DataFrames, Downloads
 isdir("data") || mkdir("data")
 url = "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/GRCh37_mapping/gencode.v39lift37.annotation.gtf.gz"
 file = basename(url)
 isdir("data/gencode") || mkdir("data/gencode")
-isfile("data/gencode/$(file)") || download(url, "data/gencode/$(file)")
+isfile("data/gencode/$(file)") || Downloads.download(url, "data/gencode/$(file)")
 h = ["seqnames", "source", "feature", "start", "end", "score", "strand", "phase", "info"]
 gencode = CSV.read("data/gencode/$(file)", DataFrame; delim = "\t", comment = "#", header = h)
 ```
@@ -54,4 +54,4 @@ GeneticsMakie.findgene("RBFOX1", gencode)
 
 !!! tip "Gene names"
     Make sure to use the correct gene name in case the gene cannot be found.
-    Gene names can be looked up in databases such as [GeneCards](https://www.genecards.org/).
+    The latest gene names can be looked up in databases such as [GeneCards](https://www.genecards.org/).

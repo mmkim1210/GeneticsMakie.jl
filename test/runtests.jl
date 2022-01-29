@@ -1,7 +1,6 @@
 using GeneticsMakie
 using Test
 using CairoMakie
-using Makie.GeometryBasics
 using CSV
 using DataFrames
 using SnpArrays

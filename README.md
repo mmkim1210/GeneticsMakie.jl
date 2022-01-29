@@ -17,7 +17,7 @@ using Pkg
 Pkg.activate(@__DIR__)
 Pkg.add(["GeneticsMakie", "CairoMakie", "Makie", "CSV", "DataFrames", "SnpArrays"])
 
-using GeneticsMakie, CairoMakie, Makie.GeometryBasics, CSV, DataFrames, SnpArrays, Statistics
+using GeneticsMakie, CairoMakie, Makie.GeometryBasics, CSV, DataFrames, SnpArrays, Statistics, Downloads
 
 const GM = GeneticsMakie
 CairoMakie.activate!(type = "png")
@@ -31,7 +31,7 @@ gencode = let
     url = "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/GRCh37_mapping/gencode.v39lift37.annotation.gtf.gz"
     file = basename(url)
     isdir("data/gencode") || mkdir("data/gencode")
-    isfile("data/gencode/$(file)") || download(url, "data/gencode/$(file)")
+    isfile("data/gencode/$(file)") || Downloads.download(url, "data/gencode/$(file)")
     h = ["seqnames", "source", "feature", "start", "end", "score", "strand", "phase", "info"]
     CSV.read("data/gencode/$(file)", DataFrame; delim = "\t", comment = "#", header = h)
 end
@@ -162,13 +162,13 @@ kgp = let
     url = joinpath(beagle, "b37.vcf/chr$(chr).1kg.phase3.v5a.vcf.gz")
     vcf = basename(url)
     isdir("data/1kg") || mkdir("data/1kg")
-    isfile("data/1kg/$(vcf)") || download(url, "data/1kg/$(vcf)")
+    isfile("data/1kg/$(vcf)") || Downloads.download(url, "data/1kg/$(vcf)")
     # Convert vcf file to plink bed file (this step takes a while)
     isfile("data/1kg/$(replace(vcf, ".vcf.gz" => ".bed"))") || vcf2plink("data/1kg/$(vcf)", "data/1kg/$(replace(vcf, ".vcf.gz" => ""))")
     # Download sample metadata
     url = joinpath(beagle, "sample_info/integrated_call_samples_v3.20130502.ALL.panel")
     meta = basename(url) 
-    isfile("data/1kg/$(meta)") || download(url, "data/1kg/$(meta)")
+    isfile("data/1kg/$(meta)") || Downloads.download(url, "data/1kg/$(meta)")
     # Subset data to the genomic region of interest and European samples
     kgp = SnpData("data/1kg/$(replace(vcf, ".vcf.gz" => ""))")
     meta = CSV.read("data/1kg/$(meta)", DataFrame)
@@ -244,7 +244,7 @@ gwas = let
         url = gwas[key][1]
         file = gwas[key][2]
         isdir("data/gwas") || mkdir("data/gwas")
-        isfile("data/gwas/$(file)") || download(url, "data/gwas/$(file)")
+        isfile("data/gwas/$(file)") || Downloads.download(url, "data/gwas/$(file)")
     end
     scz = CSV.read("data/gwas/$(gwas["scz"][2])", DataFrame; comment = "##", missingstring = ["NA"])
     bd = CSV.read("data/gwas/$(gwas["bd"][2])", DataFrame; comment = "##", missingstring = ["NA"])

@@ -9,7 +9,7 @@ Pkg.add(["GeneticsMakie", "CSV", "DataFrames"])
 ```
 
 ```julia
-using GeneticsMakie, CSV, DataFrames
+using GeneticsMakie, CSV, DataFrames, Downloads
 gwas = Dict(
     "height" => "https://portals.broadinstitute.org/collaboration/giant/images/6/63/Meta-analysis_Wood_et_al%2BUKBiobank_2018.txt.gz",
     "weight" => "https://portals.broadinstitute.org/collaboration/giant/images/c/c8/Meta-analysis_Locke_et_al%2BUKBiobank_2018_UPDATED.txt.gz"
@@ -18,7 +18,7 @@ isdir("data/gwas") || mkdir("data/gwas")
 df = DataFrame[]
 for key in keys(gwas)
     url = gwas[key]
-    isfile("data/gwas/$(basename(url))") || download(url, "data/gwas/$(basename(url))")
+    isfile("data/gwas/$(basename(url))") || Downloads.download(url, "data/gwas/$(basename(url))")
     push!(df, CSV.read("data/gwas/$(basename(url))", DataFrame; comment = "##", missingstring = ["NA"]))
 end
 ```
