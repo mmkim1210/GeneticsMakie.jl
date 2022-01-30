@@ -46,11 +46,11 @@ function plotqq!(
 end
 
 """
-    plotqq!(ax::Axis, df::DataFrame; kwargs)
+    plotqq!(ax::Axis, gwas::DataFrame; kwargs)
     plotqq!(ax::Axis, P::AbstractVector; kwargs)
 
 Plot QQ plot of `P` values where the expected distribution is the uniform distribution.
 
 Keyword arguments include `xstep::Real` and `ystep::Real` for x and y axes ticks step sizes.
 """
-plotqq!(ax::Axis, df::DataFrame; kwargs...) = plotqq!(ax, df.P; kwargs...)
+plotqq!(ax::Axis, gwas::DataFrame; kwargs...) = plotqq!(ax, gwas.P; kwargs...)

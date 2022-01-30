@@ -87,7 +87,6 @@ function plotlocus!(
     df = filter(x -> (x.CHR == chromosome) && (x.BP >= range1) && (x.BP <= range2), gwas)
     if nrow(df) == 0
         ymax == 0 ? ymax = 10 : nothing
-        yticks = setticks(ymax)
         ax.spinewidth = 0.75
         ax.ytickwidth = 0.75
         ax.ylabelsize = 6
@@ -104,10 +103,7 @@ function plotlocus!(
     df.P = -log.(10, df.P)
     if ymax == 0
         ymax = maximum(df.P) / 4 * 5
-        ymax <= 10 ? ymax = 10 : nothing 
-        yticks = setticks(ymax)
-    else
-        yticks = setticks(ymax)
+        ymax <= 10 ? ymax = 10 : nothing
     end
     if !isnothing(ld)
         typeof(ld) == SnpData ? calculateld!(df, ld) : calculateld!(df, ld[1]; snp = ld[2])

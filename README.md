@@ -328,9 +328,8 @@ end
 @time let
     f = Figure(resolution = (408, 792))
     axs = [Axis(f[i, 1]) for i in 1:length(titles)]
-    coord, ymaxs, xmax, ticks = GM.coordinategwas(gwas) # set up coordinates
     for i in eachindex(titles)
-        GM.plotgwas!(axs[i], coord, i, ymaxs[i], xmax, ticks; ystep = 10)
+        GM.plotgwas!(axs[i], gwas[i]; ymax = 45)
         hidespines!(axs[i], :t, :r)
         Label(f[i, 1, Top()], text = "$(titles[i])", textsize = 8)
         rowsize!(f.layout, i, 50)
@@ -349,16 +348,15 @@ end
 @time let
     f = Figure(resolution = (408, 792))
     axs = [Axis(f[i, 1]) for i in 1:2]
-    coord, ymaxs, xmax, ticks = GM.coordinategwas(gwas[1:2])
     for i in 1:2
-        GM.plotgwas!(axs[i], coord, i, ymaxs[i], xmax, ticks; ystep = 10)
+        GM.plotgwas!(axs[i], gwas[i]; ymax = 45)
         axs[i].xlabel = ""
         rowsize!(f.layout, i, 50)
     end
     hidexdecorations!(axs[2])
     hidespines!(axs[1], :t, :r)
     hidespines!(axs[2], :b, :r)
-    ylims!(axs[2], ymaxs[2], 0)
+    ylims!(axs[2], 45, 0)
     Label(f[1, 1, Top()], text = "$(titles[1])", textsize = 8)
     Label(f[2, 1, Bottom()], text = "$(titles[2])", textsize = 8)
     rowgap!(f.layout, 1)
@@ -406,5 +404,5 @@ Colocalization of GWAS signals:
 Association results across multiple phenotypes:
 <p align="center"><img width="100%" style="border-radius: 5px;" src="figs/KMT2E-phewas.png"></p>
 MHC association for schizophrenia with increasing sample size:
-<p align="center"><img width="100%" style="border-radius: 5px;" src="figs/C4A-locuszoom1.png"></p>
-<p align="center"><img width="100%" style="border-radius: 5px;" src="figs/C4A-locuszoom2.png"></p>
+<p align="center"><img width="80%" style="border-radius: 5px;" src="figs/C4A-locuszoom1.png"></p>
+<p align="center"><img width="80%" style="border-radius: 5px;" src="figs/C4A-locuszoom2.png"></p>

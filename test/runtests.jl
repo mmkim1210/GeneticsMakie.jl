@@ -146,14 +146,15 @@ end
 end
 
 @testset "Plotting GWAS" begin
-    gwas = DataFrame(CHR = rand(string.(collect(1:22)), 1000),
+    gwas = DataFrame(
+        CHR = rand(string.(collect(1:22)), 1000),
         BP = rand(1:1000, 1000),
-        P = rand(1000))
+        P = rand(1000)
+    )
 
     f = Figure()
     ax = Axis(f[1, 1])
-    coord, ymaxs, xmax, ticks = GeneticsMakie.coordinategwas([gwas])
-    GeneticsMakie.plotgwas!(ax, coord, 1, ymaxs[1], xmax, ticks)
+    GeneticsMakie.plotgwas!(ax, gwas)
     save("manhattan.png", f)
     @test isfile("manhattan.png")
     rm("manhattan.png")
