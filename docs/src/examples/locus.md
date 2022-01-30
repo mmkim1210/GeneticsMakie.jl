@@ -2,7 +2,7 @@
 
 After [Parsing GENCODE](@ref) and [Munging summary statistics](@ref),
 we can now put the pieces together to draw the backbone of a LocusZoom plot. 
-We can focus on _JAZF1_ locus as an example, which reaches strong genome-wide significance
+We focus on _JAZF1_ locus as an example, which reaches strong genome-wide significance
 in GWAS for height. By default, `GeneticsMakie.plotlocus!` returns a straightforward scatter plot.
 
 ```julia

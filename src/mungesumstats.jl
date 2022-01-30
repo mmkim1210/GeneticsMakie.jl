@@ -402,6 +402,40 @@ end
 
 findclosestgene(df::DataFrame, gencode::DataFrame; kwargs...) = findclosestgene(df.CHR, df.BP, gencode; kwargs...)
 
+function findclosestgenes(
+    chr::AbstractString,
+    bp::Real,
+    gencode::DataFrame;
+    start::Bool = false,
+    proteincoding::Bool = false,
+    n::Real = 5
+)
+
+    if proteincoding
+        df = filter(x -> (x.seqnames == chr) && (x.feature == "gene") && (x.gene_type == "protein_coding"), gencode)
+    else
+        df = filter(x -> (x.seqnames == chr) && (x.feature == "gene"), gencode)
+    end
+    if start
+        df.dist₁ .= 1
+        for i in 1:nrow(df)
+            df.strand[i] == "+" ? df.dist₁[i] = abs(df.start[i] - bp) : df.dist₁[i] = abs(df.end[i] - bp)
+        end
+        sort!(df, :dist₁)
+        select!(df, :gene_name, :dist₁)
+        rename!(df, :dist₁ => :distance)
+        return first(df, n)
+    else
+        df.dist₁ = abs.(df.start .- bp)
+        df.dist₂ = abs.(df.end .- bp)
+        df.dist = min.(df.dist₁, df.dist₂)
+        sort!(df, :dist)
+        select!(df, :gene_name, :dist)
+        rename!(df, :dist => :distance)
+        return first(df, n)
+    end
+end
+
 function getsnpinfo(snp::AbstractString, SNP::AbstractVector, CHR::AbstractVector, BP::AbstractVector)
     ind = findfirst(isequal(snp), SNP)
     isnothing(ind) ? nothing : (CHR[ind], BP[ind])
