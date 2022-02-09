@@ -13,7 +13,7 @@ function coordinategenes(
     strand = [dfg.strand[findfirst(isequal(gene), dfg.gene_name)] for gene in genes]
     ps = Vector{Vector{Polygon}}(undef, length(genes))
     bs = Matrix{Float64}(undef, length(genes), 2)
-    rows = ones(Int64, length(genes))
+    rows = ones(Int, length(genes))
     prop =  23000 * (range2 - range1) / 2.2e6
     for j in eachindex(genes)
         ind = findfirst(isequal(genes[j]), dfg.gene_name)

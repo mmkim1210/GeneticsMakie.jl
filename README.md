@@ -35,11 +35,12 @@ gencode = let
     h = ["seqnames", "source", "feature", "start", "end", "score", "strand", "phase", "info"]
     CSV.read("data/gencode/$(file)", DataFrame; delim = "\t", comment = "#", header = h)
 end
-size(gencode) # 3_247_110 features
+@assert size(gencode) == (3_247_110, 9)
 
 # Parse GENCODE
 @time GM.parsegtf!(gencode)
 select!(gencode, :seqnames, :feature, :start, :end, :strand, :gene_name, :gene_type, :transcript_id)
+@assert size(gencode) == (3_247_110, 8)
 
 # Focus on KMT2E gene as an example
 gene, window = "KMT2E", 1e6
@@ -183,8 +184,8 @@ kgp = let
     file = file * ".maf0.05"
     SnpArrays.filter(kgp, trues(size(kgp)[1]), colinds; des = "data/1kg/$(file)")
     SnpData("data/1kg/$(file)")
-end 
-size(kgp) # 503 European individuals + 5_574 SNPs
+end
+@assert size(kgp) == (503, 5_574)
 
 LD = let
     geno = convert(Matrix{Float64}, kgp.snparray)

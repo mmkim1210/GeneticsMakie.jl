@@ -18,7 +18,7 @@ function plotgwas!(
         ymax <= 10 ? ymax = 10 : nothing
     end
     storage = DataFrame(CHR = vcat(string.(1:22), ["X", "Y"]))
-    storage.maxpos = [GRCh37_length[chr] for chr in storage.CHR]
+    storage.maxpos = [GRCh37_totlength[chr] for chr in storage.CHR]
     storage.add = cumsum(storage.maxpos) - storage.maxpos
     df = leftjoin(df, storage; on = :CHR)
     df.x = df.BP + df.add
