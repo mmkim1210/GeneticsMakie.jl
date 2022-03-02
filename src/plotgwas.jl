@@ -1,12 +1,14 @@
 """
-    plotgwas!(ax::Axis, gwas::DataFrame; ymax::Real, sigline::Bool, sigcolor::Bool)
+    plotgwas!(ax::Axis, gwas::DataFrame; ymax::Real, sigvalue::Real, sigline::Bool, sigcolor::Bool)
 
 Plot `gwas` results as a Manhattan plot.
+
 """
 function plotgwas!(
     ax::Axis,
     gwas::DataFrame; 
     ymax::Real = 0,
+    sigvalue::Real = 5e-8,
     sigline::Bool = false,
     sigcolor::Bool = true
 )
@@ -28,12 +30,12 @@ function plotgwas!(
     scatter!(ax, view(df, indeven, :x), view(df, indeven, :P), markersize = 1.5, color = "#0D0D66")
     scatter!(ax, view(df, indodd, :x), view(df, indodd, :P), markersize = 1.5, color = "#7592C8")
     if sigcolor
-        ind = df.P .> -log(10, 5e-8)
+        ind = df.P .> -log(10, sigvalue)
         dfsig = view(df, ind, :)
         scatter!(ax, dfsig.x, dfsig.P,  markersize = 1.5, color = "#4DB069")
     end
     if sigline
-        hlines!(ax, -log(10, 5e-8); xmin = 0.0, xmax = xmax, linewidth = 0.75, color = :red2)
+        hlines!(ax, -log(10, sigvalue); xmin = 0.0, xmax = xmax, linewidth = 0.75, color = :red2)
     end
     xlims!(ax, 0, xmax)
     ylims!(ax, 0, ymax)
