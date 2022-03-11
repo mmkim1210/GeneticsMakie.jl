@@ -73,6 +73,7 @@ genomic coordinate `bp` or plot within a certain `window` around `gene`.
     the reference panel for which LD is calculated.
 - `ymax::Real`: the maximum value for y axis. 
 - `window::Real = 1e6`: the window around `bp` or `gene`. 
+- `showsnplabel::Bool = true`: draw SNP ID text label.
 """
 function plotlocus!(
     ax::Axis,
@@ -81,7 +82,8 @@ function plotlocus!(
     range2::Real,
     gwas::DataFrame;
     ld::Union{Nothing, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}} = nothing,
-    ymax::Real = 0
+    ymax::Real = 0,
+    showsnplabel::Bool = true
 )
 
     df = filter(x -> (x.CHR == chromosome) && (x.BP >= range1) && (x.BP <= range2), gwas)
@@ -114,12 +116,16 @@ function plotlocus!(
             bp = df.BP[ind]
             p = df.P[ind]
             scatter!(ax, [bp], [p], color = :purple1, markersize = 4.0, marker = '◆')
-            text!(ax, "$(df.index[1])", position = (bp, p), textsize = 6, align = (:center, :bottom))    
+            if showsnplabel
+                text!(ax, "$(df.index[1])", position = (bp, p), textsize = 6, align = (:center, :bottom))
+            end
         elseif length(df.index[1]) > 0
             ind = findfirst(df.SNP .== df.index[1])
             bp, p = df.BP[ind], df.P[ind]
             scatter!(ax, [bp], [p], color = :purple1, markersize = 4.0, marker = '◆')
-            text!(ax, "$(df.index[1])", position = (bp, p), textsize = 6, align = (:center, :bottom))    
+            if showsnplabel
+                text!(ax, "$(df.index[1])", position = (bp, p), textsize = 6, align = (:center, :bottom))
+            end
         end
     else
         scatter!(ax, df.BP, df.P, color = :gray60, markersize = 1.5)

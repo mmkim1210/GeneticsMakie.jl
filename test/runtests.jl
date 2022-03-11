@@ -213,6 +213,13 @@ end
     save("locuszoom.png", f)
     @test isfile("locuszoom.png")
     rm("locuszoom.png")
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotlocus!(ax, "7", 103581390, 105755466, gwas; ld = (kgp, "rs11764361"), showsnplabel = false)
+    save("locuszoom.png", f)
+    @test isfile("locuszoom.png")
+    rm("locuszoom.png")
 end
 
 @testset "Plotting QQ plot" begin
