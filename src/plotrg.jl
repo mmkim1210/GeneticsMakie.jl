@@ -85,10 +85,9 @@ function plotrg!(
     ax.xticklabelsize = 6
     ax.yticklabelsize = 6
     ax.xticklabelpad = 0
-    ax.yticklabelpad = 0
+    ax.yticklabelpad = 1
     ax.xaxisposition = :top
     ax.yaxisposition = :left
-    hidespines!(ax)
     hidedecorations!(ax, ticklabels = false)
     xlims!(ax, 0, n)
     ylims!(ax, -n, 0)
