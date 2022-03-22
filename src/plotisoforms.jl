@@ -70,6 +70,7 @@ Plot each isoform of a given `gene` on a separate row.
 
 # Arguments
 - `orderby::Union{Nothing, AbstractVector{<:AbstractString}} = nothing`: the order of isoforms.
+- `highlight::Union{Nothing, Tuple{AbstractVector, AbstractVector}} = nothing`: isoforms to be highlighted and their colors.
 - `height::Real = 0.25`: the height of exons.
 - `isoformcolor = :royalblue`: the color of isoforms.
 - `textcolor = :black`: the color of isoform labels.
@@ -80,6 +81,7 @@ function plotisoforms!(
     gene::AbstractString,
     gencode::DataFrame;
     orderby::Union{Nothing, AbstractVector{<:AbstractString}} = nothing,
+    highlight::Union{Nothing, Tuple{AbstractVector, AbstractVector}} = nothing, 
     height::Real = 0.25,
     isoformcolor = :royalblue,
     textcolor = :black,
@@ -87,32 +89,63 @@ function plotisoforms!(
 )
 
     isoforms, ps, bs, rows, chromosome = coordinateisforms(gene, gencode, orderby, height, text)
+    isnothing(highlight) ? highlight = ([nothing], [nothing]) : nothing
     if text == true || text == :top || text == :t
         for j in 1:size(ps, 1)
-            poly!(ax, ps[j], color = isoformcolor, strokewidth = 0)
-            lines!(ax, [bs[j, 1], bs[j, 2]], 
-                [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
-                color = isoformcolor, linewidth = 0.5)
-            text!(ax, "$(isoforms[j])", 
-                position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
-                align = (:center, :bottom), textsize = 6, color = textcolor)
+            ind = findfirst(isequal(isoforms[j]), highlight[1])
+            if isnothing(ind)
+                poly!(ax, ps[j], color = isoformcolor, strokewidth = 0)
+                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                    [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
+                    color = isoformcolor, linewidth = 0.5)
+                text!(ax, "$(isoforms[j])", 
+                    position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
+                    align = (:center, :bottom), textsize = 6, color = textcolor)
+            else
+                poly!(ax, ps[j], color = highlight[2][ind], strokewidth = 0)
+                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                    [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
+                    color = highlight[2][ind], linewidth = 0.5)
+                text!(ax, "$(isoforms[j])", 
+                    position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
+                    align = (:center, :bottom), textsize = 6, color = textcolor)
+            end
         end
     elseif text == :bottom || text == :b
         for j in 1:size(ps, 1)
-            poly!(ax, ps[j], color = isoformcolor, strokewidth = 0)
-            lines!(ax, [bs[j, 1], bs[j, 2]], 
-                [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
-                color = isoformcolor, linewidth = 0.5)
-            text!(ax, "$(isoforms[j])", 
-                position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - height - (rows[j] - 1) * (0.25 + height)), 
-                align = (:center, :top), textsize = 6, color = textcolor)
+            ind = findfirst(isequal(isoforms[j]), highlight[1])
+            if isnothing(ind)
+                poly!(ax, ps[j], color = isoformcolor, strokewidth = 0)
+                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                    [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
+                    color = isoformcolor, linewidth = 0.5)
+                text!(ax, "$(isoforms[j])", 
+                    position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - height - (rows[j] - 1) * (0.25 + height)), 
+                    align = (:center, :top), textsize = 6, color = textcolor)
+            else
+                poly!(ax, ps[j], color = highlight[2][ind], strokewidth = 0)
+                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                    [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
+                    color = highlight[2][ind], linewidth = 0.5)
+                text!(ax, "$(isoforms[j])", 
+                    position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - height - (rows[j] - 1) * (0.25 + height)), 
+                    align = (:center, :top), textsize = 6, color = textcolor)
+            end
         end
     else
         for j in 1:size(ps, 1)
-            poly!(ax, ps[j], color = isoformcolor, strokewidth = 0)
-            lines!(ax, [bs[j, 1], bs[j, 2]], 
-                [1 - height / 2 - (rows[j] - 1) * (0.025 + height), 1 - height / 2 - (rows[j] - 1) * (0.025 + height)],
-                color = isoformcolor, linewidth = 0.5)
+            ind = findfirst(isequal(isoforms[j]), highlight[1])
+            if isnothing(ind)
+                poly!(ax, ps[j], color = isoformcolor, strokewidth = 0)
+                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                    [1 - height / 2 - (rows[j] - 1) * (0.025 + height), 1 - height / 2 - (rows[j] - 1) * (0.025 + height)],
+                    color = isoformcolor, linewidth = 0.5)
+            else
+                poly!(ax, ps[j], color = highlight[2][ind], strokewidth = 0)
+                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                    [1 - height / 2 - (rows[j] - 1) * (0.025 + height), 1 - height / 2 - (rows[j] - 1) * (0.025 + height)],
+                    color = highlight[2][ind], linewidth = 0.5)
+            end
         end
     end
     range1 = minimum(bs[:, 1])

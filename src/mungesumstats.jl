@@ -1,8 +1,5 @@
 function mungenames!(gwas::DataFrame)
     rename!(uppercase, gwas)
-    if "RSID" in names(gwas) && "SNP" in names(gwas)
-        rename!(gwas, "SNP" => "EXTRAID")
-    end
     colnames = Dict(
         "SNPID" => "SNP",
         "MARKER" => "SNP",
@@ -111,6 +108,9 @@ function mungenames!(gwas::DataFrame)
         "MEDIAN_INFO" => "INFO",
         "MININFO" => "INFO"
     )
+    if in("SNP", [get(colnames, name, 0) for name in names(gwas)]) && "SNP" in names(gwas)
+        rename!(gwas, "SNP" => "EXTRAID")
+    end
     for name in names(gwas)
         haskey(colnames, name) ? rename!(gwas, name => colnames[name]) : nothing
     end
