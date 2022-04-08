@@ -5,6 +5,9 @@ Visualize a symmetric correlation matrix `LD` with the diagonal elements on the 
 `color` can be either "red", "green", "blue", or "black".
 """
 function plotld!(ax::Axis, LD::AbstractMatrix; color::AbstractString = "blue")
+    if any(isnan.(LD))
+        throw(ErrorException("LD matrix contains NaNs"))
+    end
     n = size(LD, 1)
     m = count(>(1 / 9), LD)
     addx1 = [0, 1, 0, 1]
