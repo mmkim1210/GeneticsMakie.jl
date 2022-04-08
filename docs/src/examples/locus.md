@@ -171,3 +171,9 @@ credible set post-fine-mapping.
     entire human genome. Note that empirically speaking, the probability of an arbitrary 2 Mb window 
     harboring at least one genome-wide significant hit across multiple phenotypes is 
     higher than not harboring any significant association.
+
+!!! note "Phenome-scale LocusZoom"
+    To visualize 100s of phenotypes simultaneously, summary statistics or other
+    relevant genomic annotations should be converted to memory friendly 
+    [__Arrow.jl__](https://github.com/apache/arrow-julia) or 
+    [__Parquet.jl__](https://github.com/JuliaIO/Parquet.jl) files.
