@@ -4,7 +4,7 @@ function coordinateisforms(
     orderby::Union{Nothing, AbstractVector{<:AbstractString}},
     height::Real,
     text::Union{Bool, Symbol}
-)
+    )
 
     df = filter(x -> x.gene_name == gene, gencode)
     nrow(df) == 0 ? error("Cannot find $(gene) in the annotation.") : nothing
@@ -86,7 +86,7 @@ function plotisoforms!(
     isoformcolor = :royalblue,
     textcolor = :black,
     text::Union{Bool, Symbol} = :top
-)
+    )
 
     isoforms, ps, bs, rows, chromosome = coordinateisforms(gene, gencode, orderby, height, text)
     isnothing(highlight) ? highlight = ([nothing], [nothing]) : nothing

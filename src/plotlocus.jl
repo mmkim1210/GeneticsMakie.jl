@@ -16,7 +16,7 @@ function calculateld!(
     gwas::DataFrame, 
     ref::SnpData; 
     snp::Union{AbstractString, Tuple{AbstractString, Int}} = "index"
-)
+    )
 
     gwas.ind = findsnps(gwas, ref; matchalleles = false)
     dropmissing!(gwas, "ind")
@@ -82,7 +82,7 @@ function plotlocus!(
     gwas::DataFrame;
     ld::Union{Nothing, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}} = nothing,
     ymax::Real = 0
-)
+    )
 
     df = filter(x -> (x.CHR == chromosome) && (x.BP >= range1) && (x.BP <= range2), gwas)
     if nrow(df) == 0

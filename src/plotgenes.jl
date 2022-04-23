@@ -4,7 +4,7 @@ function coordinategenes(
     range2::Real,
     gencode::DataFrame,
     height::Real
-)
+    )
 
     df = filter(x -> (x.seqnames == chromosome) && (x.end >= range1) && (x.start <= range2), gencode)
     dfg = view(df, df.feature .== "gene", :)
@@ -87,7 +87,7 @@ function plotgenes!(
     height::Real = 0.25,
     genecolor = :royalblue,
     textcolor = :black
-)
+    )
 
     genes, strand, ps, bs, rows = coordinategenes(chromosome, range1, range2, gencode, height)
     if length(rows) == 0

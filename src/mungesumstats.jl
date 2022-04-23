@@ -291,7 +291,7 @@ function findsnps(
     A1₂::AbstractVector,
     A2₂::AbstractVector;
     matchalleles::Bool = true
-)
+    )
     
     if matchalleles
         ind = Matrix{Union{Missing, Int}}(undef, length(CHR₁), 2)
@@ -357,7 +357,7 @@ function findclosestgene(
     gencode::DataFrame;
     start::Bool = false,
     proteincoding::Bool = false
-)
+    )
 
     if proteincoding
         df = filter(x -> (x.seqnames == chr) && (x.feature == "gene") && (x.gene_type == "protein_coding"), gencode)
@@ -416,7 +416,7 @@ function findclosestgenes(
     start::Bool = false,
     proteincoding::Bool = false,
     n::Real = 5
-)
+    )
 
     if proteincoding
         df = filter(x -> (x.seqnames == chr) && (x.feature == "gene") && (x.gene_type == "protein_coding"), gencode)

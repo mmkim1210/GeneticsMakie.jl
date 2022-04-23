@@ -3,8 +3,9 @@ function plotrg!(
     r::AbstractMatrix,
     colnames::AbstractVector; 
     p::Union{AbstractMatrix, Nothing} = nothing,
-    circle::Bool = true
-)
+    circle::Bool = true,
+    diag::Bool = false,
+    )
 
     n = size(r, 1)
     ps = Vector{Polygon}(undef, n^2)
@@ -44,6 +45,14 @@ function plotrg!(
                 counter += 1
             end
         end
+        if diag
+            csd = Vector{Circle}(undef, n)
+            colord = Vector{Float32}(undef, n)
+            for i in 1:n
+                csd[i] = Circle(Point2f(i - 0.5, 0.5 - i), r[i, i] * 0.45)
+                colord[i] = r[i, i]
+            end
+        end
     else
         csl = Vector{Rect}(undef, binomial(n, 2))
         csu = Vector{Rect}(undef, binomial(n, 2))
@@ -59,6 +68,15 @@ function plotrg!(
                 colorl[counter] = r[i, j]
                 coloru[counter] = r[j, i]
                 counter += 1
+            end
+        end
+        if diag
+            csd = Vector{Circle}(undef, n)
+            colord = Vector{Float32}(undef, n)
+            for i in 1:n
+                widthd = r[i, i] * 0.95
+                csd[i] = Rect(i - 1 + (1 - withd) / 2, 1 - i - (1 - withd) / 2, withd, -withd)
+                colord[i] = r[i, i]
             end
         end
     end
@@ -79,6 +97,9 @@ function plotrg!(
         end
         ind = findall(x -> x < 0.05, pvalues[:, 1]) 
         scatter!(ax, pvalues[ind, 2], pvalues[ind, 3], marker = '✳', markersize = 7, color = :black)
+    end
+    if diag
+        poly!(ax, csd, color = colord, colorrange = (-1, 1), colormap = :RdBu_10)
     end
     ax.xticks = (0.5:(n - 0.5), colnames)
     ax.yticks = (-0.5:-1:-(n - 0.5), colnames)

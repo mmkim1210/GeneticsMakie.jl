@@ -9,7 +9,7 @@ function plotgwas!(
     ymax::Real = 0,
     sigline::Bool = false,
     sigcolor::Bool = true
-)
+    )
 
     df = select(gwas, :CHR, :BP, :P)
     df.P = -log.(10, df.P)
