@@ -14,6 +14,8 @@ using Statistics
     gene = "KMT2E"
     chr, start, stop = GeneticsMakie.findgene(gene, gencode)
     @test ("7", 104581390, 104755466) == (chr, start, stop)
+    _, start, stop = GeneticsMakie.findgene("ENSG00000005483", gencode)
+    @test (104581390, 104755466) == (start, stop)
     range1 = start - 1e6
     range2 = stop + 1e6
 

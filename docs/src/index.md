@@ -6,7 +6,7 @@ CurrentModule = GeneticsMakie
 
 The goal of [__GeneticsMakie.jl__](https://github.com/mmkim1210/GeneticsMakie.jl) is to 
 permit seamless data visualization and exploratory data analysis of the human genome within
-the larger Julia data science and [__OpenMendel__](https://github.com/OpenMendel) ecosystems.
+the larger [Julia data science](https://github.com/JuliaData) and [__OpenMendel__](https://github.com/OpenMendel) ecosystems.
 The package provides convenient wrapper functions for wrangling genetic association results and 
 plotting them using [__Makie.jl__](https://makie.juliaplots.org/stable/). Every component of a figure 
 can be easily customized and extended, and the package generates high-quality, publication-ready figures. 

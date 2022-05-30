@@ -37,7 +37,11 @@ end
 Find chromosome, gene start, and gene stop sites for the `gene` of interest.
 """
 function findgene(gene::AbstractString, gencode::DataFrame)
-    ind = findfirst(isequal(gene), gencode.gene_name)
+    if startswith(gene, "ENSG")
+        ind = findfirst(isequal(gene), gencode.gene_id)
+    else
+        ind = findfirst(isequal(gene), gencode.gene_name)
+    end
     if isnothing(ind)
         error("Cannot find $(gene) in the annotation.")
     else
