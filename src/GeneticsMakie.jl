@@ -16,5 +16,7 @@ include("plotlocus.jl")
 include("plotqq.jl")
 include("plotgwas.jl")
 include("plotrg.jl")
+include("gwas.jl")
+include("genome.jl")
 
 end

@@ -23,7 +23,7 @@ gencode = CSV.read("data/gencode/$(file)", DataFrame; delim = "\t", comment = "#
 ```
 
 !!! warning "Human genome build"
-    The latest human genome assembly is GRCh38, but we use an annotation with coordinates 
+    The latest human genome assembly is [GRCh38](https://www.ncbi.nlm.nih.gov/grc/human/data?asm=GRCh38.p14), but we use an annotation with coordinates 
     from the older version (GRCh37), because a lot of the GWAS results are shared in 
     GRCh37 genomic coordinates. Make sure to use the matching human genome build when
     visualizing your results. 
