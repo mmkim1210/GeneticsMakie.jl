@@ -83,6 +83,8 @@ f
 !!! note "Gene density"
     As some regions have higher gene density than the others, it would be wise (for
     publication purpose) to visualize a smaller genomic window for such gene-dense regions.
+    One could instead visualize only the genes of interest (e.g. protein coding genes) by subsetting
+    GENCODE accordingly to such features.
 
 We can highlight a gene or sets of genes as below. This can be useful when highlighting genes 
 by certain properties such as those that are protein coding or those that are 

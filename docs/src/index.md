@@ -9,9 +9,9 @@ permit seamless data visualization and exploratory data analysis of the human ge
 the larger [Julia data science](https://github.com/JuliaData) and [__OpenMendel__](https://github.com/OpenMendel) ecosystems.
 The package provides convenient wrapper functions for wrangling genetic association results and 
 plotting them using [__Makie.jl__](https://makie.juliaplots.org/stable/). Every component of a figure 
-can be easily customized and extended, and the package generates high-quality, publication-ready figures. 
+can be easily customized and extended, and the package generates high-quality, publication-ready figures.
 
-!["mhc"](figs/mhc.png)
+!["mhc"](figs/MHC-locuszoom.png)
 
 !!! tip "Getting started"
     Please peruse the documentations of 
