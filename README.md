@@ -12,31 +12,31 @@ pkg> add GeneticsMakie
 ```
 
 ## Examples
-Visualize 1 Mb window around KMT2E:
+Visualize 1 Mb window around *KMT2E* gene:
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-gene.png"></p>
 
-Highlight KMT2E and several nearby genes:
+Highlight *KMT2E* gene and several nearby genes:
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-gene-highlight.png"></p>
 
-Visualize KMT2E isoforms:
+Visualize *KMT2E* isoforms:
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-isoform.png"></p>
 
-Visualize KMT2E and nearby isoforms simultaneously:
+Visualize *KMT2E* and nearby isoforms simultaneously:
 <p align="center"><img width="90%" style="border-radius: 5px;" src="figs/KMT2E-isoform-others.png"></p>
 
-Visualize KMT2E isoforms w/ randomly generated expression
+Visualize *KMT2E* isoforms w/ randomly generated expression
 <p align="center"><img width="85%" style="border-radius: 5px;" src="figs/KMT2E-expression.png"></p>
 
-Visualize LD for KMT2E locus:
+Visualize LD for *KMT2E* locus:
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/KMT2E-LD.png"></p>
 
-Visualize LD as a square for KMT2E locus:
+Visualize LD as a square for *KMT2E* locus:
 <p align="center"><img width="60%" style="border-radius: 5px;" src="figs/KMT2E-LD-square.png"></p>
 
-Visualize GWAS results for KMT2E locus:
+Visualize GWAS results for *KMT2E* locus:
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-locuszoom.png"></p>
 
-Visualize GWAS results for KMT2E locus with the same reference SNPs for LD:
+Visualize GWAS results for *KMT2E* locus with the same reference SNPs for LD:
 <p align="center"><img width="100%" style="border-radius: 5px;" src="figs/KMT2E-locuszoom-index.png"></p>
 
 Visualize Manhattan plot:
@@ -45,7 +45,7 @@ Visualize Manhattan plot:
 Visualize Miami/Hudson plot:
 <p align="center"><img width="75%" style="border-radius: 5px;" src="figs/miami.png"></p>
 
-Visualize QQ plot of P values:
+Visualize QQ plot of *P* values:
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/QQ.png"></p>
 
 ## Further examples
