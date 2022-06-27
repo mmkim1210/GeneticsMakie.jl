@@ -57,6 +57,7 @@ as long as they contain the above columns with the right column names.
 Once `gencode` is ready, we can look up where a gene is on the human genome.
 ```julia
 GeneticsMakie.findgene("RBFOX1", gencode)
+GeneticsMakie.findgene("ENSG00000078328", gencode)
 ```
 
 !!! tip "Gene names"

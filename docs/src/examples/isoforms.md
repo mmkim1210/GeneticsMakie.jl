@@ -68,3 +68,15 @@ resize_to_layout!(f)
 f
 ```
 ![](../figs/GRIN2A-isoform-order.png)
+
+```julia
+f = Figure(resolution = (306, 792))
+ax = Axis(f[1, 1])
+rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(ax, gene, gencode; orderby = ["ENST00000675189", "ENST00000463531"], 
+    highlight = (["ENST00000675398", "ENST00000562109"], [:brown3]), isoformcolor = :forestgreen, height = 0.1)
+GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
+rowsize!(f.layout, 1, rs)
+resize_to_layout!(f)
+f
+```
+![](../figs/GRIN2A-isoform-highlights.png)
