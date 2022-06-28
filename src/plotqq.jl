@@ -1,3 +1,11 @@
+"""
+    plotqq!(ax::Axis, gwas::DataFrame; kwargs)
+    plotqq!(ax::Axis, P::AbstractVector; kwargs)
+
+Plot QQ plot of `P` values where the expected distribution is the uniform distribution.
+
+Keyword arguments include `xstep::Real` and `ystep::Real` for x and y axes ticks step sizes.
+"""
 function plotqq!(
     ax::Axis,
     P::AbstractVector; 
@@ -45,12 +53,4 @@ function plotqq!(
     ax.yticks = yticks
 end
 
-"""
-    plotqq!(ax::Axis, gwas::DataFrame; kwargs)
-    plotqq!(ax::Axis, P::AbstractVector; kwargs)
-
-Plot QQ plot of `P` values where the expected distribution is the uniform distribution.
-
-Keyword arguments include `xstep::Real` and `ystep::Real` for x and y axes ticks step sizes.
-"""
 plotqq!(ax::Axis, gwas::DataFrame; kwargs...) = plotqq!(ax, gwas.P; kwargs...)

@@ -48,7 +48,7 @@ function plotgwas!(
         scatter!(ax, dfsig.x, dfsig.P, markersize = 1.5, color = scattercolor)
     end
     if !isnothing(linecolor)
-        hlines!(ax, -log(10, p); xmin = 0.0, xmax = xmax, linewidth = 0.75, color = linecolor)
+        lines!(ax, [0.0, xmax], fill(-log(10, p), 2), color = linecolor, linewidth = 0.75)
     end
     xlims!(ax, 0, xmax)
     ylims!(ax, 0, ymax)

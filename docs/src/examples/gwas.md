@@ -70,3 +70,29 @@ resize_to_layout!(f)
 f
 ```
 ![](../figs/manhattan-chromosomes.png)
+
+We can then use `GeneticsMakie.plotqq!` to draw QQ plots.
+```julia
+f = Figure(resolution = (408, 792))
+axs = [Axis(f[2, i]) for i in 1:length(titles)]
+for i in eachindex(titles)
+    GeneticsMakie.plotqq!(axs[i], dfs[i]; ystep = 5)
+    axs[i].xlabel = ""
+    axs[i].ylabel = ""
+    ylims!(axs[i], 0, 40)
+    i > 1 ? hideydecorations!(axs[i]) : nothing
+end
+for (i, title) in enumerate(titles)
+    Box(f[1, i], color = :gray90)
+    Label(f[1, i], title, tellwidth = false, textsize = 8, padding = (0, 0, 3, 3))
+end
+Label(f[3, 1:length(titles)], text = "Expected -log[p]", textsize = 8)
+Label(f[2, 0], text = "Observed -log[p]", textsize = 8, rotation = pi / 2, tellheight = false)
+rowsize!(f.layout, 2, Aspect(2, 1))
+colgap!(f.layout, 5)
+rowgap!(f.layout, 1, 0)
+rowgap!(f.layout, 2, 5)
+resize_to_layout!(f)
+f
+```
+![](../figs/qq.png)
