@@ -2,28 +2,43 @@
 
 After [Parsing GENCODE](@ref) and [Munging summary statistics](@ref),
 we can now put the pieces together to draw the backbone of a LocusZoom plot. 
-We focus on _JAZF1_ locus as an example, which reaches strong genome-wide significance
+We focus on _ACAN_ locus as an example, which reaches strong genome-wide significance
 in GWAS for height. By default, `GeneticsMakie.plotlocus!` returns a straightforward scatter plot.
 
 ```julia
-gene = "JAZF1"
-chr, start, stop = GeneticsMakie.findgene(gene, gencode)
-range1 = start - 1e6
-range2 = stop + 1e6
+using Pkg
+Pkg.add(["GeneticsMakie", "CairoMakie", "DataFrames", "Arrow", "SnpArrays"])
+```
 
-n = length(df)
+```julia
+using GeneticsMakie, CairoMakie, DataFrames, Arrow, SnpArrays, Downloads
+dfs = DataFrame[]
+for key in ["height", "weight"]
+    push!(dfs, Arrow.Table("data/gwas/$(key).arrow")|> DataFrame)
+end
+url = "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/GRCh37_mapping/gencode.v39lift37.annotation.gtf.gz"
+gencode = Arrow.Table("data/gencode/$(splitext(basename(url))[1]).arrow")|> DataFrame
+GeneticsMakie.findclosestgene(GeneticsMakie.findgwasloci(dfs[1]), gencode)
+```
+
+```julia
+gene = "ACAN"
+chr, start, stop = GeneticsMakie.findgene(gene, gencode)
+ranges = [start - 1e6, stop + 1e6]
+
+n = length(dfs)
 titles = ["Height (Yengo et al. 2018)", "Weight (Yengo et al. 2018)"]
 f = Figure(resolution = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
-    GeneticsMakie.plotlocus!(axs[i], chr, range1, range2, df[i])
+    GeneticsMakie.plotlocus!(axs[i], chr, ranges[1], ranges[2], dfs[i])
     rowsize!(f.layout, i, 30)
-    lines!(axs[i], [range1, range2], fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
+    lines!(axs[i], ranges, fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
     Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
-rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, range1, range2, gencode; height = 0.1)
+rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
-GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, range1, range2)
+GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
 Colorbar(f[1:n, 2], limits = (0, 1), ticks = 0:1:1, height = 20,
     colormap = (:gray60, :red2), label = "LD", ticksize = 0, tickwidth = 0,
     tickalign = 0, ticklabelsize = 6, flip_vertical_label = true,
@@ -38,46 +53,18 @@ end
 resize_to_layout!(f)
 f
 ```
-![](../figs/JAZF1-locuszoom.png)
+![](../figs/ACAN-locuszoom.png)
 
 To color variants by linkage disequilibrium (LD), we need a reference panel. If we already have
 one, we can use [__SnpArrays.jl__](https://openmendel.github.io/SnpArrays.jl/latest/) to
-read in PLINK bed files. If not, we can download one as below. For the time being, 
-we only download and convert a single chromosome from the 1000 Genomes Project. 
+read in PLINK bed files.
 
 ```julia
-using Pkg
-Pkg.add("SnpArrays")
-```
-
-```julia
-using SnpArrays, Downloads
-# Download 1000 Genomes data for a single chromosome
-beagle = "http://bochet.gcc.biostat.washington.edu/beagle/1000_Genomes_phase3_v5a"
-url = joinpath(beagle, "b37.vcf/chr$(chr).1kg.phase3.v5a.vcf.gz")
-vcf = basename(url)
 isdir("data/1kg") || mkdir("data/1kg")
-isfile("data/1kg/$(vcf)") || Downloads.download(url, "data/1kg/$(vcf)")
-# Convert vcf file to plink bed file (this step takes a while)
-isfile("data/1kg/$(replace(vcf, ".vcf.gz" => ".bed"))") || vcf2plink("data/1kg/$(vcf)", "data/1kg/$(replace(vcf, ".vcf.gz" => ""))")
-# Download sample metadata
-url = joinpath(beagle, "sample_info/integrated_call_samples_v3.20130502.ALL.panel")
-meta = basename(url) 
-isfile("data/1kg/$(meta)") || Downloads.download(url, "data/1kg/$(meta)")
-# Subset data to the genomic region of interest and European samples
-kgp = SnpData("data/1kg/$(replace(vcf, ".vcf.gz" => ""))")
-meta = CSV.read("data/1kg/$(meta)", DataFrame)
-eur = meta.sample[meta.super_pop .== "EUR"]
-colinds = findall((kgp.snp_info.position .>= range1) .& (kgp.snp_info.position .<= range2))
-rowinds = findall(in(eur), kgp.person_info.iid)
-file = replace(vcf, ".vcf.gz" => ".eur")
-SnpArrays.filter(kgp, rowinds, colinds; des = "data/1kg/$(file)")
-# Apply minor allele frequency > 0.05 filter
-kgp = SnpData("data/1kg/$(file)")
-colinds = SnpArrays.filter(kgp.snparray; min_maf = 0.05)[2]
-file = file * ".maf0.05"
-SnpArrays.filter(kgp, trues(size(kgp)[1]), colinds; des = "data/1kg/$(file)")
-kgp = SnpData("data/1kg/$(file)")
+for plink in ["bed", "bim", "fam"]
+    Downloads.download("https://github.com/mmkim1210/GeneticsMakieExamples/raw/master/data/kgp.chr15.$(plink)", "data/1kg/kgp.chr15.$(plink)")
+end
+kgp = SnpData("data/1kg/kgp.chr15")
 ```
 
 We can color variants by LD with the index/sentinel SNP by using the `ld` keyword argument.
@@ -86,14 +73,14 @@ We can color variants by LD with the index/sentinel SNP by using the `ld` keywor
 f = Figure(resolution = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
-    GeneticsMakie.plotlocus!(axs[i], chr, range1, range2, df[i], ld = kgp)
+    GeneticsMakie.plotlocus!(axs[i], chr, ranges[1], ranges[2], dfs[i]; ld = kgp)
     rowsize!(f.layout, i, 30)
-    lines!(axs[i], [range1, range2], fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
+    lines!(axs[i], ranges, fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
     Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
-rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, range1, range2, gencode; height = 0.1)
+rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
-GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, range1, range2)
+GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
 Colorbar(f[1:n, 2], limits = (0, 1), ticks = 0:1:1, height = 20,
     colormap = (:gray60, :red2), label = "LD", ticksize = 0, tickwidth = 0,
     tickalign = 0, ticklabelsize = 6, flip_vertical_label = true,
@@ -108,7 +95,7 @@ end
 resize_to_layout!(f)
 f
 ```
-![](../figs/JAZF1-locuszoom-ld.png)
+![](../figs/ACAN-locuszoom-ld.png)
 
 We can also color variants by LD with the same SNP by using the `ld` keyword argument.
 
@@ -116,14 +103,14 @@ We can also color variants by LD with the same SNP by using the `ld` keyword arg
 f = Figure(resolution = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
-    GeneticsMakie.plotlocus!(axs[i], chr, range1, range2, df[i], ld = (kgp, "rs508347"))
+    GeneticsMakie.plotlocus!(axs[i], chr, ranges[1], ranges[2], dfs[i]; ld = (kgp, ("15", 89395626)))
     rowsize!(f.layout, i, 30)
-    lines!(axs[i], [range1, range2], fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
+    lines!(axs[i], ranges, fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
     Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
-rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, range1, range2, gencode; height = 0.1)
+rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
-GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, range1, range2)
+GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
 Colorbar(f[1:n, 2], limits = (0, 1), ticks = 0:1:1, height = 20,
     colormap = (:gray60, :red2), label = "LD", ticksize = 0, tickwidth = 0,
     tickalign = 0, ticklabelsize = 6, flip_vertical_label = true,
@@ -138,7 +125,7 @@ end
 resize_to_layout!(f)
 f
 ```
-![](../figs/JAZF1-locuszoom-ld-snp.png)
+![](../figs/ACAN-locuszoom-ld-snp.png)
 
 By using [__Makie.jl__](https://makie.juliaplots.org/stable/)'s layout tools, 
 it becomes easy to draw additional tracks. For example, in a separate track, 
@@ -164,7 +151,7 @@ credible set post-fine-mapping.
     plot alternative measures of strength of association (e.g. Z scores).
 
 !!! note "Patterns of LD"
-    Oftentimes, chunks of LD blocks hug the gene boundaries.
+    Oftentimes, chunks of LD blocks hug a single or multiple gene boundaries.
 
 !!! tip "Covering the entire genome"
     Visualizing 1,500 genomic regions with 2 Mb window will more or less cover the
