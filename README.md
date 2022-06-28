@@ -60,3 +60,6 @@ MHC association for schizophrenia with increasing sample size:
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/C4A-locuszoom2.png"></p>
 LD structure for ~66,000 SNPs in MHC region:
 <p align="center"><img width="60%" style="border-radius: 5px;" src="figs/MHC-LD-square.png"></p>
+
+## References
+> Kim et al., (2022). GeneticsMakie.jl: A versatile and scalable toolkit for visualizing locus-level genetic and genomic data. *bioRxiv*, https://doi.org/10.1101/2022.04.18.488573.
