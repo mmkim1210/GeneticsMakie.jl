@@ -7,6 +7,8 @@ in that it shows all genes within a genomic window.
 ```julia
 using Pkg
 Pkg.add(["GeneticsMakie", "CairoMakie", "DataFrames", "Arrow"])
+
+using GeneticsMakie, CairoMakie, DataFrames, Arrow
 url = "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/GRCh37_mapping/gencode.v39lift37.annotation.gtf.gz"
 gencode = Arrow.Table("data/gencode/$(splitext(basename(url))[1]).arrow")|> DataFrame
 ```
@@ -16,7 +18,6 @@ to plot all genes within a given chromosome and ± 100 Kb window around gene sta
 We can then use `GeneticsMakie.labelgenome` to label the genomic range.
 
 ```julia
-using GeneticsMakie, CairoMakie, DataFrames, Arrow
 isdir("figs") || mkdir("figs")
 set_theme!(font = "Arial")
 
@@ -131,3 +132,8 @@ vlines!(ax, stop, color = (:gold, 0.5), linewidth = 0.5)
 f
 ```
 ![](../figs/CACNA1G-gene-line.png)
+
+We can finally save the figure.
+```julia
+save("figs/$(gene)-gene.png", f, px_per_unit = 4)
+```

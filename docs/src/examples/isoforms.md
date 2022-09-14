@@ -8,12 +8,13 @@ isoforms are likely to be discovered in the future. For this reason, plotting is
 ```julia
 using Pkg
 Pkg.add(["GeneticsMakie", "CairoMakie", "DataFrames", "Arrow"])
+
+using GeneticsMakie, CairoMakie, DataFrames, Arrow
 url = "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/GRCh37_mapping/gencode.v39lift37.annotation.gtf.gz"
 gencode = Arrow.Table("data/gencode/$(splitext(basename(url))[1]).arrow")|> DataFrame
 ```
 
 ```julia
-using GeneticsMakie, CairoMakie, DataFrames, Arrow
 isdir("figs") || mkdir("figs")
 set_theme!(font = "Arial")
 

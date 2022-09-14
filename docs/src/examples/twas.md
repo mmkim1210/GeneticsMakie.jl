@@ -6,11 +6,11 @@ and gene-level Poisson test from family trio studies for schizophrenia.
 
 ```julia
 using Pkg
-Pkg.add(["GeneticsMakie", "CairoMakie", "CSV", "DataFrames"])
+Pkg.add(["GeneticsMakie", "CairoMakie", "CSV", "DataFrames", "Arrow"])
 ```
 
 ```julia
-using GeneticsMakie, CairoMakie, CSV, DataFrames
+using GeneticsMakie, CairoMakie, CSV, DataFrames, Arrow, Downloads
 url = "https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/GRCh37_mapping/gencode.v39lift37.annotation.gtf.gz"
 gencode = Arrow.Table("data/gencode/$(splitext(basename(url))[1]).arrow")|> DataFrame
 Downloads.download("https://atgu-exome-browser-data.s3.amazonaws.com/SCHEMA/SCHEMA_gene_results.tsv.bgz", "data/gwas/SCHEMA_gene_results.tsv.bgz")

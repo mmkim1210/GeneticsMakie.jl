@@ -45,8 +45,11 @@ GeneticsMakie.findgwasloci(dfs)
 Such an exhaustive list of loci can then be iterated through and visualized by 
 [Plotting LocusZooom](@ref).
 
-We can also find the closest gene to each index SNP in GWAS loci.
+We can also find the closest gene to each index SNP in GWAS loci after [Parsing GENCODE](@ref).
 ```julia
+file = "gencode.v39lift37.annotation.gtf.arrow"
+gencode = Arrow.Table("data/gencode/$(file)")|> DataFrame
+
 loci = GeneticsMakie.findgwasloci(dfs[1])
 GeneticsMakie.findclosestgene(loci, gencode)
 GeneticsMakie.findclosestgene(loci, gencode; start = true) # closest gene from gene start site
