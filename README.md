@@ -11,6 +11,9 @@ julia> ]
 pkg> add GeneticsMakie
 ```
 
+## Documentation
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://mmkim1210.github.io/GeneticsMakie.jl/dev)
+
 ## Examples
 Visualize 1 Mb window around *KMT2E* gene:
 <p align="center"><img width="70%" style="border-radius: 5px;" src="figs/KMT2E-gene.png"></p>
