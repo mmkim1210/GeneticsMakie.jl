@@ -144,12 +144,11 @@ let
                                    (row.stop, 0)])
         poly!(ax, peakpoly; color = "#CB3C33")
     end
-    Label(f[1, 1, Top()], "H3K4me3", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
     ax.spinewidth = 0.75
     hidexdecorations!(ax)
     hideydecorations!(ax)
     xlims!(ax, ranges[1], ranges[2])
-    ylims!(ax, -10 * .25, 10 * 1.75)
+    ylims!(ax, -10 * .25, 10 * 1.5)
     hidespines!(ax, :t, :r)
     rowsize!(f.layout, 1, 10)
 end
@@ -158,6 +157,7 @@ rs = GeneticsMakie.plotgenes!(axs[2], chr, ranges[1], ranges[2], gencode; height
 rowsize!(f.layout, 2, rs)
 GeneticsMakie.labelgenome(f[2, 1, Bottom()], chr, ranges[1], ranges[2])
 Label(f[1, 0], text = "Peaks", textsize = 6, rotation = pi / 2)
+Label(f[0, 2], "H3K4me3", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0), tellwidth = false)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:2
