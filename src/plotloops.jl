@@ -12,7 +12,7 @@ function drawloop!(
     height = 100,
     linewidth = 0.25,
     colorarc = "#9658B2",
-    colorend = ("#FFBB00", 0.6),
+    colorend = ("#FFBB00", 0.5),
     resolution = 1000 # Plot `resolution` points along x-axis
     )
     midpoints = (sum(pairedends[1])/2, sum(pairedends[2])/2)
@@ -25,8 +25,8 @@ function drawloop!(
     lines!(ax, xs, ys; color = colorarc, linewidth = linewidth)
     feet =
     [Polygon([Point2f(pairedend[1], 0),
-              Point2f(pairedend[1], -height/20),
-              Point2f(pairedend[2], -height/20),
+              Point2f(pairedend[1], -5),
+              Point2f(pairedend[2], -5),
               Point2f(pairedend[2], 0)])
      for pairedend in pairedends]
     poly!(ax, feet; color = colorend)
@@ -47,7 +47,7 @@ genomic coordinate `bp` or plot within a certain `window` around `gene`.
 - `ymax::Real = 102`: the maximum value for y axis.
 - `linewidth = 0.25`: the line width of the loops' arcs.
 - `colorarc = "#9658B2"`: the color of loops' arcs.
-- `colorend = "#9658B2"`: the color of loops' ends.
+- `colorend = ("#FFBB00", 0.5)`: the color of loops' ends.
 - `resolution = 1000`: plot `resolution` points along x-axis within the given range.
 """
 function plotloops!(
@@ -59,14 +59,14 @@ function plotloops!(
         ymax::Real = 102,
         linewidth::Real = 0.25,
         colorarc = "#9658B2",
-        colorend = ("#FFBB00", 0.6),
+        colorend = ("#FFBB00", 0.5),
         resolution = 1000
     )
     loopdf = subset(loopdf,
                     [:chr1, :chr2] =>
                     (chr1, chr2) -> chr1 .== chr2 .== chromosome,
-                    [:x1, :x2, :y1, :y2] =>
-                    ByRow((coords...) -> any(range1 .< coords .< range2))
+                    [:x1, :y2] =>
+                    (start, stop) -> (start .< range2) .&& (stop .> range1)
                    )
     transform!(loopdf,
                [:x1, :y2] =>
