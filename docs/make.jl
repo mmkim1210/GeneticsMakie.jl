@@ -24,7 +24,8 @@ makedocs(;
             "Plotting isoforms" => "examples/isoforms.md",
             "Plotting LocusZoom" => "examples/locus.md",
             "Plotting GWAS" => "examples/gwas.md",
-            "Plotting TWAS" => "examples/twas.md"],
+            "Plotting TWAS" => "examples/twas.md",
+            "Plotting ChIP-Seq & ATAC-Seq" => "examples/chip.md"],
         "API" => "api.md",
     ],
 )
