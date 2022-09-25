@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Plotting loops · GeneticsMakie.jl</title><script data-outdated-warner src="../../assets/warner.js"></script><link rel="canonical" href="https://mmkim1210.github.io/GeneticsMakie.jl/examples/loops/"/><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.045/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.24/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.svg" alt="GeneticsMakie.jl logo"/></a><form class="docs-search" action="../../search/"><input class="docs-search-query" id="documenter-search-query" name="q" type="text" placeholder="Search docs"/></form><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><span class="tocitem">Examples</span><ul><li><a class="tocitem" href="../gtf/">Parsing GENCODE</a></li><li><a class="tocitem" href="../summary/">Munging summary statistics</a></li><li><a class="tocitem" href="../genes/">Plotting genes</a></li><li><a class="tocitem" href="../isoforms/">Plotting isoforms</a></li><li><a class="tocitem" href="../locus/">Plotting LocusZoom</a></li><li><a class="tocitem" href="../gwas/">Plotting GWAS</a></li><li><a class="tocitem" href="../twas/">Plotting TWAS</a></li><li class="is-active"><a class="tocitem" href>Plotting loops</a></li></ul></li><li><a class="tocitem" href="../../api/">API</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Examples</a></li><li class="is-active"><a href>Plotting loops</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Plotting loops</a></li></ul></nav><div class="docs-right"><a class="docs-edit-link" href="https://github.com/mmkim1210/GeneticsMakie.jl/blob/master/docs/src/examples/loops.md#" title="Edit on GitHub"><span class="docs-icon fab"></span><span class="docs-label is-hidden-touch">Edit on GitHub</span></a><a class="docs-settings-button fas fa-cog" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-sidebar-button fa fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a></div></header><article class="content" id="documenter-page"><h1 id="Plotting-loops"><a class="docs-heading-anchor" href="#Plotting-loops">Plotting loops</a><a id="Plotting-loops-1"></a><a class="docs-heading-anchor-permalink" href="#Plotting-loops" title="Permalink"></a></h1><p>Additionally, we can visualize long-range DNA interactions captured by ChIA-PET and Hi-C sequencing. A new track with these DNA interactions can be added upon the GENCODE annotations we have processed from <a href="../gtf/#Parsing-GENCODE">Parsing GENCODE</a>. As an example, we focus on the <em>MYC</em> locus in mammary epithelial cells, which has long-range enhancers that are implicated in various epithelial cancers (<a href="https://doi.org/10.1016/j.semcdb.2016.06.017">Spitz et al. 2016</a>). In order to visualize loops within this locus, we will download long-range chromatin interactions provided by the ENCODE project.</p><pre><code class="language-julia hljs">using Pkg
+Pkg.add([&quot;GeneticsMakie&quot;, &quot;CairoMakie&quot;, &quot;CSV&quot;, &quot;DataFrames&quot;, &quot;Arrow&quot;])</code></pre><pre><code class="language-julia hljs">using GeneticsMakie, CairoMakie, CSV, DataFrames, Arrow, Downloads
+isdir(&quot;data/loops&quot;) || mkdir(&quot;data/loops&quot;)
+url = &quot;https://www.encodeproject.org/files/ENCFF730CMY/@@download/ENCFF730CMY.bedpe.gz&quot;
+if !isfile(&quot;data/loops/$(splitext(basename(url))[1]).arrow&quot;)
+    isfile(&quot;data/loops/$(basename(url))&quot;) ||
+    Downloads.download(url, &quot;data/loops/$(basename(url))&quot;)
+    df = CSV.read(&quot;data/loops/$(basename(url))&quot;, DataFrame;
+                  delim = &quot;\t&quot;, skipto = 2, header = 0)
+    # Select relevant columns and harmonize chromosomes with GENCODE
+    select!(df,
+            :Column1 =&gt; (col -&gt; replace.(col, &quot;chr&quot; =&gt; &quot;&quot;)) =&gt; :chr1,
+            :Column2 =&gt; :x1, :Column3 =&gt; :x2,
+            :Column4 =&gt; (col -&gt; replace.(col, &quot;chr&quot; =&gt; &quot;&quot;)) =&gt; :chr2,
+            :Column5 =&gt; :y1, :Column6 =&gt; :y2,
+            :Column8 =&gt; :score)
+    Arrow.write(&quot;data/loops/$(splitext(basename(url))[1]).arrow&quot;, df)
+end
+dfs = [Arrow.Table(&quot;data/loops/$(splitext(basename(url))[1]).arrow&quot;) |&gt; DataFrame]
+url = &quot;https://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_39/GRCh37_mapping/gencode.v39lift37.annotation.gtf.gz&quot;
+gencode = Arrow.Table(&quot;data/gencode/$(splitext(basename(url))[1]).arrow&quot;)|&gt; DataFrame</code></pre><pre><code class="language-julia hljs">gene = &quot;MYC&quot;
+chr, start, stop = GeneticsMakie.findgene(gene, gencode)
+ranges = [start - 1e6, stop + 1e6]
+n = length(dfs)
+titles = [&quot;ENCFF730CMY&quot;]
+
+f = Figure(resolution = (306, 792))
+axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
+for i in 1:n
+    GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i])
+    rowsize!(f.layout, i, 40)
+    Label(f[i, 1, Top()], &quot;$(titles[i])&quot;, textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+end
+rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
+rowsize!(f.layout, n + 1, rs)
+GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
+Label(f[1:n, 0], text = &quot;Chromatin\ninteractions&quot;, textsize = 6, rotation = pi / 2)
+rowgap!(f.layout, 5)
+colgap!(f.layout, 5)
+for i in 1:(n + 1)
+    vlines!(axs[i], start, color = (:gold, 0.5), linewidth = 0.5)
+    vlines!(axs[i], stop, color = (:gold, 0.5), linewidth = 0.5)
+end
+resize_to_layout!(f)
+f</code></pre><p><img src="../../figs/MYC-loops.png" alt/></p><p>We can change the color of the loops using the <code>colorarc</code> and <code>colorend</code> keywords, which color the loops&#39; arcs and paired ends respectively. Additionally, we can change the line width of the loops using the <code>linewidth</code> keyword.</p><pre><code class="language-julia hljs">f = Figure(resolution = (306, 792))
+axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
+for i in 1:n
+    GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i];
+    linewidth = 0.75, colorarc = &quot;#CB3C33&quot;, colorend = &quot;#CB3C33&quot;)
+    rowsize!(f.layout, i, 40)
+    Label(f[i, 1, Top()], &quot;$(titles[i])&quot;, textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+end
+rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
+rowsize!(f.layout, n + 1, rs)
+GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
+Label(f[1:n, 0], text = &quot;Chromatin\ninteractions&quot;, textsize = 6, rotation = pi / 2)
+rowgap!(f.layout, 5)
+colgap!(f.layout, 5)
+for i in 1:(n + 1)
+    vlines!(axs[i], start, color = (:gold, 0.5), linewidth = 0.5)
+    vlines!(axs[i], stop, color = (:gold, 0.5), linewidth = 0.5)
+end
+resize_to_layout!(f)
+f</code></pre><p><img src="../../figs/MYC-loops-color.png" alt/></p><p>By subsetting our data to what we wish to display, we can be more specific in what we wish to visualize. For example, if we wanted only the enhancer-promoter loops for <em>MYC</em>, we can filter our DataFrame to loops that link to the promoter region for <em>MYC</em>. Here we filter our DataFrame to loops that link within the <em>MYC</em> gene body and promoter. Additionally, by running <code>GeneticsMakie.plotloops!</code> on the same axis, we can overlay these loops on top of the previous full set of loops.</p><pre><code class="language-julia hljs">f = Figure(resolution = (306, 792))
+axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
+for i in 1:n
+    GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], 
+               subset(dfs[i],
+               [:chr1, :chr2] =&gt; ByRow((cols...) -&gt; all(cols .== chr)),
+               [:x1, :x2, :y1, :y2] =&gt;
+               ByRow((cols...) -&gt; !any(start .&lt; cols .&lt; stop))))
+    GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2],
+               subset(dfs[i],
+               [:chr1, :chr2] =&gt; ByRow((cols...) -&gt; all(cols .== chr)),
+               [:x1, :x2, :y1, :y2] =&gt;
+               ByRow((cols...) -&gt; any(start .&lt; cols .&lt; stop)));
+               colorarc = &quot;#CB3C33&quot;, colorend = (&quot;#CB3C33&quot;, 0.6))
+    rowsize!(f.layout, i, 40)
+    Label(f[i, 1, Top()], &quot;$(titles[i])&quot;, textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+end
+rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
+rowsize!(f.layout, n + 1, rs)
+GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
+Label(f[1:n, 0], text = &quot;Chromatin\ninteractions&quot;, textsize = 6, rotation = pi / 2)
+rowgap!(f.layout, 5)
+colgap!(f.layout, 5)
+for i in 1:(n + 1)
+    vlines!(axs[i], start, color = (:gold, 0.5), linewidth = 0.5)
+    vlines!(axs[i], stop, color = (:gold, 0.5), linewidth = 0.5)
+end
+resize_to_layout!(f)
+f</code></pre><p><img src="../../figs/MYC-loops-overlay.png" alt/></p><p>As with the LocusZoom plots, by using <a href="https://makie.juliaplots.org/stable/"><strong>Makie.jl</strong></a>&#39;s layout tools, it becomes easy to draw additional tracks. For example, in a separate track, we can include chromatin interactions present in other samples. In another example, we can include interactions found through other sequencing methods.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../twas/">« Plotting TWAS</a><a class="docs-footer-nextpage" href="../../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.23 on <span class="colophon-date" title="Sunday 25 September 2022 08:23">Sunday 25 September 2022</span>. Using Julia version 1.8.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
