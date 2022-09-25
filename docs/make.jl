@@ -25,7 +25,9 @@ makedocs(;
             "Plotting LocusZoom" => "examples/locus.md",
             "Plotting GWAS" => "examples/gwas.md",
             "Plotting TWAS" => "examples/twas.md",
-            "Plotting loops" => "examples/loops.md"],
+            "Plotting loops" => "examples/loops.md",
+            "Plotting ChIP-Seq & ATAC-Seq" => "examples/chip.md"],
+
         "API" => "api.md",
     ],
 )
