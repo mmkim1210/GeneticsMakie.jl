@@ -51,6 +51,7 @@ Visualize Miami/Hudson plot:
 Visualize QQ plot of *P* values:
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/QQ.png"></p>
 
+
 ## Further examples
 Patterns of association and LD:
 <p align="center"><img width="80%" style="border-radius: 5px;" src="figs/effect-LD.png"></p>
