@@ -65,8 +65,8 @@ function plotloops!(
     loopdf = subset(loopdf,
                     [:chr1, :chr2] =>
                     (chr1, chr2) -> chr1 .== chr2 .== chromosome,
-                    [:x1, :x2, :y1, :y2] =>
-                    ByRow((coords...) -> any(range1 .< coords .< range2))
+                    [:x1, :y2] =>
+                    (start, stop) -> (start .< range2) .&& (stop .> range1)
                    )
     transform!(loopdf,
                [:x1, :y2] =>
