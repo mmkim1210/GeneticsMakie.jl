@@ -39,10 +39,6 @@ Visualize GWAS results for *KMT2E* locus:
 Visualize GWAS results for *KMT2E* locus with the same reference SNPs for LD:
 <p align="center"><img width="100%" style="border-radius: 5px;" src="figs/KMT2E-locuszoom-index.png"></p>
 
-Visualize long-range DNA interactions, including enhancer promoter loops, for *MYC*
-locus:
-<p align="center"><img width="100%" style="border-radius: 5px;" src="figs/MYC-loops.png"></p>
-
 Visualize Manhattan plot:
 <p align="center"><img width="75%" style="border-radius: 5px;" src="figs/manhattan.png"></p>
 

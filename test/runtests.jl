@@ -180,7 +180,7 @@ end
     kgp = SnpData("data/kgp")
     gwas = CSV.read("data/locus.csv", DataFrame)
     gwas.CHR = string.(gwas.CHR)
-    
+
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotlocus!(ax, "7", 103581390, 105755466, gwas)
@@ -200,14 +200,14 @@ end
     GeneticsMakie.plotlocus!(ax, "7", 103581390, 105755466, gwas; ld = kgp)
     save("locuszoom.png", f)
     @test isfile("locuszoom.png")
-    rm("locuszoom.png")    
+    rm("locuszoom.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotlocus!(ax, "7", 103581390, 105755466, gwas; ld = (kgp, "rs11764361"))
     save("locuszoom.png", f)
     @test isfile("locuszoom.png")
-    rm("locuszoom.png")    
+    rm("locuszoom.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
@@ -254,7 +254,7 @@ end
     loopdf = CSV.read("data/loops.csv", DataFrame)
     loopdf.chr1 = string.(loopdf.chr1)
     loopdf.chr2 = string.(loopdf.chr2)
-    
+
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotloops!(ax, "7", 103581390, 105755466, loopdf)
@@ -274,34 +274,37 @@ end
     GeneticsMakie.plotloops!(ax, "7", 103581390, 105755466, loopdf; ymax = 150)
     save("loops.png", f)
     @test isfile("loops.png")
-    rm("loops.png")    
-
-    f = Figure()
-    ax = Axis(f[1, 1])
-    GeneticsMakie.plotloops!(ax, "7", 103581390, 105755466, loopdf; color = :royalblue)
-    save("loops.png", f)
-    @test isfile("loops.png")
-    rm("loops.png")    
-
-    f = Figure()
-    ax = Axis(f[1, 1])
-    GeneticsMakie.plotloops!(ax, "7", 103581390, 105755466, loopdf; outline = true)
-    save("loops.png", f)
-    @test isfile("loops.png")
-    rm("loops.png")    
+    rm("loops.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotloops!(ax, "7", 103581390, 105755466, loopdf;
-                             step = 1000, length = nothing)
+                             linewidth = 10)
     save("loops.png", f)
     @test isfile("loops.png")
-    rm("loops.png")    
+    rm("loops.png")
 
     f = Figure()
     ax = Axis(f[1, 1])
-    GeneticsMakie.plotloops!(ax, "7", 103581390, 105755466, loopdf; length = 100)
+    GeneticsMakie.plotloops!(ax, "7", 103581390, 105755466, loopdf;
+                             colorarc = :royalblue)
     save("loops.png", f)
     @test isfile("loops.png")
-    rm("loops.png")    
+    rm("loops.png")
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotloops!(ax, "7", 103581390, 105755466, loopdf;
+                             colorend = :royalblue)
+    save("loops.png", f)
+    @test isfile("loops.png")
+    rm("loops.png")
+
+    f = Figure()
+    ax = Axis(f[1, 1])
+    GeneticsMakie.plotloops!(ax, "7", 103581390, 105755466, loopdf;
+                             resolution = 10000)
+    save("loops.png", f)
+    @test isfile("loops.png")
+    rm("loops.png")
 end

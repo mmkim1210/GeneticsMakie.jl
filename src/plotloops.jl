@@ -1,39 +1,35 @@
 function ellipse(x, a, b)
     if 1 - x^2/a^2 < 0
-        return 0
+        return NaN
     end
     abs(b) * sqrt(1 - x^2/a^2)
 end
-function ellipseband!(
+function drawloop!(
     ax::Axis,
-    outerranges,
-    innerranges,
+    pairedends,
     range1::Real,
     range2::Real;
     height = 100,
-    color = "#9658B2",
-    step = nothing, # Plot a point for each <step> along x-axis
-    length = 1000, # Overrides step, sets how many plotted points
-    outline = false
+    linewidth = 0.25,
+    colorarc = "#9658B2",
+    colorend = ("#FFBB00", 0.6),
+    resolution = 1000 # Plot `resolution` points along x-axis
     )
-    if isnothing(length)
-        xs = range(max(outerranges[1], range1), min(outerranges[2], range2);
-                   step = step)
-    else
-        xs = range(max(outerranges[1], range1), min(outerranges[2], range2);
-                   length = length)
-    end
-    outera = (outerranges[2] - outerranges[1]) / 2
-    outerb = height
-    yhighs = ellipse.(xs .- outerranges[1] .- outera, outera, outerb)
-    innera = (innerranges[2] - innerranges[1]) / 2
-    innerb = innera / outera * height
-    ylows = ellipse.(xs .- innerranges[1] .- innera, innera, innerb)
-    band!(ax, xs, ylows, yhighs; color = color)
-    if outline
-        lines!(ax, xs, yhighs; color = color, linewidth = 0.1)
-        lines!(ax, xs, ylows; color = color, linewidth = 0.1)
-    end
+    midpoints = (sum(pairedends[1])/2, sum(pairedends[2])/2)
+    xs = vcat(range(max(midpoints[1], range1), min(midpoints[2], range2);
+               step = (range2 - range1) / resolution),
+              min(midpoints[2], range2)) # Add last point in case range drops it
+    a = (midpoints[2] - midpoints[1]) / 2
+    b = height
+    ys = ellipse.(xs .- midpoints[1] .- a, a, b)
+    lines!(ax, xs, ys; color = colorarc, linewidth = linewidth)
+    feet =
+    [Polygon([Point2f(pairedend[1], 0),
+              Point2f(pairedend[1], -height/20),
+              Point2f(pairedend[2], -height/20),
+              Point2f(pairedend[2], 0)])
+     for pairedend in pairedends]
+    poly!(ax, feet; color = colorend)
 end
 
 """
@@ -48,11 +44,11 @@ Alternatively, plot within a given `chromosome` and a certain `window` around a
 genomic coordinate `bp` or plot within a certain `window` around `gene`.
 
 # Arguments
-- `ymax::Real = 102`: the maximum value for y axis. 
-- `outline::Bool = false`: draw outline around loops (useful for 2.5+ Mbase windows)
-- `color = "#9658B2"`: the color of loops.
-- `step = nothing`: plot a point for each `step` base pairs. `length` must be set to nothing.
-- `length = 1000`: plot `length` number of points for each loop. overrides `step`.
+- `ymax::Real = 102`: the maximum value for y axis.
+- `linewidth = 0.25`: the line width of the loops' arcs.
+- `colorarc = "#9658B2"`: the color of loops' arcs.
+- `colorend = "#9658B2"`: the color of loops' ends.
+- `resolution = 1000`: plot `resolution` points along x-axis within the given range.
 """
 function plotloops!(
         ax::Axis,
@@ -61,10 +57,10 @@ function plotloops!(
         range2::Real,
         loopdf::AbstractDataFrame;
         ymax::Real = 102,
-        outline::Bool = false,
-        color = "#9658B2",
-        step = nothing,
-        length = 1000
+        linewidth::Real = 0.25,
+        colorarc = "#9658B2",
+        colorend = ("#FFBB00", 0.6),
+        resolution = 1000
     )
     loopdf = subset(loopdf,
                     [:chr1, :chr2] =>
@@ -83,14 +79,16 @@ function plotloops!(
         loopdf.b = range(10, 100, length = nrow(loopdf))
     end
     for row in eachrow(loopdf)
-        ellipseband!(ax,
-                     (row.x1, row.y2), (row.x2, row.y1),
-                     range1, range2; height = row.b, color = color,
-                     step = step, length = length, outline = outline)
+        drawloop!(ax,
+                  [(row.x1, row.x2), (row.y1, row.y2)],
+                  range1, range2;
+                  height = row.b, linewidth = linewidth,
+                  colorarc = colorarc, colorend = colorend,
+                  resolution = resolution)
     end
     ax.spinewidth = 0.75
     xlims!(ax, range1, range2)
-    ylims!(ax, 0, ymax)
+    ylims!(ax, -ymax/20, ymax)
     hidespines!(ax, :t, :r)
     hidedecorations!(ax)
 end

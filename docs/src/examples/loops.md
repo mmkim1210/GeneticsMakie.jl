@@ -41,9 +41,9 @@ gencode = Arrow.Table("data/gencode/$(splitext(basename(url))[1]).arrow")|> Data
 gene = "MYC"
 chr, start, stop = GeneticsMakie.findgene(gene, gencode)
 ranges = [start - 1e6, stop + 1e6]
-
 n = length(dfs)
 titles = ["ENCFF730CMY"]
+
 f = Figure(resolution = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
@@ -66,21 +66,17 @@ f
 ```
 ![](../figs/MYC-loops.png)
 
-We can change the color of the loops using the `color` keyword. Additionally,
-we can add outlines to the loops for visual clarity (useful when viewing large
-ranges).
+We can change the color of the loops using the `colorarc` and `colorend`
+keywords, which color the loops' arcs and paired ends respectively.
+Additionally, we can change the line width of the loops using the `linewidth`
+keyword.
 
 ```julia
-gene = "MYC"
-chr, start, stop = GeneticsMakie.findgene(gene, gencode)
-ranges = [start - 1e6, stop + 1e6]
-
-n = length(dfs)
-titles = ["ENCFF730CMY"]
 f = Figure(resolution = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
-    GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i]; color = "#CB3C33", outline = true)
+    GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i];
+    linewidth = 0.75, colorarc = "#CB3C33", colorend = "#CB3C33")
     rowsize!(f.layout, i, 40)
     Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
@@ -108,12 +104,6 @@ _MYC_ gene body and promoter. Additionally, by running
 of the previous full set of loops.
 
 ```julia
-gene = "MYC"
-chr, start, stop = GeneticsMakie.findgene(gene, gencode)
-ranges = [start - 1e6, stop + 1e6]
-
-n = length(dfs)
-titles = ["ENCFF730CMY"]
 f = Figure(resolution = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
@@ -127,7 +117,7 @@ for i in 1:n
                [:chr1, :chr2] => ByRow((cols...) -> all(cols .== chr)),
                [:x1, :x2, :y1, :y2] =>
                ByRow((cols...) -> any(start .< cols .< stop)));
-               color = "#CB3C33", outline = true)
+               colorarc = "#CB3C33", colorend = ("#CB3C33", 0.6))
     rowsize!(f.layout, i, 40)
     Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
