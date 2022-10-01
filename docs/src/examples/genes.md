@@ -133,7 +133,7 @@ f
 ```
 ![](../figs/CACNA1G-gene-line.png)
 
-We can finally save the figure.
+Then we can save the figure as below.
 ```julia
 save("figs/$(gene)-gene.png", f, px_per_unit = 4)
 ```
