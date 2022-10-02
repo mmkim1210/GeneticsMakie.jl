@@ -1,7 +1,7 @@
 name = "GeneticsMakie"
 uuid = "8ca62643-82d8-47b5-a233-a06d1654fb35"
 authors = ["Minsoo <mmkim1210@gmail.com> and contributors"]
-version = "0.1.4"
+version = "0.1.5"
 
 [deps]
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"

@@ -4,6 +4,7 @@ function ellipse(x, a, b)
     end
     abs(b) * sqrt(1 - x^2/a^2)
 end
+
 function drawloop!(
     ax::Axis,
     pairedends,

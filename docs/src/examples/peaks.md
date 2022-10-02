@@ -1,15 +1,8 @@
-# Plotting ChIP-seq and ATAC-seq
+# Plotting peaks
 
 Epigenetic sequencing is another data modality of interest that we can
 visualize with [__Makie.jl__](https://makie.juliaplots.org/stable/) and
-GeneticsMakie.jl. Chromatin immunoprecipitation sequencing (ChIP-seq) and assay
-for transposase-accessible chromatin with high-throughput sequencing (ATAC-seq)
-map epigenetic modifications throughout the genome by identifying DNA-protein
-interaction sites and open chromatin respectively, and although they capture
-different aspects of the epigenome, their resulting data share the same form
-and function (BAM files to capture reads, wiggle files to capture coverage and
-signal, BED files to capture peaks). Consequently, visualizing both types of
-sequencing will follow the same workflow.
+GeneticsMakie.jl. ChIP-seq and ATAC-seq map epigenetic modifications throughout the genome by identifying DNA-protein interaction sites and open chromatin respectively, and although they capture different aspects of the epigenome, their resulting data share the same form and function (i.e. BAM files to capture reads, wiggle files to capture coverage and signal, BED files to capture peaks). Consequently, visualizing both types of data will follow the same workflow.
 
 We will start with the annotation from [Parsing GENCODE](@ref). Accompanying
 ChIP-seq data will be downloaded from the

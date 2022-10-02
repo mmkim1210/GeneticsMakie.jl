@@ -25,7 +25,7 @@ makedocs(;
             "Plotting GWAS" => "examples/gwas.md",
             "Plotting TWAS" => "examples/twas.md",
             "Plotting loops" => "examples/loops.md",
-            "Plotting peaks" => "examples/chip.md"],
+            "Plotting peaks" => "examples/peaks.md"],
         "API" => "api.md",
         ],
     )
