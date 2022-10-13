@@ -66,12 +66,43 @@ f
 ```
 ![](../figs/MYC-loops.png)
 
-We can change the color of the loops using the `colorarc` and `colorend`
-keywords, which color the loops' arcs and paired ends respectively.
-Additionally, we can change the line width of the loops using the `linewidth`
-keyword.
+We can zoom in closer to the gene body by setting a smaller genomic range. With this 
+closer look, we can see yellow boxes at the ends of the arcs, each representing the 
+anchors of each loop. The span and length of these interaction anchors is recorded 
+in the ChIA-PET BEDPE file and is set to reflect the length of a ChIP DNA fragment.
 
 ```julia
+ranges = [start - 1e5, stop + 1e5]
+
+f = Figure(resolution = (306, 792))
+axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
+for i in 1:n
+    GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i])
+    rowsize!(f.layout, i, 40)
+    Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+end
+rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
+rowsize!(f.layout, n + 1, rs)
+GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
+Label(f[1:n, 0], text = "Chromatin\ninteractions", textsize = 6, rotation = pi / 2)
+rowgap!(f.layout, 5)
+colgap!(f.layout, 5)
+for i in 1:(n + 1)
+    vlines!(axs[i], start, color = (:gold, 0.5), linewidth = 0.5)
+    vlines!(axs[i], stop, color = (:gold, 0.5), linewidth = 0.5)
+end
+resize_to_layout!(f)
+f
+```
+![](../figs/MYC-loops-zoom.png)
+
+We can change the color of the loops and anchors using the `colorarc` and `colorend` 
+keywords respectively.  Additionally, we can change the line width of the loops using 
+the `linewidth` keyword.
+
+```julia
+ranges = [start - 1e6, stop + 1e6]
+
 f = Figure(resolution = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
