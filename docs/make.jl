@@ -1,21 +1,20 @@
 using GeneticsMakie
 using Documenter
-# using other stuff
 
 DocMeta.setdocmeta!(GeneticsMakie, :DocTestSetup, :(using GeneticsMakie); recursive=true)
 
 makedocs(;
-    modules=[GeneticsMakie],
-    authors="Minsoo <mmkim1210@gmail.com> and contributors",
-    repo="https://github.com/mmkim1210/GeneticsMakie.jl/blob/{commit}{path}#{line}",
-    sitename="GeneticsMakie.jl",
-    format=Documenter.HTML(;
-        prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://mmkim1210.github.io/GeneticsMakie.jl",
-        assets=String[],
+    modules = [GeneticsMakie],
+    authors = "Minsoo <mmkim1210@gmail.com> and contributors",
+    repo = "https://github.com/mmkim1210/GeneticsMakie.jl/blob/{commit}{path}#{line}",
+    sitename = "GeneticsMakie.jl",
+    format = Documenter.HTML(;
+        prettyurls = get(ENV, "CI", "false") == "true",
+        canonical = "https://mmkim1210.github.io/GeneticsMakie.jl",
+        assets = String[],
         sidebar_sitename = false,
-    ),
-    pages=[
+        ),
+    pages = [
         "Home" => "index.md",
         "Examples" =>
             ["Parsing GENCODE" => "examples/gtf.md",
@@ -26,12 +25,11 @@ makedocs(;
             "Plotting GWAS" => "examples/gwas.md",
             "Plotting TWAS" => "examples/twas.md",
             "Plotting loops" => "examples/loops.md",
-            "Plotting ChIP-Seq & ATAC-Seq" => "examples/chip.md"],
-
+            "Plotting peaks" => "examples/peaks.md"],
         "API" => "api.md",
-    ],
-)
+        ],
+    )
 
 deploydocs(;
-    repo="github.com/mmkim1210/GeneticsMakie.jl",
+    repo = "github.com/mmkim1210/GeneticsMakie.jl",
 )

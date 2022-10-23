@@ -4,6 +4,7 @@ function ellipse(x, a, b)
     end
     abs(b) * sqrt(1 - x^2/a^2)
 end
+
 function drawloop!(
     ax::Axis,
     pairedends,
@@ -66,7 +67,7 @@ function plotloops!(
                     [:chr1, :chr2] =>
                     (chr1, chr2) -> chr1 .== chr2 .== chromosome,
                     [:x1, :y2] =>
-                    (start, stop) -> (start .< range2) .&& (stop .> range1)
+                    (start, stop) -> (start .< range2) .& (stop .> range1)
                    )
     transform!(loopdf,
                [:x1, :y2] =>
