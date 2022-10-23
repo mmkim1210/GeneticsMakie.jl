@@ -57,7 +57,7 @@ f
 
 To color variants by linkage disequilibrium (LD), we need a reference panel. If we already have
 one, we can use [__SnpArrays.jl__](https://openmendel.github.io/SnpArrays.jl/latest/) to
-read in PLINK bed files.
+read in PLINK bed files. Otherwise, we download and load pre-processed 1000 Genomes reference panel for chromosome 15.
 
 ```julia
 isdir("data/1kg") || mkdir("data/1kg")
@@ -67,7 +67,10 @@ end
 kgp = SnpData("data/1kg/kgp.chr15")
 ```
 
-We can color variants by LD with the index/sentinel SNP by using the `ld` keyword argument.
+!!! note "Processing LD reference panel"
+    1000 Genomes genotype array data is publicly available, which can be downloaded and processed using [these example scripts](https://github.com/mmkim1210/1kg).
+
+We can then color variants by LD with the index/sentinel SNP by using the `ld` keyword argument.
 
 ```julia
 f = Figure(resolution = (306, 792))
