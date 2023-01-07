@@ -66,4 +66,4 @@ LD structure for ~66,000 SNPs in MHC region:
 <p align="center"><img width="60%" style="border-radius: 5px;" src="figs/MHC-LD-square.png"></p>
 
 ## References
-> Kim et al., (2022). GeneticsMakie.jl: A versatile and scalable toolkit for visualizing locus-level genetic and genomic data. *bioRxiv*, https://doi.org/10.1101/2022.04.18.488573.
+> Kim et al., (2022). GeneticsMakie.jl: A versatile and scalable toolkit for visualizing locus-level genetic and genomic data. *Bioinformatics*, https://doi.org/10.1093/bioinformatics/btac786.
