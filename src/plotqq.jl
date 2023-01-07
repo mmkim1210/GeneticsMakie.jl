@@ -33,7 +33,7 @@ function plotqq!(
     scatter!(ax, expect, obs, markersize = 2, color = :black)
     lines!(ax, expect, expect, color = :red2, linewidth = 0.75)
     text!(ax, "λgc = $(round(λgc, digits = 2))", position = (xmax - 0.5, 1), 
-        textsize = 6, align = (:right, :bottom))
+        fontsize = 6, align = (:right, :bottom))
     xlims!(ax, 0, xmax)
     ylims!(ax, 0, ymax)
     hidedecorations!(ax, label = false, ticklabels = false, ticks = false)

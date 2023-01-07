@@ -63,7 +63,7 @@ let
     lines!(ax, xs, ys; color = ("#389826", 0.75))
     rowsize!(f.layout, 1, 30)
     close(reader)
-    Label(f[1, 1, Top()], "H3K4me3", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[1, 1, Top()], "H3K4me3", fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
     # Tidy up the axes
     ymax = max(10, maximum(ys) * 1.25)
     ax.spinewidth = 0.75
@@ -96,7 +96,7 @@ end
 rs = GeneticsMakie.plotgenes!(axs[2], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, 2, rs)
 GeneticsMakie.labelgenome(f[2, 1, Bottom()], chr, ranges[1], ranges[2])
-Label(f[1, 0], text = "-log[p]", textsize = 6, rotation = pi / 2)
+Label(f[1, 0], text = "-log[p]", fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:2
@@ -149,8 +149,8 @@ end
 rs = GeneticsMakie.plotgenes!(axs[2], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, 2, rs)
 GeneticsMakie.labelgenome(f[2, 1, Bottom()], chr, ranges[1], ranges[2])
-Label(f[1, 0], text = "Peaks", textsize = 6, rotation = pi / 2)
-Label(f[0, 2], "H3K4me3", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0), tellwidth = false)
+Label(f[1, 0], text = "Peaks", fontsize = 6, rotation = pi / 2)
+Label(f[0, 2], "H3K4me3", fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0), tellwidth = false)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:2
@@ -185,7 +185,7 @@ let
     lines!(ax, xs, ys; color = ("#389826", 0.75))
     rowsize!(f.layout, 1, 30)
     close(reader)
-    Label(f[1, 1, Top()], "H3K4me3", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[1, 1, Top()], "H3K4me3", fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
     # Tidy up the axes
     ymax = max(10, maximum(ys) * 1.25)
     ax.spinewidth = 0.75
@@ -246,8 +246,8 @@ end
 rs = GeneticsMakie.plotgenes!(axs[3], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, 3, rs)
 GeneticsMakie.labelgenome(f[3, 1, Bottom()], chr, ranges[1], ranges[2])
-Label(f[1, 0], text = "-log[p]", textsize = 6, rotation = pi / 2)
-Label(f[2, 1], text = "Peaks", textsize = 6, rotation = pi / 2)
+Label(f[1, 0], text = "-log[p]", fontsize = 6, rotation = pi / 2)
+Label(f[2, 1], text = "Peaks", fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:3

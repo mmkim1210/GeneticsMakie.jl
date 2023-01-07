@@ -49,12 +49,12 @@ axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i])
     rowsize!(f.layout, i, 40)
-    Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[i, 1, Top()], "$(titles[i])", fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
 rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
 GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
-Label(f[1:n, 0], text = "Chromatin\ninteractions", textsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], text = "Chromatin\ninteractions", fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)
@@ -79,12 +79,12 @@ axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i])
     rowsize!(f.layout, i, 40)
-    Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[i, 1, Top()], "$(titles[i])", fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
 rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
 GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
-Label(f[1:n, 0], text = "Chromatin\ninteractions", textsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], text = "Chromatin\ninteractions", fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)
@@ -109,12 +109,12 @@ for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i];
     linewidth = 0.75, colorarc = "#CB3C33", colorend = "#CB3C33")
     rowsize!(f.layout, i, 40)
-    Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[i, 1, Top()], "$(titles[i])", fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
 rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
 GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
-Label(f[1:n, 0], text = "Chromatin\ninteractions", textsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], text = "Chromatin\ninteractions", fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)
@@ -150,12 +150,12 @@ for i in 1:n
                ByRow((cols...) -> any(start .< cols .< stop)));
                colorarc = "#CB3C33", colorend = ("#CB3C33", 0.6))
     rowsize!(f.layout, i, 40)
-    Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[i, 1, Top()], "$(titles[i])", fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
 rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
 GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
-Label(f[1:n, 0], text = "Chromatin\ninteractions", textsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], text = "Chromatin\ninteractions", fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)

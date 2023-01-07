@@ -34,16 +34,16 @@ for i in 1:n
     GeneticsMakie.plotlocus!(axs[i], chr, ranges[1], ranges[2], dfs[i])
     rowsize!(f.layout, i, 30)
     lines!(axs[i], ranges, fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
-    Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[i, 1, Top()], "$(titles[i])", fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
 rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
 GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
 Colorbar(f[1:n, 2], limits = (0, 1), ticks = 0:1:1, height = 20,
-    colormap = (:gray60, :red2), label = "LD", ticksize = 0, tickwidth = 0,
+    colormap = [:gray60, :red2], label = "LD", ticksize = 0, tickwidth = 0,
     tickalign = 0, ticklabelsize = 6, flip_vertical_label = true,
     labelsize = 6, width = 5, spinewidth = 0.5)
-Label(f[1:n, 0], text = "-log[p]", textsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], text = "-log[p]", fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)
@@ -79,16 +79,16 @@ for i in 1:n
     GeneticsMakie.plotlocus!(axs[i], chr, ranges[1], ranges[2], dfs[i]; ld = kgp)
     rowsize!(f.layout, i, 30)
     lines!(axs[i], ranges, fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
-    Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[i, 1, Top()], "$(titles[i])", fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
 rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
 GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
 Colorbar(f[1:n, 2], limits = (0, 1), ticks = 0:1:1, height = 20,
-    colormap = (:gray60, :red2), label = "LD", ticksize = 0, tickwidth = 0,
+    colormap = [:gray60, :red2], label = "LD", ticksize = 0, tickwidth = 0,
     tickalign = 0, ticklabelsize = 6, flip_vertical_label = true,
     labelsize = 6, width = 5, spinewidth = 0.5)
-Label(f[1:n, 0], text = "-log[p]", textsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], text = "-log[p]", fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)
@@ -109,16 +109,16 @@ for i in 1:n
     GeneticsMakie.plotlocus!(axs[i], chr, ranges[1], ranges[2], dfs[i]; ld = (kgp, ("15", 89395626)))
     rowsize!(f.layout, i, 30)
     lines!(axs[i], ranges, fill(-log(10, 5e-8), 2), color = (:purple, 0.5), linewidth = 0.5)
-    Label(f[i, 1, Top()], "$(titles[i])", textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[i, 1, Top()], "$(titles[i])", fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
 rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
 GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
 Colorbar(f[1:n, 2], limits = (0, 1), ticks = 0:1:1, height = 20,
-    colormap = (:gray60, :red2), label = "LD", ticksize = 0, tickwidth = 0,
+    colormap = [:gray60, :red2], label = "LD", ticksize = 0, tickwidth = 0,
     tickalign = 0, ticklabelsize = 6, flip_vertical_label = true,
     labelsize = 6, width = 5, spinewidth = 0.5)
-Label(f[1:n, 0], text = "-log[p]", textsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], text = "-log[p]", fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)

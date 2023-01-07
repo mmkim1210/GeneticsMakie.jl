@@ -40,7 +40,7 @@ f = Figure(resolution = (408, 792))
 ax = Axis(f[1, 1])
 GeneticsMakie.plotgwas!(ax, df; ymax = 13, p = 2.2e-6)
 hidespines!(ax, :t, :r)
-Label(f[1, 1, Top()], text = "SCZ (2022): SCHEMA", textsize = 8)
+Label(f[1, 1, Top()], text = "SCZ (2022): SCHEMA", fontsize = 8)
 rowsize!(f.layout, 1, 50)
 resize_to_layout!(f)
 f

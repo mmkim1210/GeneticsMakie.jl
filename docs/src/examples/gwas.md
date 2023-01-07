@@ -23,7 +23,7 @@ axs = [Axis(f[i, 1]) for i in 1:length(titles)]
 for i in eachindex(titles)
     GeneticsMakie.plotgwas!(axs[i], dfs[i])
     hidespines!(axs[i], :t, :r)
-    Label(f[i, 1, Top()], text = "$(titles[i])", textsize = 8)
+    Label(f[i, 1, Top()], text = "$(titles[i])", fontsize = 8)
     rowsize!(f.layout, i, 50)
     i == length(titles) ? axs[i].xlabel = "Chromosome" : axs[i].xlabel = ""
 end
@@ -42,7 +42,7 @@ axs = [Axis(f[i, 1]) for i in 1:length(titles)]
 for i in eachindex(titles)
     GeneticsMakie.plotgwas!(axs[i], dfs[i]; linecolor = nothing, scattercolor = nothing)
     hidespines!(axs[i], :t, :r)
-    Label(f[i, 1, Top()], text = "$(titles[i])", textsize = 8)
+    Label(f[i, 1, Top()], text = "$(titles[i])", fontsize = 8)
     rowsize!(f.layout, i, 50)
     i == length(titles) ? axs[i].xlabel = "Chromosome" : axs[i].xlabel = ""
 end
@@ -61,7 +61,7 @@ for i in eachindex(titles)
     GeneticsMakie.plotgwas!(axs[i], dfs[i]; linecolor = nothing, scattercolor = nothing, 
         chromcolors = ["#389826", "#9658B2"])
     hidespines!(axs[i], :t, :r)
-    Label(f[i, 1, Top()], text = "$(titles[i])", textsize = 8)
+    Label(f[i, 1, Top()], text = "$(titles[i])", fontsize = 8)
     rowsize!(f.layout, i, 50)
     i == length(titles) ? axs[i].xlabel = "Chromosome" : axs[i].xlabel = ""
 end
@@ -84,10 +84,10 @@ for i in eachindex(titles)
 end
 for (i, title) in enumerate(titles)
     Box(f[1, i], color = :gray90)
-    Label(f[1, i], title, tellwidth = false, textsize = 8, padding = (0, 0, 3, 3))
+    Label(f[1, i], title, tellwidth = false, fontsize = 8, padding = (0, 0, 3, 3))
 end
-Label(f[3, 1:length(titles)], text = "Expected -log[p]", textsize = 8)
-Label(f[2, 0], text = "Observed -log[p]", textsize = 8, rotation = pi / 2, tellheight = false)
+Label(f[3, 1:length(titles)], text = "Expected -log[p]", fontsize = 8)
+Label(f[2, 0], text = "Observed -log[p]", fontsize = 8, rotation = pi / 2, tellheight = false)
 rowsize!(f.layout, 2, Aspect(2, 1))
 colgap!(f.layout, 5)
 rowgap!(f.layout, 1, 0)

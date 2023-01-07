@@ -107,7 +107,7 @@ function plotgenes!(
         g = (strand[j] == "+" ? genes[j] * "→" : "←" * genes[j])
         text!(ax, "$g", 
             position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
-            align = (:center, :bottom), textsize = 6, color = textcolor)
+            align = (:center, :bottom), fontsize = 6, color = textcolor)
     end
     ax.spinewidth = 0.75
     hidexdecorations!(ax)
@@ -163,7 +163,7 @@ function plotgenes!(
             g = (strand[j] == "+" ? genes[j] * "→" : "←" * genes[j])
             text!(ax, "$g", 
                 position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
-                align = (:center, :bottom), textsize = 6, color = highlight[2][ind])
+                align = (:center, :bottom), fontsize = 6, color = highlight[2][ind])
         else
             poly!(ax, ps[j], color = "gray60", strokewidth = 0)
             lines!(ax, [bs[j, 1], bs[j, 2]], 
@@ -172,7 +172,7 @@ function plotgenes!(
             g = (strand[j] == "+" ? genes[j] * "→" : "←" * genes[j])
             text!(ax, "$g", 
                 position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)),
-                align = (:center, :bottom), textsize = 6, color = "gray60")
+                align = (:center, :bottom), fontsize = 6, color = "gray60")
         end
     end
     ax.spinewidth = 0.75
@@ -207,7 +207,7 @@ plotgenes!(ax::Axis, gene::AbstractString, highlight::Tuple{AbstractString, Any}
 Label `g` with a given `chromosome` and genomic range between `range1` and `range2`.
 """
 function labelgenome(g::GridPosition, chromosome::AbstractString, range1::Real, range2::Real)
-    Label(g, "~$(round(range1 / 1e6; digits = 1)) Mb", textsize = 6, halign = :left)
-    Label(g, "Chr $(chromosome)", textsize = 6, halign = :center)
-    Label(g, "~$(round(range2 / 1e6; digits = 1)) Mb", textsize = 6, halign = :right)
+    Label(g, "~$(round(range1 / 1e6; digits = 1)) Mb", fontsize = 6, halign = :left)
+    Label(g, "Chr $(chromosome)", fontsize = 6, halign = :center)
+    Label(g, "~$(round(range2 / 1e6; digits = 1)) Mb", fontsize = 6, halign = :right)
 end

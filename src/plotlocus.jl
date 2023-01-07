@@ -108,18 +108,18 @@ function plotlocus!(
     if !isnothing(ld)
         typeof(ld) == SnpData ? calculateld!(df, ld) : calculateld!(df, ld[1]; snp = ld[2])
         scatter!(ax, df.BP, df.P, color = df.LD, colorrange = (0, 1),
-            colormap = (:gray60, :red2), markersize = 1.5)
+            colormap = [:gray60, :red2], markersize = 1.5)
         if typeof(ld) == SnpData
             ind = argmax(df.P)
             bp = df.BP[ind]
             p = df.P[ind]
             scatter!(ax, [bp], [p], color = :purple1, markersize = 4.0, marker = '◆')
-            text!(ax, "$(df.index[1])", position = (bp, p), textsize = 6, align = (:center, :bottom))    
+            text!(ax, "$(df.index[1])", position = (bp, p), fontsize = 6, align = (:center, :bottom))    
         elseif length(df.index[1]) > 0
             ind = findfirst(df.SNP .== df.index[1])
             bp, p = df.BP[ind], df.P[ind]
             scatter!(ax, [bp], [p], color = :purple1, markersize = 4.0, marker = '◆')
-            text!(ax, "$(df.index[1])", position = (bp, p), textsize = 6, align = (:center, :bottom))    
+            text!(ax, "$(df.index[1])", position = (bp, p), fontsize = 6, align = (:center, :bottom))    
         end
     else
         scatter!(ax, df.BP, df.P, color = :gray60, markersize = 1.5)
