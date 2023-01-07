@@ -10,7 +10,7 @@ axs = [Axis(f[i, 1]) for i in 1:length(titles)]
 for i in eachindex(titles)
     GeneticsMakie.plotgwas!(axs[i], dfs[i])
     hidespines!(axs[i], :t, :r)
-    Label(f[i, 1, Top()], text = &quot;$(titles[i])&quot;, textsize = 8)
+    Label(f[i, 1, Top()], text = &quot;$(titles[i])&quot;, fontsize = 8)
     rowsize!(f.layout, i, 50)
     i == length(titles) ? axs[i].xlabel = &quot;Chromosome&quot; : axs[i].xlabel = &quot;&quot;
 end
@@ -21,7 +21,7 @@ axs = [Axis(f[i, 1]) for i in 1:length(titles)]
 for i in eachindex(titles)
     GeneticsMakie.plotgwas!(axs[i], dfs[i]; linecolor = nothing, scattercolor = nothing)
     hidespines!(axs[i], :t, :r)
-    Label(f[i, 1, Top()], text = &quot;$(titles[i])&quot;, textsize = 8)
+    Label(f[i, 1, Top()], text = &quot;$(titles[i])&quot;, fontsize = 8)
     rowsize!(f.layout, i, 50)
     i == length(titles) ? axs[i].xlabel = &quot;Chromosome&quot; : axs[i].xlabel = &quot;&quot;
 end
@@ -33,7 +33,7 @@ for i in eachindex(titles)
     GeneticsMakie.plotgwas!(axs[i], dfs[i]; linecolor = nothing, scattercolor = nothing, 
         chromcolors = [&quot;#389826&quot;, &quot;#9658B2&quot;])
     hidespines!(axs[i], :t, :r)
-    Label(f[i, 1, Top()], text = &quot;$(titles[i])&quot;, textsize = 8)
+    Label(f[i, 1, Top()], text = &quot;$(titles[i])&quot;, fontsize = 8)
     rowsize!(f.layout, i, 50)
     i == length(titles) ? axs[i].xlabel = &quot;Chromosome&quot; : axs[i].xlabel = &quot;&quot;
 end
@@ -50,13 +50,13 @@ for i in eachindex(titles)
 end
 for (i, title) in enumerate(titles)
     Box(f[1, i], color = :gray90)
-    Label(f[1, i], title, tellwidth = false, textsize = 8, padding = (0, 0, 3, 3))
+    Label(f[1, i], title, tellwidth = false, fontsize = 8, padding = (0, 0, 3, 3))
 end
-Label(f[3, 1:length(titles)], text = &quot;Expected -log[p]&quot;, textsize = 8)
-Label(f[2, 0], text = &quot;Observed -log[p]&quot;, textsize = 8, rotation = pi / 2, tellheight = false)
+Label(f[3, 1:length(titles)], text = &quot;Expected -log[p]&quot;, fontsize = 8)
+Label(f[2, 0], text = &quot;Observed -log[p]&quot;, fontsize = 8, rotation = pi / 2, tellheight = false)
 rowsize!(f.layout, 2, Aspect(2, 1))
 colgap!(f.layout, 5)
 rowgap!(f.layout, 1, 0)
 rowgap!(f.layout, 2, 5)
 resize_to_layout!(f)
-f</code></pre><p><img src="../../figs/qq.png" alt/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../locus/">« Plotting LocusZoom</a><a class="docs-footer-nextpage" href="../twas/">Plotting TWAS »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.23 on <span class="colophon-date" title="Saturday 24 December 2022 21:53">Saturday 24 December 2022</span>. Using Julia version 1.8.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+f</code></pre><p><img src="../../figs/qq.png" alt/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../locus/">« Plotting LocusZoom</a><a class="docs-footer-nextpage" href="../twas/">Plotting TWAS »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.23 on <span class="colophon-date" title="Saturday 7 January 2023 08:33">Saturday 7 January 2023</span>. Using Julia version 1.8.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

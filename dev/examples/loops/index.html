@@ -30,12 +30,12 @@ axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i])
     rowsize!(f.layout, i, 40)
-    Label(f[i, 1, Top()], &quot;$(titles[i])&quot;, textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[i, 1, Top()], &quot;$(titles[i])&quot;, fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
 rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
 GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
-Label(f[1:n, 0], text = &quot;Chromatin\ninteractions&quot;, textsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], text = &quot;Chromatin\ninteractions&quot;, fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)
@@ -50,12 +50,12 @@ axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i])
     rowsize!(f.layout, i, 40)
-    Label(f[i, 1, Top()], &quot;$(titles[i])&quot;, textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[i, 1, Top()], &quot;$(titles[i])&quot;, fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
 rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
 GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
-Label(f[1:n, 0], text = &quot;Chromatin\ninteractions&quot;, textsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], text = &quot;Chromatin\ninteractions&quot;, fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)
@@ -71,12 +71,12 @@ for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i];
     linewidth = 0.75, colorarc = &quot;#CB3C33&quot;, colorend = &quot;#CB3C33&quot;)
     rowsize!(f.layout, i, 40)
-    Label(f[i, 1, Top()], &quot;$(titles[i])&quot;, textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[i, 1, Top()], &quot;$(titles[i])&quot;, fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
 rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
 GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
-Label(f[1:n, 0], text = &quot;Chromatin\ninteractions&quot;, textsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], text = &quot;Chromatin\ninteractions&quot;, fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)
@@ -99,12 +99,12 @@ for i in 1:n
                ByRow((cols...) -&gt; any(start .&lt; cols .&lt; stop)));
                colorarc = &quot;#CB3C33&quot;, colorend = (&quot;#CB3C33&quot;, 0.6))
     rowsize!(f.layout, i, 40)
-    Label(f[i, 1, Top()], &quot;$(titles[i])&quot;, textsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
+    Label(f[i, 1, Top()], &quot;$(titles[i])&quot;, fontsize = 6, halign = :left, padding = (7.5, 0, -5, 0))
 end
 rs = GeneticsMakie.plotgenes!(axs[n + 1], chr, ranges[1], ranges[2], gencode; height = 0.1)
 rowsize!(f.layout, n + 1, rs)
 GeneticsMakie.labelgenome(f[n + 1, 1, Bottom()], chr, ranges[1], ranges[2])
-Label(f[1:n, 0], text = &quot;Chromatin\ninteractions&quot;, textsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], text = &quot;Chromatin\ninteractions&quot;, fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)
@@ -112,4 +112,4 @@ for i in 1:(n + 1)
     vlines!(axs[i], stop, color = (:gold, 0.5), linewidth = 0.5)
 end
 resize_to_layout!(f)
-f</code></pre><p><img src="../../figs/MYC-loops-overlay.png" alt/></p><p>As with the LocusZoom plots, by using <a href="https://makie.juliaplots.org/stable/"><strong>Makie.jl</strong></a>&#39;s layout tools, it becomes easy to draw additional tracks. For example, in a separate track, we can include chromatin interactions present in other samples. In another example, we can include interactions found through other sequencing methods.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../twas/">« Plotting TWAS</a><a class="docs-footer-nextpage" href="../peaks/">Plotting peaks »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.23 on <span class="colophon-date" title="Saturday 24 December 2022 21:53">Saturday 24 December 2022</span>. Using Julia version 1.8.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+f</code></pre><p><img src="../../figs/MYC-loops-overlay.png" alt/></p><p>As with the LocusZoom plots, by using <a href="https://makie.juliaplots.org/stable/"><strong>Makie.jl</strong></a>&#39;s layout tools, it becomes easy to draw additional tracks. For example, in a separate track, we can include chromatin interactions present in other samples. In another example, we can include interactions found through other sequencing methods.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../twas/">« Plotting TWAS</a><a class="docs-footer-nextpage" href="../peaks/">Plotting peaks »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.23 on <span class="colophon-date" title="Saturday 7 January 2023 08:33">Saturday 7 January 2023</span>. Using Julia version 1.8.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
