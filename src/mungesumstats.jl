@@ -499,3 +499,167 @@ function flipalleles(gwas::Vector{DataFrame}; outer = false)
 end
 
 flipalleles(gwas₁::DataFrame, gwas₂::DataFrame; kwargs...) = flipalleles([gwas₁, gwas₂]; kwargs...)
+
+# Liftover summary statistics
+
+function parsechain(chainpath)
+    chains = NamedTuple{(:score, :tseq, :tsize, :tstrand, :tstart, :tend, :qseq, :qsize, 
+                         :qstrand, :qstart, :qend, :alignments),
+                        Tuple{Int64, String, Int64, String, Int64, Int64, String, 
+                              Int64, String, Int64, Int64, Vector{Vector{Int64}}}}[]
+    header = nothing
+    alignments = Vector{Int64}[]
+    magicnumbers = UInt8[]
+    open(chainpath) do io
+        readbytes!(io, magicnumbers, 2)
+    end
+    open(chainpath) do io
+        # GZip decompression if the file is gzipped
+        for line in eachline(magicnumbers == [0x1f, 0x8b] ? GzipDecompressorStream(io) : io)
+            if line == ""
+                continue
+            end
+            if startswith(line, "chain")
+                linearr = split(line, " ")
+                header = [parse(Int64, linearr[2]), # score
+                          string(linearr[3]), # tseq
+                          parse(Int64, linearr[4]), # tsize
+                          string(linearr[5]), # tstrand
+                          parse(Int64, linearr[6]), # tstart
+                          parse(Int64, linearr[7]), # tend
+                          string(linearr[8]), #qseq
+                          parse(Int64, linearr[9]), # qsize
+                          string(linearr[10]), # qstrand
+                          parse(Int64, linearr[11]), # qstart
+                          parse(Int64, linearr[12])] # qend
+                continue
+            end
+            linearr = split(line, "\t")
+            push!(alignments, parse.(Int64, linearr))
+            if length(linearr) == 1
+                push!(chains,
+                      (; zip([:score, :tseq, :tsize, :tstrand, :tstart, :tend, :qseq, :qsize, 
+                              :qstrand, :qstart, :qend, :alignments],
+                             [header..., alignments])...))
+                alignments = Vector{Int64}[]
+            end
+        end
+    end
+    DataFrame(chains)
+end
+
+function expandchaindf(chaindf)
+    vcat([let
+              tpos = row.tstart + 1
+              qpos = row.qstart + 1
+              [let
+                   newrow = (score = row.score,
+                             tseq = row.tseq,
+                             tsize = row.tsize,
+                             tstrand = row.tstrand,
+                             tstart = tpos,
+                             tend = tpos + alignment[1],
+                             qseq = row.qseq,
+                             qsize = row.qsize,
+                             qstrand = row.qstrand,
+                             qstart = qpos,
+                             qend = qpos + alignment[1])
+                   if length(alignment) == 3
+                       tpos = tpos + alignment[1] + alignment[2]
+                       qpos = qpos + alignment[1] + alignment[3]
+                   end
+                   newrow
+               end
+               for alignment in row.alignments]
+          end
+          for row in eachrow(chaindf)]...) |>
+    DataFrame
+end
+
+"""
+    readchain(path::AbstractString)
+
+Read a chain file describing the genomic positions mapped between two 
+reference genomes. Returns a DataFrame necessary for liftover. 
+Information about the chain file format is present at 
+[UCSC Genome Browser: Chain Format](https://genome.ucsc.edu/goldenPath/help/chain.html).
+"""
+function readchain(path::AbstractString)
+    parsechain(path) |> expandchaindf
+end
+
+function findnewcoord(
+        CHR::AbstractString, BP::Int, echain::AbstractDataFrame;
+        # Behavior when multiple positions map after liftover
+        multiplematches::Symbol = :error # :error, :warning, :silent
+    )
+    @assert multiplematches in [:error, :warning, :silent]
+    blocks =
+    subset(echain,
+           :tseq => col -> col .== CHR,
+           [:tstart, :tend] => (tstart, tend) -> tstart .<= BP .<= tend)
+    if size(blocks, 1) > 1
+        if multiplematches == :error
+            error("Error: multiple matches with given position $(CHR):$(BP)")
+        elseif multiplematches == :warning
+            println("Warning: multiple matches with given position $(CHR):$(BP)")
+        end
+    end
+    [let
+         # TODO: Handle "-" strands as well
+         @assert block.tstrand == "+"
+         qpos = block.qstart + (BP - block.tstart)
+         if block.qstrand == "-"
+             qpos = block.qsize - qpos + 1
+         end
+         (CHR = block.qseq, BP = qpos, strand = block.qstrand, size = block.qsize)
+     end
+    for block in eachrow(blocks)]
+end
+
+"""
+    liftover_gwas!(gwas::AbstractDataFrame, echain::AbstractDataFrame; kwargs)
+
+Perform liftover on a gwas, using an expanded chain file DataFrame 
+produced by `GeneticsMakie::readchain`. Variants that are unmapped or 
+have multiple matches are dropped. Returns a NamedTuple of DataFrames: 
+`unmapped` for unmapped variants (coordinates still on original build), 
+`multiple` for variants with multiple matches (coordinates on the 
+target build).
+# Arguments
+- `multiplematches::Symbol = :error`: Behavior when multiple positions map 
+   after liftover. One of :error, :warning, :silent
+"""
+function liftover_gwas!(
+        gwas::AbstractDataFrame,
+        echain::AbstractDataFrame;
+        multiplematches::Symbol = :error
+    )
+    notlifted = []
+    multiple = []
+    multiplegwas = empty(gwas)
+    for i in eachindex(eachrow(gwas))
+        newcoords = findnewcoord(gwas[i, :CHR], gwas[i, :BP], echain;
+                                 multiplematches = multiplematches)
+        if length(newcoords) == 0
+            push!(notlifted, i)
+            continue
+        end
+        if length(newcoords) > 1
+            additionalmatches = DataFrame(fill(gwas[i, :], length(newcoords)))
+            for j in eachindex(newcoords)
+                additionalmatches[j, :CHR] = newcoords[j].CHR
+                additionalmatches[j, :BP] = newcoords[j].BP
+            end
+            append!(multiplegwas, additionalmatches)
+            push!(multiple, i)
+            continue
+        end
+        gwas[i, :CHR] = newcoords[1].CHR
+        gwas[i, :BP] = newcoords[1].BP
+    end
+    unmappedgwas = gwas[notlifted, :]
+    delete!(gwas, vcat(notlifted, multiple))
+    (unmapped = unmappedgwas, multiple = multiplegwas)
+end
+

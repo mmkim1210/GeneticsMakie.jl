@@ -1,5 +1,6 @@
 module GeneticsMakie
 
+using CodecZlib
 using CairoMakie
 using Makie.GeometryBasics
 using DataFrames

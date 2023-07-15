@@ -145,6 +145,16 @@ end
     @test nrow(df) == 1
     df = GeneticsMakie.findgwasloci([gwas, gwas])
     @test nrow(df) == 1
+
+    echain = GeneticsMakie.readchain("data/hg19ToHg38.over.chain.gz")
+    @test nrow(echain) == 53950
+    @test ncol(echain) == 11
+
+    gwas.CHR = "chr" .* gwas.CHR
+    unmapped, multiple = GeneticsMakie.liftover_gwas!(gwas, echain)
+    @test nrow(gwas) == 3000
+    @test nrow(unmapped) == 0
+    @test nrow(multiple) == 0
 end
 
 @testset "Plotting GWAS" begin
