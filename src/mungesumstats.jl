@@ -522,12 +522,12 @@ function parsechain(chainpath)
             if startswith(line, "chain")
                 linearr = split(line, r"[ \t]+")
                 header = [parse(Int64, linearr[2]), # score
-                          string(linearr[3]), # tseq
+                          replace(string(linearr[3]), r"^chr" => ""), # tseq
                           parse(Int64, linearr[4]), # tsize
                           string(linearr[5]), # tstrand
                           parse(Int64, linearr[6]), # tstart
                           parse(Int64, linearr[7]), # tend
-                          string(linearr[8]), #qseq
+                          replace(string(linearr[8]), r"^chr" => ""), #qseq
                           parse(Int64, linearr[9]), # qsize
                           string(linearr[10]), # qstrand
                           parse(Int64, linearr[11]), # qstart
@@ -580,7 +580,8 @@ end
     readchain(path::AbstractString)
 
 Read a chain file describing the genomic positions mapped between two 
-reference genomes. Returns a DataFrame necessary for liftover. 
+reference genomes. Returns a DataFrame necessary for liftover. Sequence 
+names are of type `String` and are stripped of the prefix "chr".
 Information about the chain file format is present at 
 [UCSC Genome Browser: Chain Format](https://genome.ucsc.edu/goldenPath/help/chain.html).
 """
@@ -589,13 +590,13 @@ function readchain(path::AbstractString)
 end
 
 function findnewcoord(
-        CHR::AbstractString, BP::Int, echain::AbstractDataFrame;
+        CHR::AbstractString, BP::Int, chain::AbstractDataFrame;
         # Behavior when multiple positions map after liftover
         multiplematches::Symbol = :error # :error, :warning, :silent
     )
     @assert multiplematches in [:error, :warning, :silent]
     blocks =
-    subset(echain,
+    subset(chain,
            :tseq => col -> col .== CHR,
            [:tstart, :tend] => (tstart, tend) -> tstart .<= BP .<= tend)
     if size(blocks, 1) > 1
@@ -618,7 +619,8 @@ function findnewcoord(
 end
 
 """
-    liftover_gwas!(gwas::AbstractDataFrame, echain::AbstractDataFrame; kwargs)
+    liftover_gwas!(gwas::AbstractDataFrame, chain::AbstractDataFrame; kwargs)
+    liftover_gwas!(gwas::AbstractVector{<:AbstractDataFrame}, chain::AbstractDataFrame; kwargs)
 
 Perform liftover on a gwas, using an expanded chain file DataFrame 
 produced by `GeneticsMakie::readchain`. Variants that are unmapped or 
@@ -630,16 +632,16 @@ target build).
 - `multiplematches::Symbol = :error`: Behavior when multiple positions map 
    after liftover. One of :error, :warning, :silent
 """
-function liftover_gwas!(
+function liftover_sumstats!(
         gwas::AbstractDataFrame,
-        echain::AbstractDataFrame;
+        chain::AbstractDataFrame;
         multiplematches::Symbol = :error
     )
     notlifted = []
     multiple = []
     multiplegwas = empty(gwas)
     for i in eachindex(eachrow(gwas))
-        newcoords = findnewcoord(gwas[i, :CHR], gwas[i, :BP], echain;
+        newcoords = findnewcoord(gwas[i, :CHR], gwas[i, :BP], chain;
                                  multiplematches = multiplematches)
         if length(newcoords) == 0
             push!(notlifted, i)
@@ -661,5 +663,14 @@ function liftover_gwas!(
     unmappedgwas = gwas[notlifted, :]
     delete!(gwas, vcat(notlifted, multiple))
     (unmapped = unmappedgwas, multiple = multiplegwas)
+end
+
+function liftover_sumstats!(
+        gwas::AbstractVector{<:AbstractDataFrame},
+        chain::AbstractDataFrame;
+        multiplematches::Symbol = :error
+    )
+    arr = liftover_sumstats!.(gwas, Ref(chain); multiplematches = multiplematches)
+    (unmapped = [el.unmapped for el in arr], arr = [el.multiple for el in arr])
 end
 

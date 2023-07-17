@@ -62,3 +62,30 @@ for (i, key) in enumerate(keys(gwas))
     Arrow.write("data/gwas/$(key).arrow", dfs[i])
 end
 ```
+
+The summary statistics we are using are on the genome assembly GRCh37. However, newer 
+GWAS and annotations may be shared on the latest genome assembly GRCh38. The genomic 
+coordinates between the two builds are incompatible; in order to visualize data across 
+builds, we need to "liftover" the coordinates all to one genome assembly. GeneticsMakie 
+provides functions for perfoming liftover on summary statistics.  
+
+To perform liftover, we need to read a chain file describing how genomic coordinates 
+map between one build to the other. Similar to `GeneticsMakie.mungesumstats!`, chromosome 
+names are of type `String` and are stripped of the prefix "chr".
+```julia
+isdir("data/chain") || mkdir("data/chain")
+url = "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz"
+isfile("data/chain/$(basename(url))") || Downloads.download(url, "data/chain/$(basename(url))")
+
+chain = GeneticsMakie.readchain("data/gwas/$(basename(url))")
+```
+
+With the chain file loaded, we can now perform liftover on our GWAS. `GeneticsMakie.liftover_sumstats!` 
+will liftover the sumstats in place and return a NamedTuple of `unmapped`) unmapped 
+variants still on the original build and `multiple`) variants on the target build 
+that has mapped to multiple positions.  
+```julia
+dfs_hg38 = deepcopy(dfs)
+unmapped, multiple = GeneticsMakie.liftover_sumstats!(dfs_hg38, chain; multiplematches = :warning)
+```
+
