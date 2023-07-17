@@ -520,7 +520,7 @@ function parsechain(chainpath)
                 continue
             end
             if startswith(line, "chain")
-                linearr = split(line, " ")
+                linearr = split(line, r"[ \t]+")
                 header = [parse(Int64, linearr[2]), # score
                           string(linearr[3]), # tseq
                           parse(Int64, linearr[4]), # tsize
@@ -534,7 +534,7 @@ function parsechain(chainpath)
                           parse(Int64, linearr[12])] # qend
                 continue
             end
-            linearr = split(line, "\t")
+            linearr = split(line, r"[ \t]+")
             push!(alignments, parse.(Int64, linearr))
             if length(linearr) == 1
                 push!(chains,
