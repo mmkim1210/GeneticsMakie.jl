@@ -661,7 +661,7 @@ function liftoversumstats!(
         gwas[i, :BP] = newcoords[1].BP
     end
     unmappedgwas = gwas[notlifted, :]
-    delete!(gwas, vcat(notlifted, multiple))
+    delete!(gwas, sort(unique(vcat(notlifted, multiple))))
     (unmapped = unmappedgwas, multiple = multiplegwas)
 end
 
