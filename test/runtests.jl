@@ -151,7 +151,7 @@ end
     @test ncol(chain) == 11
 
     gwasarr = [gwas]
-    unmapped, multiple = GeneticsMakie.liftover_sumstats!(gwasarr, chain)
+    unmapped, multiple = GeneticsMakie.liftoversumstats!(gwasarr, chain)
     @test nrow(gwasarr[1]) == 3000
     @test nrow(unmapped[1]) == 0
     @test nrow(multiple[1]) == 0

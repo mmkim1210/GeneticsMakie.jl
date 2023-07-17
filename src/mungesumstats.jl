@@ -619,8 +619,8 @@ function findnewcoord(
 end
 
 """
-    liftover_gwas!(gwas::AbstractDataFrame, chain::AbstractDataFrame; kwargs)
-    liftover_gwas!(gwas::AbstractVector{<:AbstractDataFrame}, chain::AbstractDataFrame; kwargs)
+    liftoversumstats!(gwas::AbstractDataFrame, chain::AbstractDataFrame; kwargs)
+    liftoversumstats!(gwas::AbstractVector{<:AbstractDataFrame}, chain::AbstractDataFrame; kwargs)
 
 Perform liftover on a gwas, using an expanded chain file DataFrame 
 produced by `GeneticsMakie::readchain`. Variants that are unmapped or 
@@ -632,7 +632,7 @@ target build).
 - `multiplematches::Symbol = :error`: Behavior when multiple positions map 
    after liftover. One of :error, :warning, :silent
 """
-function liftover_sumstats!(
+function liftoversumstats!(
         gwas::AbstractDataFrame,
         chain::AbstractDataFrame;
         multiplematches::Symbol = :error
@@ -665,12 +665,12 @@ function liftover_sumstats!(
     (unmapped = unmappedgwas, multiple = multiplegwas)
 end
 
-function liftover_sumstats!(
+function liftoversumstats!(
         gwas::AbstractVector{<:AbstractDataFrame},
         chain::AbstractDataFrame;
         multiplematches::Symbol = :error
     )
-    arr = liftover_sumstats!.(gwas, Ref(chain); multiplematches = multiplematches)
+    arr = liftoversumstats!.(gwas, Ref(chain); multiplematches = multiplematches)
     (unmapped = [el.unmapped for el in arr], arr = [el.multiple for el in arr])
 end
 

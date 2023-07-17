@@ -77,15 +77,16 @@ isdir("data/chain") || mkdir("data/chain")
 url = "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/liftOver/hg19ToHg38.over.chain.gz"
 isfile("data/chain/$(basename(url))") || Downloads.download(url, "data/chain/$(basename(url))")
 
-chain = GeneticsMakie.readchain("data/gwas/$(basename(url))")
+chain = GeneticsMakie.readchain("data/chain/$(basename(url))")
 ```
 
-With the chain file loaded, we can now perform liftover on our GWAS. `GeneticsMakie.liftover_sumstats!` 
+With the chain file loaded, we can now perform liftover on our GWAS. `GeneticsMakie.liftoversumstats!` 
 will liftover the sumstats in place and return a NamedTuple of `unmapped`) unmapped 
 variants still on the original build and `multiple`) variants on the target build 
-that has mapped to multiple positions.  
+that has mapped to multiple positions. Liftover will take a while to complete, especially 
+summary statistics with many variants.
 ```julia
 dfs_hg38 = deepcopy(dfs)
-unmapped, multiple = GeneticsMakie.liftover_sumstats!(dfs_hg38, chain; multiplematches = :warning)
+unmapped, multiple = GeneticsMakie.liftoversumstats!(dfs_hg38, chain; multiplematches = :warning)
 ```
 
