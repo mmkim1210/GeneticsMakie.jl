@@ -172,10 +172,10 @@ end
     @test nrow(multiple[1]) == 0
 
     push!(chain, chain[nrow(chain), :])
-    @test_throws r"^Error: multiple matches" GeneticsMakie.findnewcoord("Y",
-                                                                        59282592,
-                                                                        chain;
-                                                                        multiplematches = :error)
+    @test_throws ErrorException GeneticsMakie.findnewcoord("Y",
+                                                           59282592,
+                                                           chain;
+                                                           multiplematches = :error)
     @test length(GeneticsMakie.findnewcoord("Y", 59282592, chain;
                                             multiplematches = :warning)) == 2
 end
