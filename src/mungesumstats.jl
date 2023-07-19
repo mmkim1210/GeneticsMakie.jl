@@ -641,7 +641,8 @@ function findnewcoord(
     if multiplematches == :error && any(length.(newpos) .> 1)
          error("Error: multiple matches with given positions: $(chrbp[findall(x -> length(x) > 1, newpos), :])")
      elseif multiplematches == :warning && any(length.(newpos) .> 1)
-         println("Warning: multiple matches with given positions:")
+         println("Warning: multiple matches with given positions")
+         display(chrbp[findall(x -> length(x) > 1, newpos), :])
      end
      # Return array of lifted over positions (CHR, BP, strand)
      # Same order as arguments
