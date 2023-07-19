@@ -612,7 +612,7 @@ function findnewcoord(
         chainidxcur = chainidxold
         chainidxset = false
         CHR::String, BP::Int64 = chrbp[idx, [:CHR, :BP]]
-        while (chainidxcur <= chainidxend) & (chain[chainidxcur, :tseq] <= CHR)
+        while (chainidxcur <= chainidxend) && (chain[chainidxcur, :tseq] <= CHR)
             if CHR == chain[chainidxcur, :tseq]
                 if chain[chainidxcur, :tstart] <= BP <= chain[chainidxcur, :tend]
                     # Update where to start looking in the chain file only once per 
@@ -653,7 +653,7 @@ function findnewcoord(
         # Behavior when multiple positions map after liftover
         multiplematches::Symbol = :error # :error, :warning, :silent
     )
-    findnewcoord([CHR], Int64[BP], chain; multiplematches = multiplematches)
+    findnewcoord([CHR], Int64[BP], chain; multiplematches = multiplematches)[1]
 end
 
 """
@@ -665,7 +665,7 @@ produced by `GeneticsMakie::readchain`. Variants that are unmapped or
 have multiple matches are dropped. Returns a NamedTuple of DataFrames: 
 `unmapped` for unmapped variants (coordinates still on original build), 
 `multiple` for variants with multiple matches (coordinates on the 
-target build).
+target build, accompanied by the chain score).
 # Arguments
 - `multiplematches::Symbol = :error`: Behavior when multiple positions map 
    after liftover. One of :error, :warning, :silent

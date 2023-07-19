@@ -137,6 +137,21 @@ end
     @test ncol(gwas) == 6
 
     gwas = CSV.read("data/sumstats.csv", DataFrame)
+    select!(gwas, "#CHROM", :POS, :PVAL, :BETA => (col -> exp.(col)) => :OR, :SE)
+    GeneticsMakie.mungesumstats!(gwas)
+    @test ncol(gwas) == 5
+
+    gwas = CSV.read("data/sumstats.csv", DataFrame)
+    select!(gwas, "#CHROM", :POS, :PVAL, :BETA)
+    GeneticsMakie.mungesumstats!(gwas)
+    @test ncol(gwas) == 5
+
+    gwas = CSV.read("data/sumstats.csv", DataFrame)
+    select!(gwas, "#CHROM", :POS, :PVAL, :BETA => (col -> exp.(col)) => :OR)
+    GeneticsMakie.mungesumstats!(gwas)
+    @test ncol(gwas) == 5
+
+    gwas = CSV.read("data/sumstats.csv", DataFrame)
     select!(gwas, "#CHROM", :POS, :PVAL)
     GeneticsMakie.mungesumstats!(gwas)
     @test ncol(gwas) == 4
@@ -152,9 +167,17 @@ end
 
     gwasarr = [gwas]
     unmapped, multiple = GeneticsMakie.liftoversumstats!(gwasarr, chain)
-    @test nrow(gwasarr[1]) == 3000
-    @test nrow(unmapped[1]) == 0
+    @test nrow(gwasarr[1]) == 2999
+    @test nrow(unmapped[1]) == 1
     @test nrow(multiple[1]) == 0
+
+    push!(chain, chain[nrow(chain), :])
+    @test_throws r"^Error: multiple matches" GeneticsMakie.findnewcoord("Y",
+                                                                        59282592,
+                                                                        chain;
+                                                                        multiplematches = :error)
+    @test length(GeneticsMakie.findnewcoord("Y", 59282592, chain;
+                                            multiplematches = :warning)) == 2
 end
 
 @testset "Plotting GWAS" begin
