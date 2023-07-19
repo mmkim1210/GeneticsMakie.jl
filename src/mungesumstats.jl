@@ -158,7 +158,7 @@ function mungezscore!(gwas::DataFrame)
         gwas.Z = log.(gwas.OR) ./ gwas.SE
         filter!(x -> !isnan(x.Z), gwas)
     elseif "BETA" in names(gwas)
-        gwas.Z .= 0.0
+        gwas.Z = fill(0.0, nrow(gwas))
         for i in 1:nrow(gwas)
             if gwas.BETA[i] >= 0
                 gwas.Z[i] = sqrt(cquantile(Chisq(1), gwas.P[i]))
@@ -168,7 +168,7 @@ function mungezscore!(gwas::DataFrame)
         end
     elseif "OR" in names(gwas)
         gwas.BETA = log.(gwas.OR)
-        gwas.Z .= 0.0
+        gwas.Z = fill(0.0, nrow(gwas))
         for i in 1:nrow(gwas)
             if gwas.BETA[i] >= 0
                 gwas.Z[i] = sqrt(cquantile(Chisq(1), gwas.P[i]))
@@ -177,7 +177,7 @@ function mungezscore!(gwas::DataFrame)
             end
         end
     elseif "OVERALL" in names(gwas)
-        gwas.Z .= 0.0
+        gwas.Z = fill(0.0, nrow(gwas))
         for i in 1:nrow(gwas)
             if gwas.OVERALL[i] == "+"
                 gwas.Z[i] = sqrt(cquantile(Chisq(1), gwas.P[i]))
