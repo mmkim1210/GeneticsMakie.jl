@@ -553,17 +553,23 @@ function expandchaindf(chaindf)
               tpos = row.tstart + 1
               qpos = row.qstart + 1
               [let
+                   tend = tpos + alignment[1] - 1
+                   qend = qpos + alignment[1] - 1
                    newrow = (score = row.score,
                              tseq = row.tseq,
                              tsize = row.tsize,
                              tstrand = row.tstrand,
                              tstart = tpos,
-                             tend = tpos + alignment[1],
+                             tend = tend,
                              qseq = row.qseq,
                              qsize = row.qsize,
                              qstrand = row.qstrand,
                              qstart = qpos,
-                             qend = qpos + alignment[1])
+                             qend = qend)
+                   if length(alignment) == 1
+                       @assert tend == row.tend
+                       @assert qend == row.qend
+                   end
                    if length(alignment) == 3
                        tpos = tpos + alignment[1] + alignment[2]
                        qpos = qpos + alignment[1] + alignment[3]
@@ -586,36 +592,68 @@ Information about the chain file format is present at
 [UCSC Genome Browser: Chain Format](https://genome.ucsc.edu/goldenPath/help/chain.html).
 """
 function readchain(path::AbstractString)
-    parsechain(path) |> expandchaindf
+    parsechain(path) |> expandchaindf |> df -> sort!(df, [:tseq, :tstart, :tend])
 end
 
 function findnewcoord(
-        CHR::AbstractString, BP::Int, chain::AbstractDataFrame;
+        CHR::Vector{<:AbstractString}, BP::Vector{Int64}, chain::AbstractDataFrame;
         # Behavior when multiple positions map after liftover
         multiplematches::Symbol = :error # :error, :warning, :silent
     )
     @assert multiplematches in [:error, :warning, :silent]
-    blocks =
-    subset(chain,
-           :tseq => col -> col .== CHR,
-           [:tstart, :tend] => (tstart, tend) -> tstart .<= BP .<= tend)
-    if size(blocks, 1) > 1
-        if multiplematches == :error
-            error("Error: multiple matches with given position $(CHR):$(BP)")
-        elseif multiplematches == :warning
-            println("Warning: multiple matches with given position $(CHR):$(BP)")
+    # Sort the positions so that we can iterate and liftover more efficiently
+    chrbp = DataFrame(CHR = CHR, BP = BP)
+    sortedidx = sortperm(chrbp, [:CHR, :BP])
+    newpos = [NamedTuple{(:CHR, :BP, :strand, :score), Tuple{String, Int64, String, Int64}}[] for _ in 1:nrow(chrbp)]
+    chainidxold = 1
+    chainidxcur = 1
+    chainidxend = nrow(chain)
+    for idx in sortedidx
+        chainidxcur = chainidxold
+        chainidxset = false
+        CHR::String, BP::Int64 = chrbp[idx, [:CHR, :BP]]
+        while (chainidxcur <= chainidxend) & (chain[chainidxcur, :tseq] <= CHR)
+            if CHR == chain[chainidxcur, :tseq]
+                if chain[chainidxcur, :tstart] <= BP <= chain[chainidxcur, :tend]
+                    # Update where to start looking in the chain file only once per 
+                    # position
+                    # A position might have multiple matches, and we don't want to 
+                    # miss checking the regions that matched first
+                    if !chainidxset
+                        chainidxold = chainidxcur
+                        chainidxset = true
+                    end
+                    # TODO: Handle "-" strands as well
+                    @assert chain[chainidxcur, :tstrand] == "+"
+                    qpos = chain[chainidxcur, :qstart] + BP - chain[chainidxcur, :tstart]
+                    push!(newpos[idx],
+                          (CHR = chain[chainidxcur, :qseq],
+                           BP = chain[chainidxcur, :qstrand] == "+" ? qpos : chain[chainidxcur, :qsize] - qpos + 1,
+                           strand = chain[chainidxcur, :qstrand],
+                           score = chain[chainidxcur, :score]))
+                elseif BP < chain[chainidxcur, :tstart]
+                    break
+                end
+            end
+            chainidxcur = chainidxcur + 1
         end
     end
-    [let
-         # TODO: Handle "-" strands as well
-         @assert block.tstrand == "+"
-         qpos = block.qstart + (BP - block.tstart)
-         if block.qstrand == "-"
-             qpos = block.qsize - qpos + 1
-         end
-         (CHR = block.qseq, BP = qpos, strand = block.qstrand, size = block.qsize)
+    if multiplematches == :error && any(length.(newpos) .> 1)
+         error("Error: multiple matches with given positions: $(chrbp[findall(x -> length(x) > 1, newpos), :])")
+     elseif multiplematches == :warning && any(length.(newpos) .> 1)
+         println("Warning: multiple matches with given positions:")
      end
-    for block in eachrow(blocks)]
+     # Return array of lifted over positions (CHR, BP, strand)
+     # Same order as arguments
+     newpos
+end
+
+function findnewcoord(
+        CHR::AbstractString, BP::Int64, chain::AbstractDataFrame;
+        # Behavior when multiple positions map after liftover
+        multiplematches::Symbol = :error # :error, :warning, :silent
+    )
+    findnewcoord([CHR], Int64[BP], chain; multiplematches = multiplematches)
 end
 
 """
@@ -637,32 +675,35 @@ function liftoversumstats!(
         chain::AbstractDataFrame;
         multiplematches::Symbol = :error
     )
-    notlifted = []
-    multiple = []
+    notlifted = Int64[]
+    multiple = Int64[]
     multiplegwas = empty(gwas)
+    multiplegwas.score = Int64[]
+    newcoords = findnewcoord(gwas[:, :CHR], gwas[:, :BP], chain;
+                             multiplematches = multiplematches)
     for i in eachindex(eachrow(gwas))
-        newcoords = findnewcoord(gwas[i, :CHR], gwas[i, :BP], chain;
-                                 multiplematches = multiplematches)
-        if length(newcoords) == 0
+        if length(newcoords[i]) == 0
             push!(notlifted, i)
             continue
         end
-        if length(newcoords) > 1
-            additionalmatches = DataFrame(fill(gwas[i, :], length(newcoords)))
-            for j in eachindex(newcoords)
-                additionalmatches[j, :CHR] = newcoords[j].CHR
-                additionalmatches[j, :BP] = newcoords[j].BP
+        if length(newcoords[i]) > 1
+            additionalmatches = DataFrame(fill(gwas[i, :], length(newcoords[i])))
+            for j in eachindex(newcoords[i])
+                additionalmatches[j, :CHR] = newcoords[i][j].CHR
+                additionalmatches[j, :BP] = newcoords[i][j].BP
             end
+            additionalmatches[!, :score] = [newcoords[i][j].score
+                                            for j in eachindex(newcoords[i])]
             append!(multiplegwas, additionalmatches)
             push!(multiple, i)
             continue
         end
-        gwas[i, :CHR] = newcoords[1].CHR
-        gwas[i, :BP] = newcoords[1].BP
+        gwas[i, :CHR] = newcoords[i][1].CHR
+        gwas[i, :BP] = newcoords[i][1].BP
     end
     unmappedgwas = gwas[notlifted, :]
     delete!(gwas, sort(unique(vcat(notlifted, multiple))))
-    (unmapped = unmappedgwas, multiple = multiplegwas)
+    (unmapped = unmappedgwas::DataFrame, multiple = multiplegwas::DataFrame)
 end
 
 function liftoversumstats!(
