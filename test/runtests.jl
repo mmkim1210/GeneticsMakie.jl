@@ -165,6 +165,8 @@ end
     @test nrow(chain) == 53950
     @test ncol(chain) == 11
 
+    gwas = CSV.read("data/sumstats.csv", DataFrame)
+    GeneticsMakie.mungesumstats!(gwas)
     gwasarr = [gwas]
     unmapped, multiple = GeneticsMakie.liftoversumstats!(gwasarr, chain)
     @test nrow(gwasarr[1]) == 2999

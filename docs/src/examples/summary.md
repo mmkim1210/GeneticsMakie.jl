@@ -80,13 +80,54 @@ isfile("data/chain/$(basename(url))") || Downloads.download(url, "data/chain/$(b
 chain = GeneticsMakie.readchain("data/chain/$(basename(url))")
 ```
 
-With the chain file loaded, we can now perform liftover on our GWAS. `GeneticsMakie.liftoversumstats!` 
-will liftover the sumstats in place and return a NamedTuple of `unmapped`) unmapped 
-variants still on the original build and `multiple`) variants on the target build 
-that has mapped to multiple positions. Liftover will take a while to complete, especially 
-summary statistics with many variants.
+Additionally, we will need to read in FASTA files describing both the reference and 
+the query genome builds (GRCh37 and GRCh38 respectively). These are used to properly 
+liftover indels that were on the opposite strand. You will need to uncompress and 
+index these files to use them with the `FASTX` julia package.
+
+```julia
+isdir("data/fasta") || mkdir("data/fasta")
+urls = [
+    "https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz",
+    "https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz"
+]
+for url in urls
+    isfile("data/fasta/$(basename(url))") || Downloads.download(url, "data/fasta/$(basename(url))")
+end
+```
+
+```bash
+gunzip data/fasta/hg19.fa.gz
+gunzip data/fasta/hg38.fa.gz
+samtools faidx data/fasta/hg19.fa
+samtools faidx data/fasta/hg38.fa
+```
+
+```julia
+import FASTX: FASTA
+hg19io = open("data/fasta/hg19.fa")
+hg19fa = FASTA.Reader(hg19io)
+hg19fai = FASTA.Index("data/fasta/hg19.fa.fai")
+FASTA.index!(hg19fa, hg19fai)
+hg38io = open("data/fasta/hg38.fa")
+hg38fa = FASTA.Reader(hg38io)
+hg38fai = FASTA.Index("data/fasta/hg38.fa.fai")
+FASTA.index!(hg38fa, hg38fai)
+```
+
+With the chain file and the FASTA files loaded, we can now perform liftover on our 
+GWAS. `GeneticsMakie.liftoversumstats!` will liftover the sumstats in place and return 
+a NamedTuple of `unmapped`) unmapped variants still on the original build and `multiple`) 
+variants on the target build that has mapped to multiple positions. Liftover will 
+take a while to complete, especially summary statistics with many variants.
 ```julia
 dfs_hg38 = deepcopy(dfs)
-unmapped, multiple = GeneticsMakie.liftoversumstats!(dfs_hg38, chain; multiplematches = :warning)
+unmapped, multiple = GeneticsMakie.liftoversumstats!(dfs_hg38, chain, hg19fa, hg38fa;
+                                                     multiplematches = :warning,
+                                                     pickreference = :longest,
+                                                     indelref = :start,
+                                                     extendambiguous = true)
+close(hg19io)
+close(hg38io)
 ```
 

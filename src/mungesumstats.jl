@@ -657,6 +657,22 @@ function findnewcoord(
     findnewcoord([CHR], Int64[BP], chain; multiplematches = multiplematches)[1]
 end
 
+function reversecomplement(seq)
+    reversecomplementarr = fill('N', length(seq))
+    for i in eachindex(seq)
+        if seq[i] == 'A'
+            reversecomplementarr[length(seq) - i + 1] = 'T'
+        elseif seq[i] == 'T'
+            reversecomplementarr[length(seq) - i + 1] = 'A'
+        elseif seq[i] == 'C'
+            reversecomplementarr[length(seq) - i + 1] = 'G'
+        elseif seq[i] == 'G'
+            reversecomplementarr[length(seq) - i + 1] = 'C'
+        end
+    end
+    return join(reversecomplementarr, "")
+end
+
 """
     liftoversumstats!(gwas::AbstractDataFrame, chain::AbstractDataFrame; kwargs)
     liftoversumstats!(gwas::AbstractVector{<:AbstractDataFrame}, chain::AbstractDataFrame; kwargs)
@@ -674,7 +690,28 @@ target build, accompanied by the chain score).
 function liftoversumstats!(
         gwas::AbstractDataFrame,
         chain::AbstractDataFrame;
-        multiplematches::Symbol = :error
+        # targetfa::FASTX.FASTA.Reader,
+        # queryfa::FASTX.FASTA.Reader;
+        multiplematches::Symbol = :error,
+        # pickreference will adjust how reference allele is chosen
+        # :first will use the first allele as the reference allele and throw an error 
+        # if it does not match
+        # :longest will find the longest match and use that as the reference allele
+        # :firstlongest will use first allele as the reference allele if it matches, 
+        # and if it does not match the reference sequence, use the longest
+        pickreference = :firstlongest,
+        # indelref describes how indel alleles are coded
+        # :start assumes that all alleles share the same first nucleotide from the 
+        # reference sequence, e.g. A1 = ATCG, A2 = A
+        # :startend assumes that all alleles share the same first and last nucleotide 
+        # from the reference sequence, e.g. A1 = ATCGA, A2 = AA
+        indelref = :start,
+        # extendambiguous will extend alleles until they are not substrings of one 
+        # another
+        # this is what the score plugin does, but if the target and query reference 
+        # differ, this will possibly cause the alleles to reflect changes in the reference 
+        # as well
+        extendambiguous::Bool = true
     )
     notlifted = Int64[]
     multiple = Int64[]
@@ -690,8 +727,20 @@ function liftoversumstats!(
         if length(newcoords[i]) > 1
             additionalmatches = DataFrame(fill(gwas[i, :], length(newcoords[i])))
             for j in eachindex(newcoords[i])
-                additionalmatches[j, :CHR] = newcoords[i][j].CHR
-                additionalmatches[j, :BP] = newcoords[i][j].BP
+                if newcoords[i][1].strand == "+"
+                    additionalmatches[j, :CHR] = newcoords[i][j].CHR
+                    additionalmatches[j, :BP] = newcoords[i][j].BP
+                elseif newcoords[i][1].strand == "-"
+                    if length(gwas[i, :A1]) == 1 || length(gwas[i, :A2]) == 1
+                        # SNP
+                        gwas[i, :A1] = reversecomplement(gwas[i, :A1])
+                        gwas[i, :A2] = reversecomplement(gwas[i, :A2])
+                    else
+                        # TODO indel
+                        push!(notlifted, i)
+                        continue
+                    end
+                end
             end
             additionalmatches[!, :score] = [newcoords[i][j].score
                                             for j in eachindex(newcoords[i])]
@@ -699,8 +748,19 @@ function liftoversumstats!(
             push!(multiple, i)
             continue
         end
-        gwas[i, :CHR] = newcoords[i][1].CHR
-        gwas[i, :BP] = newcoords[i][1].BP
+        if newcoords[i][1].strand == "+"
+            gwas[i, :CHR] = newcoords[i][1].CHR
+            gwas[i, :BP] = newcoords[i][1].BP
+        elseif newcoords[i][1].strand == "-"
+            if length(gwas[i, :A1]) == 1 || length(gwas[i, :A2]) == 1
+                # SNP
+                gwas[i, :A1] = reversecomplement(gwas[i, :A1])
+                gwas[i, :A2] = reversecomplement(gwas[i, :A2])
+            else
+                # TODO indel
+                push!(notlifted, i)
+            end
+        end
     end
     unmappedgwas = gwas[notlifted, :]
     delete!(gwas, sort(unique(vcat(notlifted, multiple))))
@@ -710,9 +770,19 @@ end
 function liftoversumstats!(
         gwas::AbstractVector{<:AbstractDataFrame},
         chain::AbstractDataFrame;
-        multiplematches::Symbol = :error
+        # targetfa::FASTX.FASTA.Reader,
+        # queryfa::FASTX.FASTA.Reader;
+        multiplematches::Symbol = :error,
+        pickreference = :firstlongest,
+        indelref = :start,
+        extendambiguous::Bool = true
     )
-    arr = liftoversumstats!.(gwas, Ref(chain); multiplematches = multiplematches)
+    arr = liftoversumstats!.(gwas, Ref(chain);
+                             multiplematches = multiplematches, pickreference = pickreference, 
+                             indelref = indelref, extendambiguous = extendambiguous)
+#     arr = liftoversumstats!.(gwas, Ref(chain), Ref(targetfa), Ref(queryfa);
+#                              multiplematches = multiplematches, pickreference = pickreference, 
+#                              indelref = indelref, extendambiguous = extendambiguous)
     (unmapped = [el.unmapped for el in arr], arr = [el.multiple for el in arr])
 end
 

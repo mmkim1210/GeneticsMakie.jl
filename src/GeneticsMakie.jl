@@ -2,6 +2,7 @@ module GeneticsMakie
 
 using CodecZlib
 using CairoMakie
+using FASTX
 using Makie.GeometryBasics
 using DataFrames
 using SnpArrays
