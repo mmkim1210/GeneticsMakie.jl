@@ -673,6 +673,202 @@ function reversecomplement(seq)
     return join(reversecomplementarr, "")
 end
 
+function liftoverindel(
+        row;
+        # pickreference will adjust how reference allele is chosen
+        # :first will use the first allele as the reference allele and throw an error 
+        # if it does not match
+        # :longest will find the longest match and use that as the reference allele
+        # :firstlongest will use first allele as the reference allele if it matches, 
+        # and if it does not match the reference sequence, use the longest
+        pickreference,
+        # indelref describes how indel alleles are coded
+        # :start assumes that all alleles share the same first nucleotide from the 
+        # reference sequence, e.g. A1 = ATCG, A2 = A
+        # :startend assumes that all alleles share the same first and last nucleotide 
+        # from the reference sequence, e.g. A1 = ATCGA, A2 = AA
+        indelref,
+        # extendambiguous will extend alleles until they are not substrings of one 
+        # another
+        # this is what the score plugin does, but if the target and query reference 
+        # differ, this will possibly cause the alleles to reflect changes in the reference 
+        # as well
+        extendambiguous::Bool
+    )
+    # Make sure that the alleles start and end with the reference sequence
+    referenceseq = ""
+    alleles = [row.A1, row.A2]
+    try
+        referenceseq = FASTA.extract(targetfa, row.CHR, pos:(pos + maximum(length.(alleles))))
+    catch err
+        println(err)
+        return nothing
+    end
+    # Determine which allele to treat as the reference allele
+    if pickreference == :first
+        if occursin(Regex("^$(alleles[1])"), referenceseq)
+            refallele = alleles[1]
+        else
+            throw("Reference allele does not match reference sequence; pickreference = :first")
+        end
+    elseif pickreference == :longest
+        allelematches =
+        [let
+             regexmatch = match(Regex("^$(allele)"), referenceseq)
+             if !isnothing(regexmatch)
+                 regexmatch.match
+             else
+                 ""
+             end
+         end
+        for allele in alleles]
+        refallele = ""
+        for allele in allelematches
+            if length(allele) > length(refallele)
+                refallele = allele
+            end
+        end
+        refallele = string(refallele)
+    elseif pickreference == :firstlongest
+        if occursin(Regex("^$(alleles[1])"), referenceseq)
+            refallele = alleles[1]
+        else
+        allelematches =
+        [let
+             regexmatch = match(Regex("^$(allele)"), referenceseq)
+             if !isnothing(regexmatch)
+                 regexmatch.match
+             else
+                 ""
+             end
+         end
+        for allele in alleles]
+        refallele = ""
+        for allele in allelematches
+            if length(allele) > length(refallele)
+                refallele = allele
+            end
+        end
+        refallele = string(refallele)
+        end
+    else
+        throw("pickreference is invalid, must be one of :first, :longest, :firstlongest")
+    end
+    reflength = length(refallele)
+    if indelref == :start
+        # Append an additional nucleotide from the reference sequence
+        reflength = reflength + 1
+        refend = referenceseq[reflength]
+        refallele = refallele * refend
+        for i in eachindex(alleles)
+            alleles[i] = alleles[i] * refend
+        end
+    elseif indelref == :startend
+        # Check if all the alleles also end with the same nucleotide from the reference sequence
+        if !all([allele[end] for allele in alleles] .== refallele[end])
+            throw("Alleles' last nucleotide do not match reference sequence, indelref = :startend")
+        end
+    else
+        throw("indelref is invalid, must be one of :start, :startend")
+    end
+    # Extend sequence if there are any ambiguous alleles
+    # If an allele is an exact substring of another, it will make identifying the 
+    # reference allele after liftover difficult
+    if extendambiguous
+        for i in eachindex(alleles)
+            for j in (i+1):length(alleles)
+                if length(alleles[i]) > length(alleles[j])
+                    longerallele = alleles[i]
+                    shorterallele = alleles[j]
+                elseif length(alleles[i]) < length(alleles[j])
+                    longerallele = alleles[j]
+                    shorterallele = alleles[i]
+                else
+                    continue
+                end
+                while (occursin(Regex("^$(shorterallele)"), longerallele) ||
+                    occursin(Regex("$(shorterallele)\$"), longerallele))
+                    reflength = reflength + 1
+                    refend = ""
+                    try
+                        refend = FASTA.extract(targetfa, chromosome, (pos+reflength-1):(pos+reflength-1))
+                    catch err
+                        println(err)
+                        return nothing
+                    end
+                    for k in eachindex(alleles)
+                        alleles[k] = alleles[k] * refend
+                    end
+                    longerallele = longerallele * refend
+                    shorterallele = shorterallele * refend
+                end
+            end
+        end
+    end
+    referenceseq = ""
+    try
+        referenceseq = FASTA.extract(targetfa, chromosome, pos:(pos + reflength - 1))
+    catch err
+        println(err)
+        return nothing
+    end
+    # Find the new coordinate
+    startcoord = findnewcoord(chromosome, pos, echaindf)
+    endcoord = findnewcoord(chromosome, pos + reflength - 1, echaindf)
+    if (length(startcoord) == 0 ||
+        length(endcoord) == 0 ||
+        startcoord[1].chromosome != endcoord[1].chromosome ||
+        startcoord[1].strand != endcoord[1].strand)
+        return nothing
+    end
+    startcoord = startcoord[1]
+    endcoord = endcoord[1]
+    # Flip alleles if needed
+    if startcoord.strand == "-"
+        qpos = (endcoord.size - endcoord.pos + 1,
+                startcoord.size - startcoord.pos + 1)
+        for i in eachindex(alleles)
+            alleles[i] = reversecomplement.(alleles[i])
+        end
+    elseif startcoord.strand == "+"
+        qpos = (startcoord.pos, endcoord.pos)
+    end
+    qreferencesequence = ""
+    try
+        qreferencesequence = FASTA.extract(queryfa, startcoord.chromosome, (qpos[1]):(qpos[2]))
+    catch err
+        println(err)
+        return nothing
+    end
+    refalleleindex = findall(allele -> allele == qreferencesequence, alleles)
+    # Truncate and normalize alleles
+    finalend = 0
+    while (finalend < minimum(length.(alleles)) &&
+           all(qreferencesequence[end - finalend] .==
+               [allele[end - finalend] for allele in alleles]))
+           finalend = finalend + 1
+    end
+    qreferencesequence = qreferencesequence[begin:(end - finalend)]
+    for i in eachindex(alleles)
+        alleles[i] = alleles[i][begin:(end - finalend)]
+    end
+    finalstart = 1
+    while (finalstart < minimum(length.(alleles)) &&
+           all(qreferencesequence[finalstart + 1] .==
+               [allele[finalstart + 1] for allele in alleles]))
+        finalstart = finalstart + 1
+    end
+    qreferencesequence = qreferencesequence[finalstart:end]
+    for i in eachindex(alleles)
+        alleles[i] = alleles[i][finalstart:end]
+    end
+    # Swap alleles to match reference if needed
+    return (chromosome = startcoord.chromosome,
+            position = qpos[1] + finalstart - 1,
+            alleles = alleles,
+            refallele = (qreferencesequence, refalleleindex))
+end
+
 """
     liftoversumstats!(gwas::AbstractDataFrame, chain::AbstractDataFrame; kwargs)
     liftoversumstats!(gwas::AbstractVector{<:AbstractDataFrame}, chain::AbstractDataFrame; kwargs)
