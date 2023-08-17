@@ -1,0 +1,2145 @@
+##fileformat=VCFv4.2
+##FILTER=<ID=PASS,Description="All filters passed">
+##fileurl=https://github.com/MRCIEU/gwas-vcf-specification/blob/master/example.vcf.txt
+##filedate="07/09/2020"
+##gwasformat=GWAS-VCFv1.2
+##source=Gwas2VCFv1.2.0
+##reference=ftp://ftp.broadinstitute.org/bundle/b37/human_g1k_v37.fasta.gz
+##INFO=<ID=RSID,Number=1,Type=String,Description="dbSNP identifier",Source="https://ftp.ncbi.nih.gov/snp/latest_release/VCF/GCF_000001405.25.gz",Version="153">
+##FORMAT=<ID=NS,Number=A,Type=Float,Description="Variant-specific number of samples/individuals with called genotypes used to test association with specified trait">
+##FORMAT=<ID=EZ,Number=A,Type=Float,Description="Z-score provided if it was used to derive the ES and SE fields">
+##FORMAT=<ID=SI,Number=A,Type=Float,Description="Accuracy score of summary association statistics imputation">
+##FORMAT=<ID=NC,Number=A,Type=Float,Description="Variant-specific number of cases used to estimate genetic effect (binary traits only)">
+##FORMAT=<ID=ES,Number=A,Type=Float,Description="Effect size estimate relative to the alternative allele">
+##FORMAT=<ID=SE,Number=A,Type=Float,Description="Standard error of effect size estimate">
+##FORMAT=<ID=LP,Number=A,Type=Float,Description="-log10 p-value for effect estimate">
+##FORMAT=<ID=AF,Number=A,Type=Float,Description="Alternative allele frequency in trait subset">
+##FORMAT=<ID=AC,Number=A,Type=Float,Description="Alternative allele count in the trait subset">
+##study=<ID="PMID:12345678",Source="PubMed">
+##trait=<ID=EFO0004340,Description="Body mass index",Source="EFO",Version="3.14.0",Type="continuous",Test="linear",Unit="SD",Population="European",TotalSamples=461460,TotalVariants=9851866,VariantsNotRead=0,HarmonisedVariants=9851866,VariantsNotHarmonised=0,SwitchedAlleles=9851866,FileUrl="https://gwas.mrcieu.ac.uk/files/ukb-b-19953/ukb-b-19953.vcf.gz",FileDate="24/04/2020">
+##trait=<ID=EFO0001360,Description="type II diabetes mellitus",Source="EFO",Version="3.14.0",Type="binary",Test="logistic",Population="European",TotalSamples=462933,TotalCases=2972,TotalVariants=9851866,VariantsNotRead=0,HarmonisedVariants=9851866,VariantsNotHarmonised=0,SwitchedAlleles=9851866,FileUrl="https://gwas.mrcieu.ac.uk/files/ukb-b-13806/ukb-b-13806.vcf.gz",FileDate="24/04/2020">
+##bcftools_normVersion=1.15+htslib-1.15
+##bcftools_normCommand=norm -o adhd.norm.vcf -f GRCh37.p13.genome.fa -c wx adhd.vcf; Date=Thu Aug 17 13:46:48 2023
+##contig=<ID=chr1,length=248956422>
+##contig=<ID=chr2,length=242193529>
+##contig=<ID=chr3,length=198295559>
+##contig=<ID=chr4,length=190214555>
+##contig=<ID=chr5,length=181538259>
+##contig=<ID=chr6,length=170805979>
+##contig=<ID=chr7,length=159345973>
+##contig=<ID=chr8,length=145138636>
+##contig=<ID=chr9,length=138394717>
+##contig=<ID=chr10,length=133797422>
+##contig=<ID=chr11,length=135086622>
+##contig=<ID=chr12,length=133275309>
+##contig=<ID=chr13,length=114364328>
+##contig=<ID=chr14,length=107043718>
+##contig=<ID=chr15,length=101991189>
+##contig=<ID=chr16,length=90338345>
+##contig=<ID=chr17,length=83257441>
+##contig=<ID=chr18,length=80373285>
+##contig=<ID=chr19,length=58617616>
+##contig=<ID=chr20,length=64444167>
+##contig=<ID=chr21,length=46709983>
+##contig=<ID=chr22,length=50818468>
+##contig=<ID=chrX,length=156040895>
+##contig=<ID=chrY,length=57227415>
+##contig=<ID=chrM,length=16569>
+##contig=<ID=GL000008.2,length=209709>
+##contig=<ID=GL000009.2,length=201709>
+##contig=<ID=GL000194.1,length=191469>
+##contig=<ID=GL000195.1,length=182896>
+##contig=<ID=GL000205.2,length=185591>
+##contig=<ID=GL000208.1,length=92689>
+##contig=<ID=GL000213.1,length=164239>
+##contig=<ID=GL000214.1,length=137718>
+##contig=<ID=GL000216.2,length=176608>
+##contig=<ID=GL000218.1,length=161147>
+##contig=<ID=GL000219.1,length=179198>
+##contig=<ID=GL000220.1,length=161802>
+##contig=<ID=GL000221.1,length=155397>
+##contig=<ID=GL000224.1,length=179693>
+##contig=<ID=GL000225.1,length=211173>
+##contig=<ID=GL000226.1,length=15008>
+##contig=<ID=KQ759759.1,length=196940>
+##contig=<ID=ML143376.1,length=493165>
+##contig=<ID=KN538364.1,length=415308>
+##contig=<ID=ML143355.1,length=292944>
+##contig=<ID=ML143348.1,length=125549>
+##contig=<ID=ML143347.1,length=176674>
+##contig=<ID=ML143346.1,length=53476>
+##contig=<ID=ML143352.1,length=254759>
+##contig=<ID=KQ759762.1,length=101037>
+##contig=<ID=ML143375.1,length=56695>
+##contig=<ID=KQ031383.1,length=467143>
+##contig=<ID=KN538369.1,length=541038>
+##contig=<ID=ML143342.1,length=84043>
+##contig=<ID=ML143350.1,length=89956>
+##contig=<ID=ML143362.1,length=192531>
+##contig=<ID=JH159136.1,length=200998>
+##contig=<ID=ML143357.1,length=165419>
+##contig=<ID=ML143385.1,length=17435>
+##contig=<ID=ML143378.1,length=461303>
+##contig=<ID=ML143382.1,length=28824>
+##contig=<ID=ML143383.1,length=68192>
+##contig=<ID=ML143384.1,length=14678>
+##contig=<ID=JH159137.1,length=191409>
+##contig=<ID=ML143356.1,length=45257>
+##contig=<ID=ML143364.1,length=158944>
+##contig=<ID=ML143365.1,length=65394>
+##contig=<ID=KZ208923.1,length=48370>
+##contig=<ID=KZ208924.1,length=209722>
+##contig=<ID=KQ031387.1,length=320750>
+##contig=<ID=KV766195.1,length=140877>
+##contig=<ID=KZ208916.1,length=1046838>
+##contig=<ID=ML143363.1,length=7309>
+##contig=<ID=KN538360.1,length=460100>
+##contig=<ID=KZ208920.1,length=690932>
+##contig=<ID=KZ208906.1,length=330031>
+##contig=<ID=KN196484.1,length=370917>
+##contig=<ID=KN196476.1,length=305979>
+##contig=<ID=KQ983257.1,length=230434>
+##contig=<ID=KN196479.1,length=330164>
+##contig=<ID=KV575245.1,length=154723>
+##contig=<ID=KZ208917.1,length=64689>
+##contig=<ID=KZ208911.1,length=242796>
+##contig=<ID=KN196473.1,length=166200>
+##contig=<ID=KZ559108.1,length=305244>
+##contig=<ID=KN196487.1,length=101150>
+##contig=<ID=KQ759760.1,length=315610>
+##contig=<ID=KN196475.1,length=451168>
+##contig=<ID=KV880766.1,length=156998>
+##contig=<ID=KV880767.1,length=265876>
+##contig=<ID=KQ090016.1,length=245716>
+##contig=<ID=ML143374.1,length=137908>
+##contig=<ID=KV880764.1,length=142129>
+##contig=<ID=KN538361.1,length=305542>
+##contig=<ID=KN196474.1,length=122022>
+##contig=<ID=ML143360.1,length=170928>
+##contig=<ID=KZ559109.1,length=279644>
+##contig=<ID=ML143359.1,length=217075>
+##contig=<ID=KQ090022.1,length=181958>
+##contig=<ID=KV766194.1,length=139427>
+##contig=<ID=KN196478.1,length=268330>
+##contig=<ID=KZ559104.1,length=105527>
+##contig=<ID=KN196480.1,length=277797>
+##contig=<ID=ML143370.1,length=369264>
+##contig=<ID=KQ090028.1,length=407387>
+##contig=<ID=KN196483.1,length=35455>
+##contig=<ID=KN196481.1,length=108875>
+##contig=<ID=KN538363.1,length=365499>
+##contig=<ID=KN538362.1,length=208149>
+##contig=<ID=KQ031385.1,length=373699>
+##contig=<ID=KV766192.1,length=411654>
+##contig=<ID=KQ031386.1,length=165718>
+##contig=<ID=KQ031388.1,length=179932>
+##contig=<ID=KN538365.1,length=14347>
+##contig=<ID=KN538366.1,length=85284>
+##contig=<ID=KN538367.1,length=420164>
+##contig=<ID=ML143361.1,length=297568>
+##contig=<ID=KN538370.1,length=86533>
+##contig=<ID=KN538373.1,length=148762>
+##contig=<ID=KZ559113.1,length=480415>
+##contig=<ID=KV880765.1,length=468267>
+##contig=<ID=KV766196.1,length=281919>
+##contig=<ID=KN538371.1,length=206320>
+##contig=<ID=KQ031384.1,length=481245>
+##contig=<ID=KN538372.1,length=356766>
+##contig=<ID=KQ090021.1,length=264545>
+##contig=<ID=ML143371.1,length=5500449>
+##contig=<ID=KN196482.1,length=211377>
+##contig=<ID=KZ559115.1,length=230843>
+##contig=<ID=KZ208914.1,length=165120>
+##contig=<ID=KZ208922.1,length=93070>
+##contig=<ID=ML143373.1,length=270967>
+##contig=<ID=ML143369.1,length=97763>
+##contig=<ID=ML143366.1,length=409912>
+##contig=<ID=ML143367.1,length=399183>
+##contig=<ID=ML143372.1,length=396515>
+##contig=<ID=ML143380.1,length=412368>
+##contig=<ID=ML143377.1,length=519485>
+##contig=<ID=ML143345.1,length=341066>
+##contig=<ID=KQ458386.1,length=405389>
+##contig=<ID=ML143358.1,length=270122>
+##contig=<ID=KV575244.1,length=673059>
+##contig=<ID=ML143381.1,length=403128>
+##contig=<ID=KZ559100.1,length=44955>
+##contig=<ID=ML143379.1,length=12295>
+##contig=<ID=ML143354.1,length=454963>
+##contig=<ID=ML143351.1,length=73265>
+##contig=<ID=ML143353.1,length=25408>
+##contig=<ID=ML143344.1,length=235734>
+##contig=<ID=ML143349.1,length=276109>
+##contig=<ID=KZ208912.1,length=589656>
+##contig=<ID=ML143341.1,length=145975>
+##contig=<ID=KZ208915.1,length=6367528>
+##contig=<ID=KV880768.1,length=1927115>
+##contig=<ID=KN196472.1,length=186494>
+##contig=<ID=GL383545.1,length=179254>
+##contig=<ID=GL383546.1,length=309802>
+##contig=<ID=KI270824.1,length=181496>
+##contig=<ID=KI270825.1,length=188315>
+##contig=<ID=KQ090020.1,length=185507>
+##contig=<ID=GL383547.1,length=154407>
+##contig=<ID=KN538368.1,length=203552>
+##contig=<ID=KI270826.1,length=186169>
+##contig=<ID=KI270827.1,length=67707>
+##contig=<ID=KZ559111.1,length=181167>
+##contig=<ID=KI270829.1,length=204059>
+##contig=<ID=KI270830.1,length=177092>
+##contig=<ID=KI270831.1,length=296895>
+##contig=<ID=KI270832.1,length=210133>
+##contig=<ID=KI270902.1,length=106711>
+##contig=<ID=KI270903.1,length=214625>
+##contig=<ID=KZ559110.1,length=301637>
+##contig=<ID=KI270927.1,length=218612>
+##contig=<ID=GL877875.1,length=167313>
+##contig=<ID=GL383549.1,length=120804>
+##contig=<ID=GL383550.2,length=169178>
+##contig=<ID=KQ090023.1,length=109323>
+##contig=<ID=GL877876.1,length=408271>
+##contig=<ID=GL383552.1,length=138655>
+##contig=<ID=KI270904.1,length=572349>
+##contig=<ID=GL383553.2,length=152874>
+##contig=<ID=KI270835.1,length=238139>
+##contig=<ID=GL383551.1,length=184319>
+##contig=<ID=KI270837.1,length=40090>
+##contig=<ID=KI270833.1,length=76061>
+##contig=<ID=KI270834.1,length=119498>
+##contig=<ID=KI270836.1,length=56134>
+##contig=<ID=KZ208918.1,length=174808>
+##contig=<ID=KZ559112.1,length=154139>
+##contig=<ID=KI270838.1,length=306913>
+##contig=<ID=KI270839.1,length=180306>
+##contig=<ID=KI270840.1,length=191684>
+##contig=<ID=KI270841.1,length=169134>
+##contig=<ID=KI270842.1,length=37287>
+##contig=<ID=KI270843.1,length=103832>
+##contig=<ID=KQ090024.1,length=168146>
+##contig=<ID=KQ090025.1,length=123480>
+##contig=<ID=KI270844.1,length=322166>
+##contig=<ID=KI270845.1,length=180703>
+##contig=<ID=KI270846.1,length=1351393>
+##contig=<ID=KI270847.1,length=1511111>
+##contig=<ID=KZ208919.1,length=171798>
+##contig=<ID=ML143368.1,length=264228>
+##contig=<ID=KI270852.1,length=478999>
+##contig=<ID=KI270848.1,length=327382>
+##contig=<ID=GL383554.1,length=296527>
+##contig=<ID=KI270906.1,length=196384>
+##contig=<ID=GL383555.2,length=388773>
+##contig=<ID=KI270851.1,length=263054>
+##contig=<ID=KI270849.1,length=244917>
+##contig=<ID=KI270905.1,length=5161414>
+##contig=<ID=KI270850.1,length=430880>
+##contig=<ID=KQ031389.1,length=2365364>
+##contig=<ID=KI270853.1,length=2659700>
+##contig=<ID=GL383556.1,length=192462>
+##contig=<ID=GL383557.1,length=89672>
+##contig=<ID=KI270855.1,length=232857>
+##contig=<ID=KQ031390.1,length=169136>
+##contig=<ID=KI270856.1,length=63982>
+##contig=<ID=KQ090027.1,length=267463>
+##contig=<ID=KQ090026.1,length=59016>
+##contig=<ID=KZ208921.1,length=78609>
+##contig=<ID=KI270854.1,length=134193>
+##contig=<ID=KI270909.1,length=325800>
+##contig=<ID=KV766197.1,length=246895>
+##contig=<ID=KZ559114.1,length=116753>
+##contig=<ID=GL383563.3,length=375691>
+##contig=<ID=KI270861.1,length=196688>
+##contig=<ID=GL383564.2,length=133151>
+##contig=<ID=GL000258.2,length=1821992>
+##contig=<ID=KI270860.1,length=178921>
+##contig=<ID=KI270907.1,length=137721>
+##contig=<ID=KI270862.1,length=391357>
+##contig=<ID=GL383565.1,length=223995>
+##contig=<ID=KI270908.1,length=1423190>
+##contig=<ID=KV766198.1,length=276292>
+##contig=<ID=KI270910.1,length=157099>
+##contig=<ID=GL383566.1,length=90219>
+##contig=<ID=JH159146.1,length=278131>
+##contig=<ID=JH159147.1,length=70345>
+##contig=<ID=JH159148.1,length=88070>
+##contig=<ID=KI270857.1,length=2877074>
+##contig=<ID=KI270858.1,length=235827>
+##contig=<ID=KI270859.1,length=108763>
+##contig=<ID=KZ559116.1,length=163186>
+##contig=<ID=GL383567.1,length=289831>
+##contig=<ID=GL383568.1,length=104552>
+##contig=<ID=GL383569.1,length=167950>
+##contig=<ID=GL383570.1,length=164789>
+##contig=<ID=GL383571.1,length=198278>
+##contig=<ID=GL383572.1,length=159547>
+##contig=<ID=KI270863.1,length=167999>
+##contig=<ID=KI270864.1,length=111737>
+##contig=<ID=KQ458385.1,length=205101>
+##contig=<ID=KI270912.1,length=174061>
+##contig=<ID=KI270911.1,length=157710>
+##contig=<ID=KV575254.1,length=99845>
+##contig=<ID=KV575246.1,length=163926>
+##contig=<ID=KV575256.1,length=223118>
+##contig=<ID=KV575253.1,length=166713>
+##contig=<ID=KV575252.1,length=178197>
+##contig=<ID=KV575255.1,length=161095>
+##contig=<ID=KV575259.1,length=171263>
+##contig=<ID=KI270917.1,length=190932>
+##contig=<ID=KI270918.1,length=123111>
+##contig=<ID=KI270919.1,length=170701>
+##contig=<ID=KV575247.1,length=170206>
+##contig=<ID=KV575248.1,length=168131>
+##contig=<ID=KV575250.1,length=241058>
+##contig=<ID=KV575249.1,length=293522>
+##contig=<ID=KV575257.1,length=100553>
+##contig=<ID=KI270920.1,length=198005>
+##contig=<ID=KI270921.1,length=282224>
+##contig=<ID=KI270922.1,length=187935>
+##contig=<ID=KI270923.1,length=189352>
+##contig=<ID=KI270929.1,length=186203>
+##contig=<ID=KI270930.1,length=200773>
+##contig=<ID=KI270931.1,length=170148>
+##contig=<ID=KI270932.1,length=215732>
+##contig=<ID=KI270933.1,length=170537>
+##contig=<ID=KI270882.1,length=248807>
+##contig=<ID=KI270883.1,length=170399>
+##contig=<ID=KI270884.1,length=157053>
+##contig=<ID=KI270885.1,length=171027>
+##contig=<ID=KI270886.1,length=204239>
+##contig=<ID=KI270887.1,length=209512>
+##contig=<ID=KI270888.1,length=155532>
+##contig=<ID=KV575258.1,length=156965>
+##contig=<ID=KV575251.1,length=159285>
+##contig=<ID=KV575260.1,length=145691>
+##contig=<ID=KI270889.1,length=170698>
+##contig=<ID=KI270890.1,length=184499>
+##contig=<ID=GL000209.2,length=177381>
+##contig=<ID=KI270891.1,length=170680>
+##contig=<ID=KI270914.1,length=205194>
+##contig=<ID=KI270915.1,length=170665>
+##contig=<ID=KI270916.1,length=184516>
+##contig=<ID=GL949746.1,length=987716>
+##contig=<ID=GL949747.2,length=729520>
+##contig=<ID=GL949748.2,length=1064304>
+##contig=<ID=GL949749.2,length=1091841>
+##contig=<ID=GL949750.2,length=1066390>
+##contig=<ID=GL949751.2,length=1002683>
+##contig=<ID=GL949752.1,length=987100>
+##contig=<ID=GL949753.2,length=796479>
+##contig=<ID=GL383573.1,length=385657>
+##contig=<ID=GL383574.1,length=155864>
+##contig=<ID=GL383575.2,length=170222>
+##contig=<ID=KI270866.1,length=43156>
+##contig=<ID=GL383576.1,length=188024>
+##contig=<ID=KI270867.1,length=233762>
+##contig=<ID=KI270865.1,length=52969>
+##contig=<ID=KI270938.1,length=1066800>
+##contig=<ID=KI270868.1,length=61734>
+##contig=<ID=KI270760.1,length=109528>
+##contig=<ID=KI270762.1,length=354444>
+##contig=<ID=GL383518.1,length=182439>
+##contig=<ID=KI270759.1,length=425601>
+##contig=<ID=KI270766.1,length=256271>
+##contig=<ID=GL383519.1,length=110268>
+##contig=<ID=KI270761.1,length=165834>
+##contig=<ID=KQ458382.1,length=141019>
+##contig=<ID=GL383520.2,length=366580>
+##contig=<ID=KI270763.1,length=911658>
+##contig=<ID=KQ458383.1,length=349938>
+##contig=<ID=KI270765.1,length=185285>
+##contig=<ID=KI270764.1,length=50258>
+##contig=<ID=KQ983255.1,length=278659>
+##contig=<ID=KQ458384.1,length=212205>
+##contig=<ID=KV880763.1,length=551020>
+##contig=<ID=KZ208904.1,length=166136>
+##contig=<ID=KZ208905.1,length=140355>
+##contig=<ID=KI270892.1,length=162212>
+##contig=<ID=GL383577.2,length=128386>
+##contig=<ID=KI270869.1,length=118774>
+##contig=<ID=KI270870.1,length=183433>
+##contig=<ID=KI270871.1,length=58661>
+##contig=<ID=GL383578.2,length=63917>
+##contig=<ID=GL383579.2,length=201197>
+##contig=<ID=GL383580.2,length=74653>
+##contig=<ID=GL383581.2,length=116689>
+##contig=<ID=KI270872.1,length=82692>
+##contig=<ID=KI270873.1,length=143900>
+##contig=<ID=KI270874.1,length=166743>
+##contig=<ID=GL383582.2,length=162811>
+##contig=<ID=GL383583.2,length=96924>
+##contig=<ID=KI270875.1,length=259914>
+##contig=<ID=KI270876.1,length=263666>
+##contig=<ID=KI270877.1,length=101331>
+##contig=<ID=KI270878.1,length=186262>
+##contig=<ID=KI270879.1,length=304135>
+##contig=<ID=KB663609.1,length=74013>
+##contig=<ID=KI270928.1,length=176103>
+##contig=<ID=KN196485.1,length=156562>
+##contig=<ID=KN196486.1,length=153027>
+##contig=<ID=KQ458387.1,length=155930>
+##contig=<ID=KQ458388.1,length=174749>
+##contig=<ID=KQ759761.1,length=145162>
+##contig=<ID=KI270769.1,length=120616>
+##contig=<ID=KI270767.1,length=161578>
+##contig=<ID=GL383521.1,length=143390>
+##contig=<ID=KI270772.1,length=133041>
+##contig=<ID=GL383522.1,length=123821>
+##contig=<ID=KI270770.1,length=136240>
+##contig=<ID=KI270893.1,length=161218>
+##contig=<ID=KI270894.1,length=214158>
+##contig=<ID=GL582966.2,length=96131>
+##contig=<ID=KI270773.1,length=70887>
+##contig=<ID=KI270776.1,length=174166>
+##contig=<ID=KI270768.1,length=110099>
+##contig=<ID=KI270774.1,length=223625>
+##contig=<ID=KI270771.1,length=110395>
+##contig=<ID=KI270775.1,length=138019>
+##contig=<ID=KQ983256.1,length=535088>
+##contig=<ID=KZ208907.1,length=181658>
+##contig=<ID=KZ208908.1,length=140361>
+##contig=<ID=JH636055.2,length=173151>
+##contig=<ID=GL383526.1,length=180671>
+##contig=<ID=KI270779.1,length=205312>
+##contig=<ID=KI270777.1,length=173649>
+##contig=<ID=KI270782.1,length=162429>
+##contig=<ID=KI270783.1,length=109187>
+##contig=<ID=KI270778.1,length=248252>
+##contig=<ID=KI270895.1,length=162896>
+##contig=<ID=KZ208909.1,length=175849>
+##contig=<ID=KI270780.1,length=224108>
+##contig=<ID=KI270924.1,length=166540>
+##contig=<ID=ML143343.1,length=215443>
+##contig=<ID=KI270781.1,length=113034>
+##contig=<ID=KI270934.1,length=163458>
+##contig=<ID=KZ559105.1,length=195063>
+##contig=<ID=KI270935.1,length=197351>
+##contig=<ID=KZ559101.1,length=164041>
+##contig=<ID=KI270936.1,length=164170>
+##contig=<ID=KZ559102.1,length=197752>
+##contig=<ID=KI270937.1,length=165607>
+##contig=<ID=KZ559103.1,length=302885>
+##contig=<ID=KI270784.1,length=184404>
+##contig=<ID=KQ983258.1,length=205407>
+##contig=<ID=KV766193.1,length=420675>
+##contig=<ID=GL383527.1,length=164536>
+##contig=<ID=KI270790.1,length=220246>
+##contig=<ID=GL383528.1,length=376187>
+##contig=<ID=KI270787.1,length=111943>
+##contig=<ID=GL000257.2,length=586476>
+##contig=<ID=KI270785.1,length=119912>
+##contig=<ID=KQ090013.1,length=90922>
+##contig=<ID=KI270786.1,length=244096>
+##contig=<ID=KI270788.1,length=158965>
+##contig=<ID=KI270789.1,length=205944>
+##contig=<ID=KI270896.1,length=378547>
+##contig=<ID=KI270925.1,length=555799>
+##contig=<ID=KQ090014.1,length=163749>
+##contig=<ID=KQ090015.1,length=236512>
+##contig=<ID=GL383532.1,length=82728>
+##contig=<ID=KI270897.1,length=1144418>
+##contig=<ID=GL383531.1,length=173459>
+##contig=<ID=GL949742.1,length=226852>
+##contig=<ID=GL339449.2,length=1612928>
+##contig=<ID=KI270795.1,length=131892>
+##contig=<ID=KI270791.1,length=195710>
+##contig=<ID=GL383530.1,length=101241>
+##contig=<ID=KI270898.1,length=130957>
+##contig=<ID=KI270792.1,length=179043>
+##contig=<ID=KI270796.1,length=172708>
+##contig=<ID=KI270793.1,length=126136>
+##contig=<ID=KI270794.1,length=164558>
+##contig=<ID=KN196477.1,length=139087>
+##contig=<ID=KV575243.1,length=362221>
+##contig=<ID=KZ208910.1,length=135987>
+##contig=<ID=KQ090017.1,length=82315>
+##contig=<ID=GL383533.1,length=124736>
+##contig=<ID=KB021644.2,length=185823>
+##contig=<ID=KI270797.1,length=197536>
+##contig=<ID=KI270798.1,length=271782>
+##contig=<ID=KI270799.1,length=152148>
+##contig=<ID=KI270800.1,length=175808>
+##contig=<ID=KI270801.1,length=870480>
+##contig=<ID=KI270802.1,length=75005>
+##contig=<ID=KI270758.1,length=76752>
+##contig=<ID=GL000250.2,length=4672374>
+##contig=<ID=GL000251.2,length=4795265>
+##contig=<ID=GL000252.2,length=4604811>
+##contig=<ID=GL000253.2,length=4677643>
+##contig=<ID=GL000254.2,length=4827813>
+##contig=<ID=GL000255.2,length=4606388>
+##contig=<ID=GL000256.2,length=4929269>
+##contig=<ID=KI270804.1,length=157952>
+##contig=<ID=KI270806.1,length=158166>
+##contig=<ID=GL383534.2,length=119183>
+##contig=<ID=KI270805.1,length=209988>
+##contig=<ID=KI270899.1,length=190869>
+##contig=<ID=KI270809.1,length=209586>
+##contig=<ID=KI270803.1,length=1111570>
+##contig=<ID=KI270807.1,length=126434>
+##contig=<ID=KZ559106.1,length=172555>
+##contig=<ID=KZ208913.1,length=680662>
+##contig=<ID=KI270808.1,length=271455>
+##contig=<ID=KI270811.1,length=292436>
+##contig=<ID=KI270814.1,length=141812>
+##contig=<ID=KI270810.1,length=374415>
+##contig=<ID=KI270812.1,length=282736>
+##contig=<ID=KI270815.1,length=132244>
+##contig=<ID=KI270813.1,length=300230>
+##contig=<ID=KI270816.1,length=305841>
+##contig=<ID=KI270818.1,length=145606>
+##contig=<ID=KI270817.1,length=158983>
+##contig=<ID=KI270900.1,length=318687>
+##contig=<ID=KI270819.1,length=133535>
+##contig=<ID=KI270901.1,length=136959>
+##contig=<ID=KI270820.1,length=36640>
+##contig=<ID=KI270926.1,length=229282>
+##contig=<ID=KZ559107.1,length=103072>
+##contig=<ID=KI270821.1,length=985506>
+##contig=<ID=KI270822.1,length=624492>
+##contig=<ID=GL383539.1,length=162988>
+##contig=<ID=GL383540.1,length=71551>
+##contig=<ID=GL383541.1,length=171286>
+##contig=<ID=GL383542.1,length=60032>
+##contig=<ID=KI270823.1,length=439082>
+##contig=<ID=KQ090018.1,length=163882>
+##contig=<ID=KQ090019.1,length=134099>
+##contig=<ID=KI270880.1,length=284869>
+##contig=<ID=KI270881.1,length=144206>
+##contig=<ID=KI270913.1,length=274009>
+##contig=<ID=KV766199.1,length=188004>
+##contig=<ID=KI270302.1,length=2274>
+##contig=<ID=KI270303.1,length=1942>
+##contig=<ID=KI270304.1,length=2165>
+##contig=<ID=KI270305.1,length=1472>
+##contig=<ID=KI270310.1,length=1201>
+##contig=<ID=KI270311.1,length=12399>
+##contig=<ID=KI270312.1,length=998>
+##contig=<ID=KI270315.1,length=2276>
+##contig=<ID=KI270316.1,length=1444>
+##contig=<ID=KI270317.1,length=37690>
+##contig=<ID=KI270320.1,length=4416>
+##contig=<ID=KI270322.1,length=21476>
+##contig=<ID=KI270329.1,length=1040>
+##contig=<ID=KI270330.1,length=1652>
+##contig=<ID=KI270333.1,length=2699>
+##contig=<ID=KI270334.1,length=1368>
+##contig=<ID=KI270335.1,length=1048>
+##contig=<ID=KI270336.1,length=1026>
+##contig=<ID=KI270337.1,length=1121>
+##contig=<ID=KI270338.1,length=1428>
+##contig=<ID=KI270340.1,length=1428>
+##contig=<ID=KI270362.1,length=3530>
+##contig=<ID=KI270363.1,length=1803>
+##contig=<ID=KI270364.1,length=2855>
+##contig=<ID=KI270366.1,length=8320>
+##contig=<ID=KI270371.1,length=2805>
+##contig=<ID=KI270372.1,length=1650>
+##contig=<ID=KI270373.1,length=1451>
+##contig=<ID=KI270374.1,length=2656>
+##contig=<ID=KI270375.1,length=2378>
+##contig=<ID=KI270376.1,length=1136>
+##contig=<ID=KI270378.1,length=1048>
+##contig=<ID=KI270379.1,length=1045>
+##contig=<ID=KI270381.1,length=1930>
+##contig=<ID=KI270382.1,length=4215>
+##contig=<ID=KI270383.1,length=1750>
+##contig=<ID=KI270384.1,length=1658>
+##contig=<ID=KI270385.1,length=990>
+##contig=<ID=KI270386.1,length=1788>
+##contig=<ID=KI270387.1,length=1537>
+##contig=<ID=KI270388.1,length=1216>
+##contig=<ID=KI270389.1,length=1298>
+##contig=<ID=KI270390.1,length=2387>
+##contig=<ID=KI270391.1,length=1484>
+##contig=<ID=KI270392.1,length=971>
+##contig=<ID=KI270393.1,length=1308>
+##contig=<ID=KI270394.1,length=970>
+##contig=<ID=KI270395.1,length=1143>
+##contig=<ID=KI270396.1,length=1880>
+##contig=<ID=KI270411.1,length=2646>
+##contig=<ID=KI270412.1,length=1179>
+##contig=<ID=KI270414.1,length=2489>
+##contig=<ID=KI270417.1,length=2043>
+##contig=<ID=KI270418.1,length=2145>
+##contig=<ID=KI270419.1,length=1029>
+##contig=<ID=KI270420.1,length=2321>
+##contig=<ID=KI270422.1,length=1445>
+##contig=<ID=KI270423.1,length=981>
+##contig=<ID=KI270424.1,length=2140>
+##contig=<ID=KI270425.1,length=1884>
+##contig=<ID=KI270429.1,length=1361>
+##contig=<ID=KI270435.1,length=92983>
+##contig=<ID=KI270438.1,length=112505>
+##contig=<ID=KI270442.1,length=392061>
+##contig=<ID=KI270448.1,length=7992>
+##contig=<ID=KI270465.1,length=1774>
+##contig=<ID=KI270466.1,length=1233>
+##contig=<ID=KI270467.1,length=3920>
+##contig=<ID=KI270468.1,length=4055>
+##contig=<ID=KI270507.1,length=5353>
+##contig=<ID=KI270508.1,length=1951>
+##contig=<ID=KI270509.1,length=2318>
+##contig=<ID=KI270510.1,length=2415>
+##contig=<ID=KI270511.1,length=8127>
+##contig=<ID=KI270512.1,length=22689>
+##contig=<ID=KI270515.1,length=6361>
+##contig=<ID=KI270516.1,length=1300>
+##contig=<ID=KI270517.1,length=3253>
+##contig=<ID=KI270518.1,length=2186>
+##contig=<ID=KI270519.1,length=138126>
+##contig=<ID=KI270521.1,length=7642>
+##contig=<ID=KI270522.1,length=5674>
+##contig=<ID=KI270528.1,length=2983>
+##contig=<ID=KI270529.1,length=1899>
+##contig=<ID=KI270530.1,length=2168>
+##contig=<ID=KI270538.1,length=91309>
+##contig=<ID=KI270539.1,length=993>
+##contig=<ID=KI270544.1,length=1202>
+##contig=<ID=KI270548.1,length=1599>
+##contig=<ID=KI270579.1,length=31033>
+##contig=<ID=KI270580.1,length=1553>
+##contig=<ID=KI270581.1,length=7046>
+##contig=<ID=KI270582.1,length=6504>
+##contig=<ID=KI270583.1,length=1400>
+##contig=<ID=KI270584.1,length=4513>
+##contig=<ID=KI270587.1,length=2969>
+##contig=<ID=KI270588.1,length=6158>
+##contig=<ID=KI270589.1,length=44474>
+##contig=<ID=KI270590.1,length=4685>
+##contig=<ID=KI270591.1,length=5796>
+##contig=<ID=KI270593.1,length=3041>
+##contig=<ID=KI270706.1,length=175055>
+##contig=<ID=KI270707.1,length=32032>
+##contig=<ID=KI270708.1,length=127682>
+##contig=<ID=KI270709.1,length=66860>
+##contig=<ID=KI270710.1,length=40176>
+##contig=<ID=KI270711.1,length=42210>
+##contig=<ID=KI270712.1,length=176043>
+##contig=<ID=KI270713.1,length=40745>
+##contig=<ID=KI270714.1,length=41717>
+##contig=<ID=KI270715.1,length=161471>
+##contig=<ID=KI270716.1,length=153799>
+##contig=<ID=KI270717.1,length=40062>
+##contig=<ID=KI270718.1,length=38054>
+##contig=<ID=KI270719.1,length=176845>
+##contig=<ID=KI270720.1,length=39050>
+##contig=<ID=KI270721.1,length=100316>
+##contig=<ID=KI270722.1,length=194050>
+##contig=<ID=KI270723.1,length=38115>
+##contig=<ID=KI270724.1,length=39555>
+##contig=<ID=KI270725.1,length=172810>
+##contig=<ID=KI270726.1,length=43739>
+##contig=<ID=KI270727.1,length=448248>
+##contig=<ID=KI270728.1,length=1872759>
+##contig=<ID=KI270729.1,length=280839>
+##contig=<ID=KI270730.1,length=112551>
+##contig=<ID=KI270731.1,length=150754>
+##contig=<ID=KI270732.1,length=41543>
+##contig=<ID=KI270733.1,length=179772>
+##contig=<ID=KI270734.1,length=165050>
+##contig=<ID=KI270735.1,length=42811>
+##contig=<ID=KI270736.1,length=181920>
+##contig=<ID=KI270737.1,length=103838>
+##contig=<ID=KI270738.1,length=99375>
+##contig=<ID=KI270739.1,length=73985>
+##contig=<ID=KI270740.1,length=37240>
+##contig=<ID=KI270741.1,length=157432>
+##contig=<ID=KI270742.1,length=186739>
+##contig=<ID=KI270743.1,length=210658>
+##contig=<ID=KI270744.1,length=168472>
+##contig=<ID=KI270745.1,length=41891>
+##contig=<ID=KI270746.1,length=66486>
+##contig=<ID=KI270747.1,length=198735>
+##contig=<ID=KI270748.1,length=93321>
+##contig=<ID=KI270749.1,length=158759>
+##contig=<ID=KI270750.1,length=148850>
+##contig=<ID=KI270751.1,length=150742>
+##contig=<ID=KI270752.1,length=27745>
+##contig=<ID=KI270753.1,length=62944>
+##contig=<ID=KI270754.1,length=40191>
+##contig=<ID=KI270755.1,length=36723>
+##contig=<ID=KI270756.1,length=79590>
+##contig=<ID=KI270757.1,length=71251>
+##INFO=<ID=FLIP,Number=0,Type=Flag,Description="Whether alleles flipped strand during liftover">
+##INFO=<ID=SWAP,Number=1,Type=Integer,Description="Which alternate allele became the reference during liftover (-1 for new reference)">
+##bcftools_pluginVersion=1.15+htslib-1.15
+##bcftools_pluginCommand=plugin liftover -o adhd.38.vcf -- adhd.norm.vcf -s GRCh37.p13.genome.fa -f GRCh38.p13.genome.fa -c hg19ToHg38.over.chain.gz; Date=Thu Aug 17 13:56:53 2023
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	YEET
+chr20	22147072	rs708998	T	C	.	PASS	RSID=rs708998	.	.
+chr20	23168744	rs11696320	A	G	.	PASS	RSID=rs11696320	.	.
+chr20	25898408	rs2000279	A	G	.	PASS	RSID=rs2000279	.	.
+chr20	21574446	rs2424377	T	C	.	PASS	RSID=rs2424377	.	.
+chr20	25149747	rs6138512	T	C	.	PASS	RSID=rs6138512	.	.
+chr20	24429353	rs34155233	GA	G	.	PASS	RSID=rs34155233	.	.
+chr20	21891388	rs138490668	C	G	.	PASS	RSID=rs138490668	.	.
+chr20	25603690	rs6138612	T	C	.	PASS	RSID=rs6138612	.	.
+chr20	22992688	rs145682494	C	G	.	PASS	RSID=rs145682494	.	.
+chr20	24312087	rs6114643	C	G	.	PASS	RSID=rs6114643	.	.
+chr20	26108443	rs2697516	T	C	.	PASS	RSID=rs2697516	.	.
+chr20	23438628	rs59644842m	A	C	.	PASS	RSID=rs59644842m	.	.
+chr20	25445172	rs6138569	A	G	.	PASS	RSID=rs6138569	.	.
+chr20	20112190	rs73605580	A	G	.	PASS	RSID=rs73605580	.	.
+chr20	22989891	rs220981	A	G	.	PASS	RSID=rs220981	.	.
+chr20	30308890	rs12481295	C	G	.	PASS	RSID=rs12481295	.	.
+chr20	23823010	rs7264112	C	G	.	PASS	RSID=rs7264112	.	.
+chr20	24768296	rs6083610	A	G	.	PASS	RSID=rs6083610	.	.
+chr20	22273982	rs200363	T	G	.	PASS	RSID=rs200363	.	.
+chr20	24521251	rs73101391	A	C	.	PASS	RSID=rs73101391	.	.
+chr20	22010444	rs151150324	A	G	.	PASS	RSID=rs151150324	.	.
+chr20	25986074	rs35665365	GCAA	G	.	PASS	RSID=rs35665365	.	.
+chr20	20084057	rs2092520	T	G	.	PASS	RSID=rs2092520	.	.
+chr20	23216940	rs6048601	A	G	.	PASS	RSID=rs6048601	.	.
+chr20	23438628	rs59644842	A	AGGAGGGACC	.	PASS	RSID=rs59644842	.	.
+chr20	23792017	rs6049126	A	G	.	PASS	RSID=rs6049126	.	.
+chr20	23616829	rs35782710	A	G	.	PASS	RSID=rs35782710	.	.
+chr20	24005828	rs28718074	A	G	.	PASS	RSID=rs28718074	.	.
+chr20	25458232	rs416745	T	C	.	PASS	RSID=rs416745	.	.
+chr20	20158820	rs62200314	A	G	.	PASS	RSID=rs62200314	.	.
+chr20	24892948	rs6083666	T	C	.	PASS	RSID=rs6083666	.	.
+chr20	24739334	rs2424644	A	C	.	PASS	RSID=rs2424644	.	.
+chr20	21962877	rs2251043	A	G	.	PASS	RSID=rs2251043	.	.
+chr20	25891377	rs2144213	T	C	.	PASS	RSID=rs2144213	.	.
+chr20	21340015	rs1546995	T	C	.	PASS	RSID=rs1546995	.	.
+chr20	22976612	rs12019187	A	C	.	PASS	RSID=rs12019187	.	.
+chr20	24638178	rs11697115	A	G	.	PASS	RSID=rs11697115	.	.
+chr20	22483771	rs73087888	A	G	.	PASS	RSID=rs73087888	.	.
+chr20	23314000	rs2995715	A	T	.	PASS	RSID=rs2995715	.	.
+chr20	30326116	rs6057151	T	C	.	PASS	RSID=rs6057151	.	.
+chr20	23059793	rs1040588	C	G	.	PASS	RSID=rs1040588	.	.
+chr20	20140181	rs926722	A	G	.	PASS	RSID=rs926722	.	.
+chr20	22380294	rs199840	T	G	.	PASS	RSID=rs199840	.	.
+chr20	22388762	rs140644667	T	G	.	PASS	RSID=rs140644667	.	.
+chr20	26174356	rs148657011	A	ATC	.	PASS	RSID=rs148657011	.	.
+chr20	24922293	rs6050134	T	C	.	PASS	RSID=rs6050134	.	.
+chr20	30338679	rs13040826	T	C	.	PASS	RSID=rs13040826	.	.
+chr20	30397599	rs6119111	A	T	.	PASS	RSID=rs6119111	.	.
+chr20	21966290	rs201543	A	G	.	PASS	RSID=rs201543	.	.
+chr20	25270573	rs200800014	CT	C	.	PASS	RSID=rs200800014	.	.
+chr20	20853339	rs6137171	A	C	.	PASS	RSID=rs6137171	.	.
+chr20	31218647	rs139878758	T	G	.	PASS	RSID=rs139878758	.	.
+chr20	23578671	rs1987845	T	G	.	PASS	RSID=rs1987845	.	.
+chr20	21555909	rs73129826	A	G	.	PASS	RSID=rs73129826	.	.
+chr20	23743675	rs35188984	G	GT	.	PASS	RSID=rs35188984	.	.
+chr20	24810063	rs6083625	T	G	.	PASS	RSID=rs6083625	.	.
+chr20	22014937	rs201557	A	G	.	PASS	RSID=rs201557	.	.
+chr20	20867874	rs6113031	A	T	.	PASS	RSID=rs6113031	.	.
+chr20	30213797	rs28734128	A	G	.	PASS	RSID=rs28734128	.	.
+chr20	25966353	rs112784359	T	G	.	PASS	RSID=rs112784359	.	.
+chr20	20198644	rs1040582	T	C	.	PASS	RSID=rs1040582	.	.
+chr20	25369862	rs2027003	A	G	.	PASS	RSID=rs2027003	.	.
+chr20	21032159	rs200594546	A	AAT	.	PASS	RSID=rs200594546	.	.
+chr20	25130329	rs112478139	T	G	.	PASS	RSID=rs112478139	.	.
+chr20	23831051	rs6138130	T	C	.	PASS	RSID=rs6138130	.	.
+chr20	23889224	rs376180291	G	GTCT	.	PASS	RSID=rs376180291	.	.
+chr20	23377721	rs16985303	T	C	.	PASS	RSID=rs16985303	.	.
+chr20	20147781	rs2424280	T	G	.	PASS	RSID=rs2424280	.	.
+chr20	23765890	rs6138059	A	G	.	PASS	RSID=rs6138059	.	.
+chr20	20927012	rs6113066	T	C	.	PASS	RSID=rs6113066	.	.
+chr20	21047374	rs6082298	A	G	.	PASS	RSID=rs6082298	.	.
+chr20	22162802	rs116913844	T	C	.	PASS	RSID=rs116913844	.	.
+chr20	23310370	rs3021460	C	G	.	PASS	RSID=rs3021460	.	.
+chr20	23778528	rs34440553	G	GT	.	PASS	RSID=rs34440553	.	.
+chr20	25397151	rs2387880	T	C	.	PASS	RSID=rs2387880	.	.
+chr20	25978526	rs4815493	T	G	.	PASS	RSID=rs4815493	.	.
+chr20	24337740	rs6049609	C	G	.	PASS	RSID=rs6049609	.	.
+chr20	24584414	rs8119291	A	G	.	PASS	RSID=rs8119291	.	.
+chr20	30363904	rs6119076	A	G	.	PASS	RSID=rs6119076	.	.
+chr20	24240735	rs6083454	A	G	.	PASS	RSID=rs6083454	.	.
+chr20	25738850	rs56213472	T	TA	.	PASS	RSID=rs56213472	.	.
+chr20	24945275	rs145581581	T	C	.	PASS	RSID=rs145581581	.	.
+chr20	21404328	rs55837402	A	C	.	PASS	RSID=rs55837402	.	.
+chr20	24730059	rs56097502	T	C	.	PASS	RSID=rs56097502	.	.
+chr20	20537748	rs6082034	A	C	.	PASS	RSID=rs6082034	.	.
+chr20	20050226	rs2073123	T	C	.	PASS	RSID=rs2073123	.	.
+chr20	23188221	rs41282284	T	G	.	PASS	RSID=rs41282284	.	.
+chr20	25282153	rs2261790	T	C	.	PASS	RSID=rs2261790	.	.
+chr20	30290404	rs7363794	A	C	.	PASS	RSID=rs7363794	.	.
+chr20	21385639	rs60774427	CAA	C	.	PASS	RSID=rs60774427	.	.
+chr20	21177731	rs2876596	T	G	.	PASS	RSID=rs2876596	.	.
+chr20	21594066	rs4815054	C	G	.	PASS	RSID=rs4815054	.	.
+chr20	22277935	rs200358	A	G	.	PASS	RSID=rs200358	.	.
+chr20	25030787	rs6050259	T	C	.	PASS	RSID=rs6050259	.	.
+chr20	24978746	rs11087491	C	G	.	PASS	RSID=rs11087491	.	.
+chr20	23297828	rs200333520	A	ACACATG	.	PASS	RSID=rs200333520	.	.
+chr20	23813676	rs79658470m	A	AG	.	PASS	RSID=rs79658470m	.	.
+chr20	24670882	rs35954840	T	C	.	PASS	RSID=rs35954840	.	.
+chr20	24198972	rs127801	T	C	.	PASS	RSID=rs127801	.	.
+chr20	21415997	rs146798617	T	C	.	PASS	RSID=rs146798617	.	.
+chr20	23335362	rs111490706	T	C	.	PASS	RSID=rs111490706	.	.
+chr20	22946556	rs3061592	A	ATT	.	PASS	RSID=rs3061592	.	.
+chr20	26279748	rs142026724	T	TAG	.	PASS	RSID=rs142026724	.	.
+chr20	23232908	rs7270823	T	G	.	PASS	RSID=rs7270823	.	.
+chr20	24863616	rs8114708	T	C	.	PASS	RSID=rs8114708	.	.
+chr20	23725645	rs72536512	T	TA	.	PASS	RSID=rs72536512	.	.
+chr20	23919974	rs141694360	G	GACACAC	.	PASS	RSID=rs141694360	.	.
+chr20	23713052	rs11698815	A	T	.	PASS	RSID=rs11698815	.	.
+chr20	20113082	rs713258	T	C	.	PASS	RSID=rs713258	.	.
+chr20	20151643	rs2328497	A	G	.	PASS	RSID=rs2328497	.	.
+chr20	22150893	rs804535	T	G	.	PASS	RSID=rs804535	.	.
+chr20	25268218	rs1555331	C	G	.	PASS	RSID=rs1555331	.	.
+chr20	30318812	rs55963102	T	C	.	PASS	RSID=rs55963102	.	.
+chr20	24673045	rs56235927	T	G	.	PASS	RSID=rs56235927	.	.
+chr20	25620824	rs6132853	T	C	.	PASS	RSID=rs6132853	.	.
+chr20	30293698	rs56076849	A	C	.	PASS	RSID=rs56076849	.	.
+chr20	24101658	rs11087448	C	CG	.	PASS	RSID=rs11087448	.	.
+chr20	24384436	rs11905097	T	C	.	PASS	RSID=rs11905097	.	.
+chr20	22732081	rs76330995	T	C	.	PASS	RSID=rs76330995	.	.
+chr20	22977851	rs956737	A	T	.	PASS	RSID=rs956737	.	.
+chr20	20310807	rs2424350	A	G	.	PASS	RSID=rs2424350	.	.
+chr20	23782771	rs72536514	T	TG	.	PASS	RSID=rs72536514	.	.
+chr20	22203976	rs804591	A	G	.	PASS	RSID=rs804591	.	.
+chr20	25727684	rs4368405	A	G	.	PASS	RSID=rs4368405	.	.
+chr20	25345162	rs137881548	T	C	.	PASS	RSID=rs137881548	.	.
+chr20	24671660	rs4347916	T	G	.	PASS	RSID=rs4347916	.	.
+chr20	23635855	rs3827141	A	C	.	PASS	RSID=rs3827141	.	.
+chr20	24742109	rs73331396	A	G	.	PASS	RSID=rs73331396	.	.
+chr20	25690122	rs148386890	C	CA	.	PASS	RSID=rs148386890	.	.
+chr20	31226062	rs6142639	T	G	.	PASS	RSID=rs6142639	.	.
+chr20	22082036	rs28757416	T	C	.	PASS	RSID=rs28757416	.	.
+chr20	23920308	rs1797042	T	C	.	PASS	RSID=rs1797042	.	.
+chr20	24893672	rs7272869	A	G	.	PASS	RSID=rs7272869	.	.
+chr20	20100131	rs34950733	A	G	.	PASS	RSID=rs34950733	.	.
+chr20	31234314	rs6141363	A	G	.	PASS	RSID=rs6141363	.	.
+chr20	30388373	rs4892328	A	C	.	PASS	RSID=rs4892328	.	.
+chr20	22988197	rs220985	T	C	.	PASS	RSID=rs220985	.	.
+chr20	24968616	rs60016170	CCAGAAA	C	.	PASS	RSID=rs60016170	.	.
+chr20	23479173	rs6036423	A	C	.	PASS	RSID=rs6036423	.	.
+chr20	24878262	rs67574259	A	T	.	PASS	RSID=rs67574259	.	.
+chr20	24900656	rs11905160	C	G	.	PASS	RSID=rs11905160	.	.
+chr20	20405301	rs6075653	T	G	.	PASS	RSID=rs6075653	.	.
+chr20	23972784	rs3004167	A	G	.	PASS	RSID=rs3004167	.	.
+chr20	21634509	rs4813436	T	C	.	PASS	RSID=rs4813436	.	.
+chr20	20034195	rs11476297	G	GT	.	PASS	RSID=rs11476297	.	.
+chr20	22241827	rs200509623	T	TG	.	PASS	RSID=rs200509623	.	.
+chr20	23282702	rs6114034	T	C	.	PASS	RSID=rs6114034	.	.
+chr20	22327353	rs4815105	A	G	.	PASS	RSID=rs4815105	.	.
+chr20	22210483	rs201726291	T	TTA	.	PASS	RSID=rs201726291	.	.
+chr20	23175018	rs62208781	A	G	.	PASS	RSID=rs62208781	.	.
+chr20	24467211	rs76600581	C	G	.	PASS	RSID=rs76600581	.	.
+chr20	23812233	rs6049146	A	T	.	PASS	RSID=rs6049146	.	.
+chr20	23818306	rs6083272	T	G	.	PASS	RSID=rs6083272	.	.
+chr20	20760297	rs11467330	A	AGTACACTC	.	PASS	RSID=rs11467330	.	.
+chr20	21590199	rs1014889	A	G	.	PASS	RSID=rs1014889	.	.
+chr20	20144607	rs11326705	GA	G	.	PASS	RSID=rs11326705	.	.
+chr20	20176152	rs6046700	A	G	.	PASS	RSID=rs6046700	.	.
+chr20	31363733	rs6119276	T	C	.	PASS	RSID=rs6119276	.	.
+chr20	23306039	rs1891685	T	C	.	PASS	RSID=rs1891685	.	.
+chr20	20758657	rs6047033	T	C	.	PASS	RSID=rs6047033	.	.
+chr20	21387103	rs2296730	A	G	.	PASS	RSID=rs2296730	.	.
+chr20	22363162	rs199839	A	C	.	PASS	RSID=rs199839	.	.
+chr20	23380528	rs11387171	CT	C	.	PASS	RSID=rs11387171	.	.
+chr20	20269203	rs74174559	G	GTA	.	PASS	RSID=rs74174559	.	.
+chr20	22535546	rs6048172	T	C	.	PASS	RSID=rs6048172	.	.
+chr20	23776992	rs11468874	CAG	C	.	PASS	RSID=rs11468874	.	.
+chr20	25463626	rs76627504	T	C	.	PASS	RSID=rs76627504	.	.
+chr20	23836012	rs34122214	GA	G	.	PASS	RSID=rs34122214	.	.
+chr20	22873508	rs1209183	A	G	.	PASS	RSID=rs1209183	.	.
+chr20	23814220	rs55655825	T	G	.	PASS	RSID=rs55655825	.	.
+chr20	31404448	rs2056989	A	T	.	PASS	RSID=rs2056989	.	.
+chr20	31327238	rs6057561	T	G	.	PASS	RSID=rs6057561	.	.
+chr20	22752207	rs17827832	T	G	.	PASS	RSID=rs17827832	.	.
+chr20	23245774	rs6114008	C	G	.	PASS	RSID=rs6114008	.	.
+chr20	30282741	rs8120246	T	G	.	PASS	RSID=rs8120246	.	.
+chr20	23830402	rs6083276	T	C	.	PASS	RSID=rs6083276	.	.
+chr20	22950616	rs6048460	A	C	.	PASS	RSID=rs6048460	.	.
+chr20	21086525	rs8118908	A	G	.	PASS	RSID=rs8118908	.	.
+chr20	21382120	rs6047417	T	G	.	PASS	RSID=rs6047417	.	.
+chr20	25778034	rs6076388	C	G	.	PASS	RSID=rs6076388	.	.
+chr20	24938193	rs227637	T	C	.	PASS	RSID=rs227637	.	.
+chr20	23079620	rs7492	A	G	.	PASS	RSID=rs7492	.	.
+chr20	23132170	rs56820994	T	C	.	PASS	RSID=rs56820994	.	.
+chr20	23014724	rs6082974	T	C	.	PASS	RSID=rs6082974	.	.
+chr20	20297500	rs2424333	T	C	.	PASS	RSID=rs2424333	.	.
+chr20	21971891	rs17739299	T	C	.	PASS	RSID=rs17739299	.	.
+chr20	23715564	rs6138045	T	C	.	PASS	RSID=rs6138045	.	.
+chr20	23988107	rs9798580	T	C	.	PASS	RSID=rs9798580	.	.
+chr20	21796422	rs62217507	A	G	.	PASS	RSID=rs62217507	.	.
+chr20	23206083	rs6113987	A	G	.	PASS	RSID=rs6113987	.	.
+chr20	24283131	rs6114592	A	G	.	PASS	RSID=rs6114592	.	.
+chr20	20458875	rs62202171	T	C	.	PASS	RSID=rs62202171	.	.
+chr20	24223450	rs12624600	A	G	.	PASS	RSID=rs12624600	.	.
+chr20	30406627	rs8119782	C	G	.	PASS	RSID=rs8119782	.	.
+chr20	23840064	rs6083293	A	C	.	PASS	RSID=rs6083293	.	.
+chr20	31240826	rs140218877mm	C	CGAATG	.	PASS	RSID=rs140218877mm	.	.
+chr20	25431406	rs62211469m	A	G	.	PASS	RSID=rs62211469m	.	.
+chr20	31268950	rs73119542	A	T	.	PASS	RSID=rs73119542	.	.
+chr20	25700342	rs143223018	TC	T	.	PASS	RSID=rs143223018	.	.
+chr20	21688042	rs117988683	A	G	.	PASS	RSID=rs117988683	.	.
+chr20	22582036	rs1212275	T	C	.	PASS	RSID=rs1212275	.	.
+chr20	25531985	rs6132840	C	G	.	PASS	RSID=rs6132840	.	.
+chr20	20549937	rs6046924	T	C	.	PASS	RSID=rs6046924	.	.
+chr20	23846991	rs148783341	C	G	.	PASS	RSID=rs148783341	.	.
+chr20	23567235	rs35022860	T	C	.	PASS	RSID=rs35022860	.	.
+chr20	25397682	rs6083838	A	G	.	PASS	RSID=rs6083838	.	.
+chr20	23118315	rs844864	A	C	.	PASS	RSID=rs844864	.	.
+chr20	20286017	rs11473095	TAA	T	.	PASS	RSID=rs11473095	.	.
+chr20	23355112	rs6114064	T	C	.	PASS	RSID=rs6114064	.	.
+chr20	26298533	rs6138851	T	C	.	PASS	RSID=rs6138851	.	.
+chr20	24262681	rs75755587	T	C	.	PASS	RSID=rs75755587	.	.
+chr20	20217519	rs17400417	T	C	.	PASS	RSID=rs17400417	.	.
+chr20	25001786	rs148373529	T	C	.	PASS	RSID=rs148373529	.	.
+chr20	22134895	rs1090263	T	C	.	PASS	RSID=rs1090263	.	.
+chr20	23382090	rs7269627	A	T	.	PASS	RSID=rs7269627	.	.
+chr20	25157788	rs7272397	T	C	.	PASS	RSID=rs7272397	.	.
+chr20	25166159	rs147126642	T	C	.	PASS	RSID=rs147126642	.	.
+chr20	21097415	rs6035780	T	C	.	PASS	RSID=rs6035780	.	.
+chr20	24221879	rs375756675	A	AT	.	PASS	RSID=rs375756675	.	.
+chr20	22726922	rs6036194	T	C	.	PASS	RSID=rs6036194	.	.
+chr20	20863258	rs6082209	A	G	.	PASS	RSID=rs6082209	.	.
+chr20	21879114	rs4815078	A	G	.	PASS	RSID=rs4815078	.	.
+chr20	25848138	rs60007971	A	G	.	PASS	RSID=rs60007971	.	.
+chr20	23925118	rs2995685	A	G	.	PASS	RSID=rs2995685	.	.
+chr20	25553880	rs73111242	A	T	.	PASS	RSID=rs73111242	.	.
+chr20	25883839	rs13043566	A	T	.	PASS	RSID=rs13043566	.	.
+chr20	31388600	rs7272826	A	T	.	PASS	RSID=rs7272826	.	.
+chr20	25161319	rs4815381	T	C	.	PASS	RSID=rs4815381	.	.
+chr20	25688338	rs139023883	T	TACAG	.	PASS	RSID=rs139023883	.	.
+chr20	20880821	rs6082223	T	C	.	PASS	RSID=rs6082223	.	.
+chr20	24294844	rs11471743	A	ACAAGGG	.	PASS	RSID=rs11471743	.	.
+chr20	22750345	rs965763	T	C	.	PASS	RSID=rs965763	.	.
+chr20	22732627	rs4514951	A	G	.	PASS	RSID=rs4514951	.	.
+chr20	20625986	rs6046968	T	C	.	PASS	RSID=rs6046968	.	.
+chr20	30359806	rs1955265	A	G	.	PASS	RSID=rs1955265	.	.
+chr20	21971209	rs2207878	A	G	.	PASS	RSID=rs2207878	.	.
+chr20	26080990	rs144488784	C	CA	.	PASS	RSID=rs144488784	.	.
+chr20	21382284	rs16982707	A	G	.	PASS	RSID=rs16982707	.	.
+chr20	20132628	rs2424261	T	C	.	PASS	RSID=rs2424261	.	.
+chr20	20617382	rs11468241	T	TTGA	.	PASS	RSID=rs11468241	.	.
+chr20	22123783	rs6047917	A	G	.	PASS	RSID=rs6047917	.	.
+chr20	24673051	rs56227934	T	C	.	PASS	RSID=rs56227934	.	.
+chr20	21498138	rs2180966	T	G	.	PASS	RSID=rs2180966	.	.
+chr20	23267528	rs6048657	A	G	.	PASS	RSID=rs6048657	.	.
+chr20	23907735	rs4284896	A	G	.	PASS	RSID=rs4284896	.	.
+chr20	24642235	rs77759768	A	C	.	PASS	RSID=rs77759768	.	.
+chr20	23747280	rs4505598	T	C	.	PASS	RSID=rs4505598	.	.
+chr20	25162888	rs76178168	T	G	.	PASS	RSID=rs76178168	.	.
+chr20	20796988	rs62202207	T	C	.	PASS	RSID=rs62202207	.	.
+chr20	23813696	rs62207550	A	T	.	PASS	RSID=rs62207550	.	.
+chr20	22353286	rs117615165	T	C	.	PASS	RSID=rs117615165	.	.
+chr20	24064943	rs6049366	T	C	.	PASS	RSID=rs6049366	.	.
+chr20	25385989	rs6083826	T	G	.	PASS	RSID=rs6083826	.	.
+chr20	25204470	rs11468275	T	TTA	.	PASS	RSID=rs11468275	.	.
+chr20	24352095	rs6036744	A	G	.	PASS	RSID=rs6036744	.	.
+chr20	24818512	rs62215823	C	G	.	PASS	RSID=rs62215823	.	.
+chr20	23503149	rs6114153	T	C	.	PASS	RSID=rs6114153	.	.
+chr20	22472785	rs4533554	T	C	.	PASS	RSID=rs4533554	.	.
+chr20	30362580	rs3954444	T	C	.	PASS	RSID=rs3954444	.	.
+chr20	21060004	rs2876592	A	C	.	PASS	RSID=rs2876592	.	.
+chr20	24243550	rs150957316	T	C	.	PASS	RSID=rs150957316	.	.
+chr20	30265354	rs6118958	T	C	.	PASS	RSID=rs6118958	.	.
+chr20	20282705	rs2424322	T	G	.	PASS	RSID=rs2424322	.	.
+chr20	25069172	rs11472028	T	TGCACA	.	PASS	RSID=rs11472028	.	.
+chr20	24689760	rs11697715	A	G	.	PASS	RSID=rs11697715	.	.
+chr20	30267242	rs6119207	T	C	.	PASS	RSID=rs6119207	.	.
+chr20	21664708	rs6047556	T	C	.	PASS	RSID=rs6047556	.	.
+chr20	24813328	rs62215817	A	G	.	PASS	RSID=rs62215817	.	.
+chr20	23432219	rs9753757	A	T	.	PASS	RSID=rs9753757	.	.
+chr20	24303550	rs6114627	T	C	.	PASS	RSID=rs6114627	.	.
+chr20	21406150	rs3062710	A	G	.	PASS	RSID=rs3062710	.	.
+chr20	21007275	rs12625054	T	C	.	PASS	RSID=rs12625054	.	.
+chr20	20269903	rs11470025	G	GTGACC	.	PASS	RSID=rs11470025	.	.
+chr20	23773056	rs6049098	A	G	.	PASS	RSID=rs6049098	.	.
+chr20	24084117	rs858145	T	C	.	PASS	RSID=rs858145	.	.
+chr20	26092844	rs6132919	T	C	.	PASS	RSID=rs6132919	.	.
+chr20	31255834	rs10622834	T	TAC	.	PASS	RSID=rs10622834	.	.
+chr20	25943740	rs6107105	A	C	.	PASS	RSID=rs6107105	.	.
+chr20	20321240	rs913393	T	G	.	PASS	RSID=rs913393	.	.
+chr20	25940811	rs1810541	A	G	.	PASS	RSID=rs1810541	.	.
+chr20	23853830	rs55901938	A	G	.	PASS	RSID=rs55901938	.	.
+chr20	30241038	rs6057216	A	G	.	PASS	RSID=rs6057216	.	.
+chr20	24873783	rs138423524	C	CA	.	PASS	RSID=rs138423524	.	.
+chr20	20515509	rs6132309	C	G	.	PASS	RSID=rs6132309	.	.
+chr20	25019810	rs2179732	A	T	.	PASS	RSID=rs2179732	.	.
+chr20	20143471	rs1883945	T	G	.	PASS	RSID=rs1883945	.	.
+chr20	21023699	rs6132379	C	G	.	PASS	RSID=rs6132379	.	.
+chr20	24875093	rs6036948	A	G	.	PASS	RSID=rs6036948	.	.
+chr20	24007737	rs4499504	A	G	.	PASS	RSID=rs4499504	.	.
+chr20	31301965	rs1018405	T	C	.	PASS	RSID=rs1018405	.	.
+chr20	23537352	rs4815205	A	C	.	PASS	RSID=rs4815205	.	.
+chr20	22008192	rs127747	A	G	.	PASS	RSID=rs127747	.	.
+chr20	24214335	rs6049501	T	G	.	PASS	RSID=rs6049501	.	.
+chr20	24721356	rs73106798	A	G	.	PASS	RSID=rs73106798	.	.
+chr20	23785884	rs6114279	T	C	.	PASS	RSID=rs6114279	.	.
+chr20	24307405	rs76074102	T	C	.	PASS	RSID=rs76074102	.	.
+chr20	22000087	rs2424426	T	C	.	PASS	RSID=rs2424426	.	.
+chr20	25665023	rs4813576	T	C	.	PASS	RSID=rs4813576	.	.
+chr20	31288969	rs2376543	T	C	.	PASS	RSID=rs2376543	.	.
+chr20	22418355	rs5011443	C	G	.	PASS	RSID=rs5011443	.	.
+chr20	23986386	rs7260970	A	G	.	PASS	RSID=rs7260970	.	.
+chr20	20803537	rs6137154	A	G	.	PASS	RSID=rs6137154	.	.
+chr20	25381065	rs4815414	A	G	.	PASS	RSID=rs4815414	.	.
+chr20	20052675	rs2273058	A	G	.	PASS	RSID=rs2273058	.	.
+chr20	31224308	rs11906530	T	G	.	PASS	RSID=rs11906530	.	.
+chr20	25311190	rs1888998	A	G	.	PASS	RSID=rs1888998	.	.
+chr20	22836688	rs926747	A	T	.	PASS	RSID=rs926747	.	.
+chr20	26259202	rs4813606	A	G	.	PASS	RSID=rs4813606	.	.
+chr20	20049310	rs66621993	T	C	.	PASS	RSID=rs66621993	.	.
+chr20	24149989	rs6049435	A	C	.	PASS	RSID=rs6049435	.	.
+chr20	24242137	rs6076210	A	C	.	PASS	RSID=rs6076210	.	.
+chr20	21077601	rs6047232	A	G	.	PASS	RSID=rs6047232	.	.
+chr20	23552081	rs1884862	T	C	.	PASS	RSID=rs1884862	.	.
+chr20	24010263	rs6036607	T	G	.	PASS	RSID=rs6036607	.	.
+chr20	20246746	rs8124529	A	T	.	PASS	RSID=rs8124529	.	.
+chr20	20792692	rs6106289	T	G	.	PASS	RSID=rs6106289	.	.
+chr20	20983452	rs13433257	T	G	.	PASS	RSID=rs13433257	.	.
+chr20	22778856	rs6082829	T	C	.	PASS	RSID=rs6082829	.	.
+chr20	22336738	rs6137610	T	C	.	PASS	RSID=rs6137610	.	.
+chr20	22243923	rs6036073	A	G	.	PASS	RSID=rs6036073	.	.
+chr20	20105886	rs6046627	A	G	.	PASS	RSID=rs6046627	.	.
+chr20	31311405	rs4911555	A	C	.	PASS	RSID=rs4911555	.	.
+chr20	20053584	rs6035533	A	G	.	PASS	RSID=rs6035533	.	.
+chr20	24294217	rs370490597	G	GCATATATCCA	.	PASS	RSID=rs370490597	.	.
+chr20	24609154	rs6049811	T	G	.	PASS	RSID=rs6049811	.	.
+chr20	25053844	rs6050281	T	C	.	PASS	RSID=rs6050281	.	.
+chr20	25531791	rs73597812	A	G	.	PASS	RSID=rs73597812	.	.
+chr20	24098378	rs6049392	T	C	.	PASS	RSID=rs6049392	.	.
+chr20	22318877	rs21331	A	C	.	PASS	RSID=rs21331	.	.
+chr20	31250144	rs117245656	A	G	.	PASS	RSID=rs117245656	.	.
+chr20	21754120	rs2424403	T	C	.	PASS	RSID=rs2424403	.	.
+chr20	30290292	rs7354509	A	G	.	PASS	RSID=rs7354509	.	.
+chr20	20062836	rs62200279	A	G	.	PASS	RSID=rs62200279	.	.
+chr20	25499607	rs400630	T	C	.	PASS	RSID=rs400630	.	.
+chr20	22743861	rs13036740	T	G	.	PASS	RSID=rs13036740	.	.
+chr20	25255808	rs144460462	A	G	.	PASS	RSID=rs144460462	.	.
+chr20	21833492	rs6047657	A	C	.	PASS	RSID=rs6047657	.	.
+chr20	22013154	rs143046938	T	C	.	PASS	RSID=rs143046938	.	.
+chr20	22010391	rs143962915	A	C	.	PASS	RSID=rs143962915	.	.
+chr20	25925780	rs7263106	T	C	.	PASS	RSID=rs7263106	.	.
+chr20	20973583	rs8121826	T	C	.	PASS	RSID=rs8121826	.	.
+chr20	22339827	rs6075903	T	C	.	PASS	RSID=rs6075903	.	.
+chr20	24318015	rs752291	T	C	.	PASS	RSID=rs752291	.	.
+chr20	23810965	rs6138109	A	C	.	PASS	RSID=rs6138109	.	.
+chr20	20024219	rs62203272	T	G	.	PASS	RSID=rs62203272	.	.
+chr20	22959725	rs4815164	T	C	.	PASS	RSID=rs4815164	.	.
+chr20	23723828	rs6132654	T	C	.	PASS	RSID=rs6132654	.	.
+chr20	20108771	rs11468049	A	AGTT	.	PASS	RSID=rs11468049	.	.
+chr20	23115290	rs844854	A	G	.	PASS	RSID=rs844854	.	.
+chr20	30197768	rs4010635	A	C	.	PASS	RSID=rs4010635	.	.
+chr20	20868429	rs6082212	T	C	.	PASS	RSID=rs6082212	.	.
+chr20	24306770	rs6106840	T	C	.	PASS	RSID=rs6106840	.	.
+chr20	25695065	rs6037198	A	G	.	PASS	RSID=rs6037198	.	.
+chr20	20265827	rs11298598	T	TA	.	PASS	RSID=rs11298598	.	.
+chr20	26158671	rs845985	T	C	.	PASS	RSID=rs845985	.	.
+chr20	21557266	rs6137387	T	C	.	PASS	RSID=rs6137387	.	.
+chr20	23727467	rs6049031	A	T	.	PASS	RSID=rs6049031	.	.
+chr20	26172245	rs79809356	T	C	.	PASS	RSID=rs79809356	.	.
+chr20	21176320	rs2103976	A	G	.	PASS	RSID=rs2103976	.	.
+chr20	22009252	rs201549	A	G	.	PASS	RSID=rs201549	.	.
+chr20	24943182	rs6050183	A	G	.	PASS	RSID=rs6050183	.	.
+chr20	20543894	rs117019850	A	T	.	PASS	RSID=rs117019850	.	.
+chr20	24286782	rs6106821	A	G	.	PASS	RSID=rs6106821	.	.
+chr20	24297223	rs75413603	T	C	.	PASS	RSID=rs75413603	.	.
+chr20	24803303	rs73903968	A	C	.	PASS	RSID=rs73903968	.	.
+chr20	22925112	rs1411789	A	G	.	PASS	RSID=rs1411789	.	.
+chr20	22222538	rs709005	A	C	.	PASS	RSID=rs709005	.	.
+chr20	25173160	rs6050396	A	G	.	PASS	RSID=rs6050396	.	.
+chr20	31275085	rs147578969	GA	G	.	PASS	RSID=rs147578969	.	.
+chr20	24934659	rs6050164	A	G	.	PASS	RSID=rs6050164	.	.
+chr20	22800200	rs6048356	T	G	.	PASS	RSID=rs6048356	.	.
+chr20	26322825	rs6084122	A	G	.	PASS	RSID=rs6084122	.	.
+chr20	23270778	rs6048661	A	G	.	PASS	RSID=rs6048661	.	.
+chr20	21161882	rs4815025	C	G	.	PASS	RSID=rs4815025	.	.
+chr20	31240886	rs62207799	A	C	.	PASS	RSID=rs62207799	.	.
+chr20	23411638	rs144428283m	TAA	T	.	PASS	RSID=rs144428283m	.	.
+chr20	23405325	rs71330889	G	GAGAA	.	PASS	RSID=rs71330889	.	.
+chr20	25374069	rs2500400	A	G	.	PASS	RSID=rs2500400	.	.
+chr20	22716524	rs10485635	A	C	.	PASS	RSID=rs10485635	.	.
+chr20	21687498	rs6035925	C	G	.	PASS	RSID=rs6035925	.	.
+chr20	25154214	rs11470626	GTTCC	G	.	PASS	RSID=rs11470626	.	.
+chr20	23574903	rs149131366	A	T	.	PASS	RSID=rs149131366	.	.
+chr20	24955054	rs58950179	A	AC	.	PASS	RSID=rs58950179	.	.
+chr20	21562272	rs2145815	A	G	.	PASS	RSID=rs2145815	.	.
+chr20	24739216	rs76095976	T	G	.	PASS	RSID=rs76095976	.	.
+chr20	25303707	rs2260197	T	C	.	PASS	RSID=rs2260197	.	.
+chr20	30398427	rs367587835	C	CTAAG	.	PASS	RSID=rs367587835	.	.
+chr20	22089887	rs6036037	A	C	.	PASS	RSID=rs6036037	.	.
+chr20	24735289	rs910240	A	G	.	PASS	RSID=rs910240	.	.
+chr20	22060319	rs16983348	A	G	.	PASS	RSID=rs16983348	.	.
+chr20	21545162	rs6137384	T	C	.	PASS	RSID=rs6137384	.	.
+chr20	20157832	rs6035568	A	G	.	PASS	RSID=rs6035568	.	.
+chr20	25494343	rs201843114	CAT	C	.	PASS	RSID=rs201843114	.	.
+chr20	22449712	rs6036116	T	C	.	PASS	RSID=rs6036116	.	.
+chr20	23644633	rs11340464	AT	A	.	PASS	RSID=rs11340464	.	.
+chr20	20061800	rs6081852	T	C	.	PASS	RSID=rs6081852	.	.
+chr20	24302842	rs73332459	A	G	.	PASS	RSID=rs73332459	.	.
+chr20	23366462	rs139847576	T	TTA	.	PASS	RSID=rs139847576	.	.
+chr20	23166541	rs6076034	A	G	.	PASS	RSID=rs6076034	.	.
+chr20	20280300	rs1327910	T	C	.	PASS	RSID=rs1327910	.	.
+chr20	20092295	rs2179683	A	C	.	PASS	RSID=rs2179683	.	.
+chr20	24005802	rs28433532	T	G	.	PASS	RSID=rs28433532	.	.
+chr20	26305320	rs6084109	A	T	.	PASS	RSID=rs6084109	.	.
+chr20	30406806	rs6087306	A	G	.	PASS	RSID=rs6087306	.	.
+chr20	31334016	rs6119848	A	C	.	PASS	RSID=rs6119848	.	.
+chr20	30208438	rs6057426	A	G	.	PASS	RSID=rs6057426	.	.
+chr20	25282821	rs2257649	T	G	.	PASS	RSID=rs2257649	.	.
+chr20	22410997	rs4355179	A	G	.	PASS	RSID=rs4355179	.	.
+chr20	22809043	rs742850	C	G	.	PASS	RSID=rs742850	.	.
+chr20	24113774	rs200780975	A	AT	.	PASS	RSID=rs200780975	.	.
+chr20	26099299	rs376385435	T	G	.	PASS	RSID=rs376385435	.	.
+chr20	31221228	rs199966520	A	AGGAAT	.	PASS	RSID=rs199966520	.	.
+chr20	23859212	rs6138144	A	G	.	PASS	RSID=rs6138144	.	.
+chr20	24231460	rs1120901	T	C	.	PASS	RSID=rs1120901	.	.
+chr20	20855049	rs6047094	T	C	.	PASS	RSID=rs6047094	.	.
+chr20	30348527	rs6118894	T	C	.	PASS	RSID=rs6118894	.	.
+chr20	21433399	rs809220	T	C	.	PASS	RSID=rs809220	.	.
+chr20	25424482	rs6083855	A	G	.	PASS	RSID=rs6083855	.	.
+chr20	20067209	rs6136935	A	G	.	PASS	RSID=rs6136935	.	.
+chr20	21298252	rs140018082	CAA	C	.	PASS	RSID=rs140018082	.	.
+chr20	22321778	rs2424431	A	G	.	PASS	RSID=rs2424431	.	.
+chr20	23352612	rs76787707	C	CT	.	PASS	RSID=rs76787707	.	.
+chr20	21800725	rs6047633	A	C	.	PASS	RSID=rs6047633	.	.
+chr20	25176300	rs35818314	A	C	.	PASS	RSID=rs35818314	.	.
+chr20	20160509	rs2179824	A	G	.	PASS	RSID=rs2179824	.	.
+chr20	23651772	rs112950650	A	G	.	PASS	RSID=rs112950650	.	.
+chr20	22177440	rs55833732	A	G	.	PASS	RSID=rs55833732	.	.
+chr20	23394072	rs6048779	C	G	.	PASS	RSID=rs6048779	.	.
+chr20	23692380	rs28463225	T	C	.	PASS	RSID=rs28463225	.	.
+chr20	21809437	rs4815066	A	C	.	PASS	RSID=rs4815066	.	.
+chr20	26169431	rs1937065	T	C	.	PASS	RSID=rs1937065	.	.
+chr20	23793413	rs4438551	A	G	.	PASS	RSID=rs4438551	.	.
+chr20	20870857	rs11477811	GA	G	.	PASS	RSID=rs11477811	.	.
+chr20	23771778	rs6036523	A	G	.	PASS	RSID=rs6036523	.	.
+chr20	26147534	rs11905271	A	G	.	PASS	RSID=rs11905271	.	.
+chr20	24690943	rs34056324	C	CA	.	PASS	RSID=rs34056324	.	.
+chr20	24962202	rs6050212	A	G	.	PASS	RSID=rs6050212	.	.
+chr20	22742534	rs72112039	T	TA	.	PASS	RSID=rs72112039	.	.
+chr20	31277508	rs73102048	T	C	.	PASS	RSID=rs73102048	.	.
+chr20	25563583	rs34442317	C	CA	.	PASS	RSID=rs34442317	.	.
+chr20	24691191	rs369970860	CTTTA	C	.	PASS	RSID=rs369970860	.	.
+chr20	23721306	rs6049023	A	C	.	PASS	RSID=rs6049023	.	.
+chr20	23641097	rs6114208	C	G	.	PASS	RSID=rs6114208	.	.
+chr20	21716266	rs11481679	G	GT	.	PASS	RSID=rs11481679	.	.
+chr20	25303302	rs3215644	A	AG	.	PASS	RSID=rs3215644	.	.
+chr20	21146082	rs3762194	A	G	.	PASS	RSID=rs3762194	.	.
+chr20	20330343	rs6137000	T	C	.	PASS	RSID=rs6137000	.	.
+chr20	25603124	rs242128	T	C	.	PASS	RSID=rs242128	.	.
+chr20	20259382	rs116855042	T	C	.	PASS	RSID=rs116855042	.	.
+chr20	23541425	rs67380244	CT	C	.	PASS	RSID=rs67380244	.	.
+chr20	24252045	rs224796	T	C	.	PASS	RSID=rs224796	.	.
+chr20	21457571	rs804386	A	G	.	PASS	RSID=rs804386	.	.
+chr20	25862591	rs11698056	T	C	.	PASS	RSID=rs11698056	.	.
+chr20	26091799	rs79674454	A	G	.	PASS	RSID=rs79674454	.	.
+chr20	23415604	rs8115832	A	G	.	PASS	RSID=rs8115832	.	.
+chr20	26279893	rs13433354	A	G	.	PASS	RSID=rs13433354	.	.
+chr20	25174507	rs12481052	T	C	.	PASS	RSID=rs12481052	.	.
+chr20	25032173	rs6132789	T	C	.	PASS	RSID=rs6132789	.	.
+chr20	23312902	rs113221070	A	G	.	PASS	RSID=rs113221070	.	.
+chr20	21616386	rs57038591	T	C	.	PASS	RSID=rs57038591	.	.
+chr20	25959443	rs4813592	A	G	.	PASS	RSID=rs4813592	.	.
+chr20	30301274	rs6118995	A	C	.	PASS	RSID=rs6118995	.	.
+chr20	21184277	rs145345036	A	G	.	PASS	RSID=rs145345036	.	.
+chr20	25208484	rs143850972	ATAAT	A	.	PASS	RSID=rs143850972	.	.
+chr20	31393067	rs2143191	A	C	.	PASS	RSID=rs2143191	.	.
+chr20	23227498	rs115625350	T	C	.	PASS	RSID=rs115625350	.	.
+chr20	24738298	rs6049932	C	G	.	PASS	RSID=rs6049932	.	.
+chr20	23236678	rs2225958	C	G	.	PASS	RSID=rs2225958	.	.
+chr20	22135091	rs804516	A	G	.	PASS	RSID=rs804516	.	.
+chr20	23751341	rs35871658	C	G	.	PASS	RSID=rs35871658	.	.
+chr20	23825899	rs55749542	T	C	.	PASS	RSID=rs55749542	.	.
+chr20	20717352	rs6082119	T	C	.	PASS	RSID=rs6082119	.	.
+chr20	21265351	rs6047338	C	G	.	PASS	RSID=rs6047338	.	.
+chr20	24039684	rs16986162	A	G	.	PASS	RSID=rs16986162	.	.
+chr20	23121545	rs844876	T	C	.	PASS	RSID=rs844876	.	.
+chr20	23096277	rs4813479	T	C	.	PASS	RSID=rs4813479	.	.
+chr20	24751423	rs6114861	T	C	.	PASS	RSID=rs6114861	.	.
+chr20	25950120	rs6037294	A	G	.	PASS	RSID=rs6037294	.	.
+chr20	20405934	rs1536841	T	G	.	PASS	RSID=rs1536841	.	.
+chr20	24712694	rs2424622	A	G	.	PASS	RSID=rs2424622	.	.
+chr20	25702064	rs148571883	C	G	.	PASS	RSID=rs148571883	.	.
+chr20	20201353	rs78324972	C	G	.	PASS	RSID=rs78324972	.	.
+chr20	24013906	rs6036612	A	C	.	PASS	RSID=rs6036612	.	.
+chr20	23572415	rs2897124	T	C	.	PASS	RSID=rs2897124	.	.
+chr20	20494797	rs6082021	A	C	.	PASS	RSID=rs6082021	.	.
+chr20	26260082	rs816537	A	G	.	PASS	RSID=rs816537	.	.
+chr20	23849970	rs4239741	T	C	.	PASS	RSID=rs4239741	.	.
+chr20	20994330	rs4813408	A	G	.	PASS	RSID=rs4813408	.	.
+chr20	24999507	rs6132783	A	G	.	PASS	RSID=rs6132783	.	.
+chr20	24865659	rs6050052	T	C	.	PASS	RSID=rs6050052	.	.
+chr20	25075765	rs76499395	T	C	.	PASS	RSID=rs76499395	.	.
+chr20	25663144	rs138493505	CT	C	.	PASS	RSID=rs138493505	.	.
+chr20	25873177	rs2890395	A	G	.	PASS	RSID=rs2890395	.	.
+chr20	24014923	rs6106765	A	G	.	PASS	RSID=rs6106765	.	.
+chr20	20252542	rs34733331	C	CT	.	PASS	RSID=rs34733331	.	.
+chr20	23134968	rs60232154	A	G	.	PASS	RSID=rs60232154	.	.
+chr20	25077499	rs7263632	T	C	.	PASS	RSID=rs7263632	.	.
+chr20	25512429	rs56243008	T	G	.	PASS	RSID=rs56243008	.	.
+chr20	23821595	rs6132671	T	C	.	PASS	RSID=rs6132671	.	.
+chr20	24452468	rs17823686	A	T	.	PASS	RSID=rs17823686	.	.
+chr20	30335697	rs2254254	T	C	.	PASS	RSID=rs2254254	.	.
+chr20	25473494	rs71185303	TAAATA	T	.	PASS	RSID=rs71185303	.	.
+chr20	20984347	rs6106324	T	C	.	PASS	RSID=rs6106324	.	.
+chr20	24399289	rs147314957	A	G	.	PASS	RSID=rs147314957	.	.
+chr20	21349312	rs9917457	A	G	.	PASS	RSID=rs9917457	.	.
+chr20	31274889	rs56050831	T	C	.	PASS	RSID=rs56050831	.	.
+chr20	30289501	rs150780629	C	G	.	PASS	RSID=rs150780629	.	.
+chr20	24432159	rs147082792	A	G	.	PASS	RSID=rs147082792	.	.
+chr20	25121069	rs6037025	T	C	.	PASS	RSID=rs6037025	.	.
+chr20	21262655	rs6035821	T	C	.	PASS	RSID=rs6035821	.	.
+chr20	30418175	rs372704148	T	C	.	PASS	RSID=rs372704148	.	.
+chr20	24287214	rs371473522	G	GATAGGAAGA	.	PASS	RSID=rs371473522	.	.
+chr20	22282402	rs191836	T	C	.	PASS	RSID=rs191836	.	.
+chr20	21216486	rs111407984	C	G	.	PASS	RSID=rs111407984	.	.
+chr20	23420504	rs6048791	C	G	.	PASS	RSID=rs6048791	.	.
+chr20	25390489	rs77202707m	C	G	.	PASS	RSID=rs77202707m	.	.
+chr20	25360150	rs2482937	A	G	.	PASS	RSID=rs2482937	.	.
+chr20	24104012	rs77415137	A	G	.	PASS	RSID=rs77415137	.	.
+chr20	21823090	rs2328640	A	G	.	PASS	RSID=rs2328640	.	.
+chr20	22178322	rs709000	A	G	.	PASS	RSID=rs709000	.	.
+chr20	23720187	rs7266357	T	G	.	PASS	RSID=rs7266357	.	.
+chr20	21022916	rs6137220	T	C	.	PASS	RSID=rs6137220	.	.
+chr20	24024622	rs6036616	A	G	.	PASS	RSID=rs6036616	.	.
+chr20	22705193	rs13045020	A	T	.	PASS	RSID=rs13045020	.	.
+chr20	24692793	rs10596380	GCA	G	.	PASS	RSID=rs10596380	.	.
+chr20	21402658	rs5840917	T	TG	.	PASS	RSID=rs5840917	.	.
+chr20	24744473	rs66711900	A	AG	.	PASS	RSID=rs66711900	.	.
+chr20	21175938	rs2328609	T	C	.	PASS	RSID=rs2328609	.	.
+chr20	20388281	rs6046825	A	C	.	PASS	RSID=rs6046825	.	.
+chr20	23432235	rs8125820	A	G	.	PASS	RSID=rs8125820	.	.
+chr20	25177561	rs4815389	A	C	.	PASS	RSID=rs4815389	.	.
+chr20	23009284	rs79156059	T	C	.	PASS	RSID=rs79156059	.	.
+chr20	25110633	rs200979781	GAC	G	.	PASS	RSID=rs200979781	.	.
+chr20	24464914	rs722602	T	C	.	PASS	RSID=rs722602	.	.
+chr20	22413603	rs2328719	A	G	.	PASS	RSID=rs2328719	.	.
+chr20	25718335	rs144205278	T	C	.	PASS	RSID=rs144205278	.	.
+chr20	25312468	rs35478308	C	CG	.	PASS	RSID=rs35478308	.	.
+chr20	30386095	rs3929094	T	C	.	PASS	RSID=rs3929094	.	.
+chr20	22435056	rs2757068	A	G	.	PASS	RSID=rs2757068	.	.
+chr20	21796097	rs2208312	T	C	.	PASS	RSID=rs2208312	.	.
+chr20	22783340	rs6075951	T	C	.	PASS	RSID=rs6075951	.	.
+chr20	21037097	rs11906215	T	C	.	PASS	RSID=rs11906215	.	.
+chr20	21933556	rs927059	T	C	.	PASS	RSID=rs927059	.	.
+chr20	24309866	rs6114638	A	G	.	PASS	RSID=rs6114638	.	.
+chr20	24778362	rs6106946	C	G	.	PASS	RSID=rs6106946	.	.
+chr20	23448707	rs2424558	A	G	.	PASS	RSID=rs2424558	.	.
+chr20	30297814	rs147904247	CCTGGTTCAAA	C	.	PASS	RSID=rs147904247	.	.
+chr20	20289359	rs35148306	CT	C	.	PASS	RSID=rs35148306	.	.
+chr20	21536767	rs6082445	T	C	.	PASS	RSID=rs6082445	.	.
+chr20	26263087	rs6115576	A	G	.	PASS	RSID=rs6115576	.	.
+chr20	21905649	rs76124199	T	C	.	PASS	RSID=rs76124199	.	.
+chr20	22772488	rs6082822	A	G	.	PASS	RSID=rs6082822	.	.
+chr20	24671195	rs35370897	A	G	.	PASS	RSID=rs35370897	.	.
+chr20	22211259	rs17740385	T	C	.	PASS	RSID=rs17740385	.	.
+chr20	25002155	rs6083717	T	C	.	PASS	RSID=rs6083717	.	.
+chr20	30333583	rs6057299	T	C	.	PASS	RSID=rs6057299	.	.
+chr20	21933011	rs6047741	A	G	.	PASS	RSID=rs6047741	.	.
+chr20	31219066	rs147765699	A	G	.	PASS	RSID=rs147765699	.	.
+chr20	20824748	rs6035704	A	C	.	PASS	RSID=rs6035704	.	.
+chr20	24857929	rs6036938	T	C	.	PASS	RSID=rs6036938	.	.
+chr20	20377341	rs34856238	A	G	.	PASS	RSID=rs34856238	.	.
+chr20	23968573	rs4815259	A	G	.	PASS	RSID=rs4815259	.	.
+chr20	24913593	rs138112013	T	TG	.	PASS	RSID=rs138112013	.	.
+chr20	20054400	rs6081850	T	C	.	PASS	RSID=rs6081850	.	.
+chr20	26324080	rs60723755m	G	GT	.	PASS	RSID=rs60723755m	.	.
+chr20	21290915	rs6082372	A	G	.	PASS	RSID=rs6082372	.	.
+chr20	25503809	rs409401	T	C	.	PASS	RSID=rs409401	.	.
+chr20	24417156	rs7265908	T	C	.	PASS	RSID=rs7265908	.	.
+chr20	21792611	rs2208311	T	G	.	PASS	RSID=rs2208311	.	.
+chr20	24093328	rs6049385	T	C	.	PASS	RSID=rs6049385	.	.
+chr20	24749434	rs6049947	A	C	.	PASS	RSID=rs6049947	.	.
+chr20	25152729	rs58750745	A	G	.	PASS	RSID=rs58750745	.	.
+chr20	22766711	rs6075949	A	G	.	PASS	RSID=rs6075949	.	.
+chr20	31313419	rs58916153	CATG	C	.	PASS	RSID=rs58916153	.	.
+chr20	25266252	rs34204571	A	AT	.	PASS	RSID=rs34204571	.	.
+chr20	20841597	rs36089766	T	C	.	PASS	RSID=rs36089766	.	.
+chr20	24424429	rs6049668	A	T	.	PASS	RSID=rs6049668	.	.
+chr20	24208206	rs148470851	C	CTG	.	PASS	RSID=rs148470851	.	.
+chr20	24214672	rs494639	A	C	.	PASS	RSID=rs494639	.	.
+chr20	25249388	rs7269584	T	G	.	PASS	RSID=rs7269584	.	.
+chr20	25034406	rs13039383	A	G	.	PASS	RSID=rs13039383	.	.
+chr20	24673675	rs6049854	A	G	.	PASS	RSID=rs6049854	.	.
+chr20	20176797	rs4814950	A	G	.	PASS	RSID=rs4814950	.	.
+chr20	23700699	rs116243060	A	G	.	PASS	RSID=rs116243060	.	.
+chr20	25224311	rs138902755	T	TG	.	PASS	RSID=rs138902755	.	.
+chr20	31224088	rs6061096	C	G	.	PASS	RSID=rs6061096	.	.
+chr20	21871683	rs6047681	A	G	.	PASS	RSID=rs6047681	.	.
+chr20	24796629	rs78309633	A	T	.	PASS	RSID=rs78309633	.	.
+chr20	24513059	rs2386955	A	G	.	PASS	RSID=rs2386955	.	.
+chr20	22141364	rs708995	A	G	.	PASS	RSID=rs708995	.	.
+chr20	20211964	rs73617298	T	TA	.	PASS	RSID=rs73617298	.	.
+chr20	24013221	rs6049323	T	G	.	PASS	RSID=rs6049323	.	.
+chr20	25471514	rs723774	T	C	.	PASS	RSID=rs723774	.	.
+chr20	20120284	rs6136944	T	C	.	PASS	RSID=rs6136944	.	.
+chr20	21041437	rs6047215	A	G	.	PASS	RSID=rs6047215	.	.
+chr20	25409648	rs4815424	T	C	.	PASS	RSID=rs4815424	.	.
+chr20	22330051	rs55640000	T	G	.	PASS	RSID=rs55640000	.	.
+chr20	22696705	rs6048267	C	G	.	PASS	RSID=rs6048267	.	.
+chr20	30300107	rs6567440	T	C	.	PASS	RSID=rs6567440	.	.
+chr20	24738618	rs926710	A	T	.	PASS	RSID=rs926710	.	.
+chr20	31305836	rs117035090	T	C	.	PASS	RSID=rs117035090	.	.
+chr20	24802818	rs73101422	C	G	.	PASS	RSID=rs73101422	.	.
+chr20	22724232	rs6106550	A	G	.	PASS	RSID=rs6106550	.	.
+chr20	25092205	rs62211640	T	G	.	PASS	RSID=rs62211640	.	.
+chr20	24790872	rs226677	T	C	.	PASS	RSID=rs226677	.	.
+chr20	25029866	rs77309490	A	C	.	PASS	RSID=rs77309490	.	.
+chr20	20846882	rs66989505	T	TCAC	.	PASS	RSID=rs66989505	.	.
+chr20	23470105	rs56685924	GA	G	.	PASS	RSID=rs56685924	.	.
+chr20	24189197	rs491724	T	C	.	PASS	RSID=rs491724	.	.
+chr20	20250945	rs6132277	C	G	.	PASS	RSID=rs6132277	.	.
+chr20	23804955	rs6049140	A	T	.	PASS	RSID=rs6049140	.	.
+chr20	31223962	rs35026934	T	TG	.	PASS	RSID=rs35026934	.	.
+chr20	24511493	rs6114748	A	G	.	PASS	RSID=rs6114748	.	.
+chr20	30250442	rs6119182	T	C	.	PASS	RSID=rs6119182	.	.
+chr20	25739418	rs58169034	C	G	.	PASS	RSID=rs58169034	.	.
+chr20	24414239	rs6106873	T	C	.	PASS	RSID=rs6106873	.	.
+chr20	30395385	rs59327647	A	G	.	PASS	RSID=rs59327647	.	.
+chr20	23884470	rs72623567	T	C	.	PASS	RSID=rs72623567	.	.
+chr20	22514208	rs6048148	A	G	.	PASS	RSID=rs6048148	.	.
+chr20	25980101	rs145575347	CTT	C	.	PASS	RSID=rs145575347	.	.
+chr20	24306437	rs6106838	A	T	.	PASS	RSID=rs6106838	.	.
+chr20	22703627	rs13039845	T	C	.	PASS	RSID=rs13039845	.	.
+chr20	23476668	rs11473513	GGT	G	.	PASS	RSID=rs11473513	.	.
+chr20	21333441	rs202840	T	C	.	PASS	RSID=rs202840	.	.
+chr20	23405617	rs2424540	A	G	.	PASS	RSID=rs2424540	.	.
+chr20	21694763	rs6035929	A	G	.	PASS	RSID=rs6035929	.	.
+chr20	22792699	rs35009421	A	ATT	.	PASS	RSID=rs35009421	.	.
+chr20	20139433	rs761468	A	G	.	PASS	RSID=rs761468	.	.
+chr20	23843060	rs4416287	T	C	.	PASS	RSID=rs4416287	.	.
+chr20	24386254	rs6138286	A	G	.	PASS	RSID=rs6138286	.	.
+chr20	21871838	rs6035969	A	G	.	PASS	RSID=rs6035969	.	.
+chr20	24996143	rs6114986	T	G	.	PASS	RSID=rs6114986	.	.
+chr20	20760130	rs11908621	A	G	.	PASS	RSID=rs11908621	.	.
+chr20	23554963	rs6137997	C	G	.	PASS	RSID=rs6137997	.	.
+chr20	24042513	rs11700325	T	G	.	PASS	RSID=rs11700325	.	.
+chr20	21041363	rs11301024	C	CA	.	PASS	RSID=rs11301024	.	.
+chr20	23748342	rs4513357	T	C	.	PASS	RSID=rs4513357	.	.
+chr20	30369148	rs12479999	T	G	.	PASS	RSID=rs12479999	.	.
+chr20	25756028	rs6050873	T	C	.	PASS	RSID=rs6050873	.	.
+chr20	22438840	rs6075913	T	G	.	PASS	RSID=rs6075913	.	.
+chr20	23697192	rs6049003	T	C	.	PASS	RSID=rs6049003	.	.
+chr20	20181120	rs80126094	A	G	.	PASS	RSID=rs80126094	.	.
+chr20	23222623	rs6048607	T	G	.	PASS	RSID=rs6048607	.	.
+chr20	24012365	rs6049318	T	C	.	PASS	RSID=rs6049318	.	.
+chr20	20870046	rs73607434	C	G	.	PASS	RSID=rs73607434	.	.
+chr20	22127675	rs74484161	A	T	.	PASS	RSID=rs74484161	.	.
+chr20	23245781	rs79069007	T	C	.	PASS	RSID=rs79069007	.	.
+chr20	22116532	rs6082606	A	C	.	PASS	RSID=rs6082606	.	.
+chr20	24115737	rs6049411	A	T	.	PASS	RSID=rs6049411	.	.
+chr20	22864648	rs12624691	T	C	.	PASS	RSID=rs12624691	.	.
+chr20	20073432	rs6035542	A	G	.	PASS	RSID=rs6035542	.	.
+chr20	30344756	rs58227900	TCA	T	.	PASS	RSID=rs58227900	.	.
+chr20	24897570	rs112358624	G	GT	.	PASS	RSID=rs112358624	.	.
+chr20	25102228	rs6115037	A	T	.	PASS	RSID=rs6115037	.	.
+chr20	25052527	rs7263112	T	G	.	PASS	RSID=rs7263112	.	.
+chr20	21750371	rs11698197	T	C	.	PASS	RSID=rs11698197	.	.
+chr20	21021579	rs62218891	T	C	.	PASS	RSID=rs62218891	.	.
+chr20	20305629	rs2424340	T	C	.	PASS	RSID=rs2424340	.	.
+chr20	21359834	rs116917677	A	C	.	PASS	RSID=rs116917677	.	.
+chr20	20750594	rs139932878	G	GTC	.	PASS	RSID=rs139932878	.	.
+chr20	24014155	rs6049328	T	C	.	PASS	RSID=rs6049328	.	.
+chr20	22708300	rs6036186	T	C	.	PASS	RSID=rs6036186	.	.
+chr20	23455002	rs2424561	A	G	.	PASS	RSID=rs2424561	.	.
+chr20	24992870	rs6138457	T	G	.	PASS	RSID=rs6138457	.	.
+chr20	20170516	rs6046686	A	G	.	PASS	RSID=rs6046686	.	.
+chr20	23475028	rs147591795m	T	TA	.	PASS	RSID=rs147591795m	.	.
+chr20	24679661	rs6049877	A	G	.	PASS	RSID=rs6049877	.	.
+chr20	23009617	rs2424501	A	G	.	PASS	RSID=rs2424501	.	.
+chr20	25981830	rs35717711	C	CA	.	PASS	RSID=rs35717711	.	.
+chr20	20938161	rs34152020	A	T	.	PASS	RSID=rs34152020	.	.
+chr20	24689544	rs71332639	A	AT	.	PASS	RSID=rs71332639	.	.
+chr20	22324430	rs390738	A	C	.	PASS	RSID=rs390738	.	.
+chr20	24286216	rs79676414	A	G	.	PASS	RSID=rs79676414	.	.
+chr20	30298886	rs145559006	T	G	.	PASS	RSID=rs145559006	.	.
+chr20	21883187	rs6113404	T	C	.	PASS	RSID=rs6113404	.	.
+chr20	23741218	rs6106702	A	G	.	PASS	RSID=rs6106702	.	.
+chr20	20105299	rs6081876	T	C	.	PASS	RSID=rs6081876	.	.
+chr20	31218182	rs144020920	T	C	.	PASS	RSID=rs144020920	.	.
+chr20	24734952	rs910238	A	G	.	PASS	RSID=rs910238	.	.
+chr20	23465140	rs11481367	A	AT	.	PASS	RSID=rs11481367	.	.
+chr20	24766852	rs2892219	A	G	.	PASS	RSID=rs2892219	.	.
+chr20	30250436	rs150520540m	T	G	.	PASS	RSID=rs150520540m	.	.
+chr20	25554248	rs145003510	T	TG	.	PASS	RSID=rs145003510	.	.
+chr20	23964505	rs60786422	A	ATC	.	PASS	RSID=rs60786422	.	.
+chr20	30367979	rs67500672	A	AAT	.	PASS	RSID=rs67500672	.	.
+chr20	23437430	rs74273791	A	T	.	PASS	RSID=rs74273791	.	.
+chr20	22710908	rs7265587	T	C	.	PASS	RSID=rs7265587	.	.
+chr20	23703241	rs2405680	C	G	.	PASS	RSID=rs2405680	.	.
+chr20	24995560	rs7269416	T	G	.	PASS	RSID=rs7269416	.	.
+chr20	25203830	rs6138537	A	G	.	PASS	RSID=rs6138537	.	.
+chr20	23095956	rs11384690	A	AT	.	PASS	RSID=rs11384690	.	.
+chr20	22770185	rs8122403	A	T	.	PASS	RSID=rs8122403	.	.
+chr20	23181540	rs60772575	T	C	.	PASS	RSID=rs60772575	.	.
+chr20	24734864	rs6076261	T	G	.	PASS	RSID=rs6076261	.	.
+chr20	24931187	rs2151462	T	C	.	PASS	RSID=rs2151462	.	.
+chr20	22497327	rs6048133	A	G	.	PASS	RSID=rs6048133	.	.
+chr20	22819274	rs2207171	T	C	.	PASS	RSID=rs2207171	.	.
+chr20	21170688	rs6035799	A	G	.	PASS	RSID=rs6035799	.	.
+chr20	23134913	rs73087653	T	C	.	PASS	RSID=rs73087653	.	.
+chr20	25666179	rs138756799	A	AT	.	PASS	RSID=rs138756799	.	.
+chr20	25573613	rs73337369	T	C	.	PASS	RSID=rs73337369	.	.
+chr20	23828470	rs6138127	A	G	.	PASS	RSID=rs6138127	.	.
+chr20	23849674	rs6106739	T	G	.	PASS	RSID=rs6106739	.	.
+chr20	21439088	rs71198100	C	CT	.	PASS	RSID=rs71198100	.	.
+chr20	22734350	rs72490809	A	G	.	PASS	RSID=rs72490809	.	.
+chr20	22722933	rs2094413	T	C	.	PASS	RSID=rs2094413	.	.
+chr20	24958196	rs11906373	A	G	.	PASS	RSID=rs11906373	.	.
+chr20	31326397	rs36078362	C	CA	.	PASS	RSID=rs36078362	.	.
+chr20	21027661	rs11469940	GTGTTGCAT	G	.	PASS	RSID=rs11469940	.	.
+chr20	31218944	rs150461434	A	G	.	PASS	RSID=rs150461434	.	.
+chr20	20161907	rs11477887	T	TA	.	PASS	RSID=rs11477887	.	.
+chr20	30198404	rs373264263	CAT	C	.	PASS	RSID=rs373264263	.	.
+chr20	24357525	rs6036747	A	G	.	PASS	RSID=rs6036747	.	.
+chr20	26288801	rs1093342	A	G	.	PASS	RSID=rs1093342	.	.
+chr20	21693373	rs17745317	C	G	.	PASS	RSID=rs17745317	.	.
+chr20	24225079	rs522109	A	G	.	PASS	RSID=rs522109	.	.
+chr20	25098970	rs6083744	A	G	.	PASS	RSID=rs6083744	.	.
+chr20	22703143	rs13044901	T	C	.	PASS	RSID=rs13044901	.	.
+chr20	21679209	rs2143672	A	G	.	PASS	RSID=rs2143672	.	.
+chr20	22342166	rs199819	T	C	.	PASS	RSID=rs199819	.	.
+chr20	24948645	rs58751902	A	C	.	PASS	RSID=rs58751902	.	.
+chr20	26140518	rs6076402	T	C	.	PASS	RSID=rs6076402	.	.
+chr20	20234216	rs74577300	T	G	.	PASS	RSID=rs74577300	.	.
+chr20	23243151	rs4995046	T	C	.	PASS	RSID=rs4995046	.	.
+chr20	22590570	rs1337921	T	G	.	PASS	RSID=rs1337921	.	.
+chr20	23763716	rs4368404	T	C	.	PASS	RSID=rs4368404	.	.
+chr20	23743696	rs6049053	A	G	.	PASS	RSID=rs6049053	.	.
+chr20	23792264	rs6132664	A	C	.	PASS	RSID=rs6132664	.	.
+chr20	20279211	rs6081947	A	G	.	PASS	RSID=rs6081947	.	.
+chr20	25614409	rs41275510	T	G	.	PASS	RSID=rs41275510	.	.
+chr20	20148444	rs6046655	A	G	.	PASS	RSID=rs6046655	.	.
+chr20	25668419	rs6515674	T	G	.	PASS	RSID=rs6515674	.	.
+chr20	25266097	rs2474767	T	C	.	PASS	RSID=rs2474767	.	.
+chr20	24390729	rs36102524	A	G	.	PASS	RSID=rs36102524	.	.
+chr20	24293845	rs59285395	A	G	.	PASS	RSID=rs59285395	.	.
+chr20	31269305	rs1078258	A	G	.	PASS	RSID=rs1078258	.	.
+chr20	21853796	rs117328878	A	T	.	PASS	RSID=rs117328878	.	.
+chr20	26279219	rs6132950	A	G	.	PASS	RSID=rs6132950	.	.
+chr20	20751534	rs6082141	C	G	.	PASS	RSID=rs6082141	.	.
+chr20	25880461	rs6050964	T	G	.	PASS	RSID=rs6050964	.	.
+chr20	23581491	rs6076101	A	G	.	PASS	RSID=rs6076101	.	.
+chr20	23728742	rs73320300	T	C	.	PASS	RSID=rs73320300	.	.
+chr20	24042036	rs55954331	T	C	.	PASS	RSID=rs55954331	.	.
+chr20	26158111	rs148467075	A	ATTCT	.	PASS	RSID=rs148467075	.	.
+chr20	22773296	rs2179857	A	G	.	PASS	RSID=rs2179857	.	.
+chr20	25033147	rs112131315m	C	CATAGCAGGGA	.	PASS	RSID=rs112131315m	.	.
+chr20	25355483	rs5841055	G	GC	.	PASS	RSID=rs5841055	.	.
+chr20	26326765	rs111545485	A	T	.	PASS	RSID=rs111545485	.	.
+chr20	22513016	rs11905577	A	G	.	PASS	RSID=rs11905577	.	.
+chr20	24012052	rs6049316	A	G	.	PASS	RSID=rs6049316	.	.
+chr20	24005745	rs28451540	T	C	.	PASS	RSID=rs28451540	.	.
+chr20	24913071	rs73341260	A	G	.	PASS	RSID=rs73341260	.	.
+chr20	24364688	rs2143508	A	G	.	PASS	RSID=rs2143508	.	.
+chr20	30353105	rs112335497	T	C	.	PASS	RSID=rs112335497	.	.
+chr20	24775128	rs6076276	T	G	.	PASS	RSID=rs6076276	.	.
+chr20	24451790	rs6049703	A	G	.	PASS	RSID=rs6049703	.	.
+chr20	26297485	rs6051274	A	G	.	PASS	RSID=rs6051274	.	.
+chr20	25067673	rs13036777	A	G	.	PASS	RSID=rs13036777	.	.
+chr20	24740685	rs76684775	A	G	.	PASS	RSID=rs76684775	.	.
+chr20	25557662	rs73337343	A	G	.	PASS	RSID=rs73337343	.	.
+chr20	25251494	rs67049380	A	G	.	PASS	RSID=rs67049380	.	.
+chr20	25965524	rs4815490	C	G	.	PASS	RSID=rs4815490	.	.
+chr20	25579245	rs13040726mm	T	G	.	PASS	RSID=rs13040726mm	.	.
+chr20	24121986	rs6049417	T	G	.	PASS	RSID=rs6049417	.	.
+chr20	22595877	rs1203917	T	C	.	PASS	RSID=rs1203917	.	.
+chr20	22792222	rs34023416	T	G	.	PASS	RSID=rs34023416	.	.
+chr20	24986341	rs6050235	A	G	.	PASS	RSID=rs6050235	.	.
+chr20	23126100	rs844888	T	C	.	PASS	RSID=rs844888	.	.
+chr20	23362854	rs4815198	T	C	.	PASS	RSID=rs4815198	.	.
+chr20	24310240	rs75182436	C	G	.	PASS	RSID=rs75182436	.	.
+chr20	24405451	rs139239079	A	G	.	PASS	RSID=rs139239079	.	.
+chr20	25301972	rs2236180	T	C	.	PASS	RSID=rs2236180	.	.
+chr20	20881943	rs76246134	A	G	.	PASS	RSID=rs76246134	.	.
+chr20	24207608	rs11467843	CAT	C	.	PASS	RSID=rs11467843	.	.
+chr20	21123346	rs1007226	A	G	.	PASS	RSID=rs1007226	.	.
+chr20	24163100	rs6049458	T	C	.	PASS	RSID=rs6049458	.	.
+chr20	23728139	rs58162303	T	C	.	PASS	RSID=rs58162303	.	.
+chr20	21788494	rs8184694	T	C	.	PASS	RSID=rs8184694	.	.
+chr20	21556320	rs4813430	T	C	.	PASS	RSID=rs4813430	.	.
+chr20	30261375	rs6141251	A	G	.	PASS	RSID=rs6141251	.	.
+chr20	23661060	rs141291540	A	AC	.	PASS	RSID=rs141291540	.	.
+chr20	30199116	rs9753714	T	C	.	PASS	RSID=rs9753714	.	.
+chr20	24220537	rs533980	T	C	.	PASS	RSID=rs533980	.	.
+chr20	25758128	rs2380323	A	G	.	PASS	RSID=rs2380323	.	.
+chr20	31374116	rs6088014	T	C	.	PASS	RSID=rs6088014	.	.
+chr20	23651414	rs201718728	A	T	.	PASS	RSID=rs201718728	.	.
+chr20	23253259	rs1203982	A	G	.	PASS	RSID=rs1203982	.	.
+chr20	24842296	rs73339206	T	C	.	PASS	RSID=rs73339206	.	.
+chr20	23772788	rs6049095	A	C	.	PASS	RSID=rs6049095	.	.
+chr20	24760265	rs2424673	T	G	.	PASS	RSID=rs2424673	.	.
+chr20	22401779	rs12626065	T	C	.	PASS	RSID=rs12626065	.	.
+chr20	22058235	rs16983341	A	C	.	PASS	RSID=rs16983341	.	.
+chr20	30193692	rs8119195	A	T	.	PASS	RSID=rs8119195	.	.
+chr20	22682100	rs6036175	A	C	.	PASS	RSID=rs6036175	.	.
+chr20	25216528	rs6050448	A	G	.	PASS	RSID=rs6050448	.	.
+chr20	25489692	rs2387891	C	G	.	PASS	RSID=rs2387891	.	.
+chr20	21681879	rs6035924	T	G	.	PASS	RSID=rs6035924	.	.
+chr20	25197351	rs6050424	A	G	.	PASS	RSID=rs6050424	.	.
+chr20	22922479	rs6082921	A	T	.	PASS	RSID=rs6082921	.	.
+chr20	23851958	rs11698834	T	C	.	PASS	RSID=rs11698834	.	.
+chr20	24223909	rs550792	T	C	.	PASS	RSID=rs550792	.	.
+chr20	24749986	rs11697733	A	T	.	PASS	RSID=rs11697733	.	.
+chr20	31234421	rs140946455	T	C	.	PASS	RSID=rs140946455	.	.
+chr20	24668128	rs6049842	A	G	.	PASS	RSID=rs6049842	.	.
+chr20	25054674	rs6050282	A	C	.	PASS	RSID=rs6050282	.	.
+chr20	24720067	rs369109710	T	TA	.	PASS	RSID=rs369109710	.	.
+chr20	23317070	rs2995723	A	G	.	PASS	RSID=rs2995723	.	.
+chr20	25971140	rs6115444	T	C	.	PASS	RSID=rs6115444	.	.
+chr20	30410618	rs6057192	T	C	.	PASS	RSID=rs6057192	.	.
+chr20	21345460	rs13043724	T	C	.	PASS	RSID=rs13043724	.	.
+chr20	22321658	rs2424430	A	G	.	PASS	RSID=rs2424430	.	.
+chr20	25926847	rs2144215	T	C	.	PASS	RSID=rs2144215	.	.
+chr20	24106560	rs114568024	T	C	.	PASS	RSID=rs114568024	.	.
+chr20	20535376	rs3827962	T	C	.	PASS	RSID=rs3827962	.	.
+chr20	21561164	rs6035888	A	G	.	PASS	RSID=rs6035888	.	.
+chr20	23574489	rs6036450	T	C	.	PASS	RSID=rs6036450	.	.
+chr20	20730707	rs6137121	A	C	.	PASS	RSID=rs6137121	.	.
+chr20	26244509	rs845796	T	C	.	PASS	RSID=rs845796	.	.
+chr20	25014529	rs11699487	T	C	.	PASS	RSID=rs11699487	.	.
+chr20	21547235	rs12624822	A	G	.	PASS	RSID=rs12624822	.	.
+chr20	23345498	rs74724582	A	G	.	PASS	RSID=rs74724582	.	.
+chr20	23812617	rs55805977	A	C	.	PASS	RSID=rs55805977	.	.
+chr20	24026403	rs35907398	GA	G	.	PASS	RSID=rs35907398	.	.
+chr20	22430694	rs11475008	A	AG	.	PASS	RSID=rs11475008	.	.
+chr20	22709895	rs7263645	T	C	.	PASS	RSID=rs7263645	.	.
+chr20	24000555	rs148252992	A	ATCT	.	PASS	RSID=rs148252992	.	.
+chr20	22907195	rs6137786	T	C	.	PASS	RSID=rs6137786	.	.
+chr20	23810219	rs6138104	A	G	.	PASS	RSID=rs6138104	.	.
+chr20	24226004	rs34679495	A	AT	.	PASS	RSID=rs34679495	.	.
+chr20	24273311	rs73330473	T	C	.	PASS	RSID=rs73330473	.	.
+chr20	20868616	rs10707718	T	TA	.	PASS	RSID=rs10707718	.	.
+chr20	21267350	rs910804	A	G	.	PASS	RSID=rs910804	.	.
+chr20	24623176	rs56072016	C	CA	.	PASS	RSID=rs56072016	.	.
+chr20	20280429	rs2182835	T	C	.	PASS	RSID=rs2182835	.	.
+chr20	23741682	rs6049048	T	C	.	PASS	RSID=rs6049048	.	.
+chr20	23731170	rs73321909	T	C	.	PASS	RSID=rs73321909	.	.
+chr20	30319998	rs142636872	T	C	.	PASS	RSID=rs142636872	.	.
+chr20	21154485	rs6047274	T	C	.	PASS	RSID=rs6047274	.	.
+chr20	24315808	rs76832707	T	C	.	PASS	RSID=rs76832707	.	.
+chr20	20512906	rs45484900	T	C	.	PASS	RSID=rs45484900	.	.
+chr20	23474121	rs6048822	A	G	.	PASS	RSID=rs6048822	.	.
+chr20	23449882	rs2424559	T	C	.	PASS	RSID=rs2424559	.	.
+chr20	20052579	rs2273056	A	T	.	PASS	RSID=rs2273056	.	.
+chr20	23815910	rs6049148	T	C	.	PASS	RSID=rs6049148	.	.
+chr20	22572502	rs1203898	T	C	.	PASS	RSID=rs1203898	.	.
+chr20	23798530	rs72490828	A	G	.	PASS	RSID=rs72490828	.	.
+chr20	22711587	rs57824551	A	G	.	PASS	RSID=rs57824551	.	.
+chr20	23494976	rs3004102	C	G	.	PASS	RSID=rs3004102	.	.
+chr20	22569788	rs1203895	T	C	.	PASS	RSID=rs1203895	.	.
+chr20	23137562	rs6515304	T	C	.	PASS	RSID=rs6515304	.	.
+chr20	20312701	rs6046789	A	G	.	PASS	RSID=rs6046789	.	.
+chr20	23785180	rs13040671	A	C	.	PASS	RSID=rs13040671	.	.
+chr20	23596207	rs6048920	T	C	.	PASS	RSID=rs6048920	.	.
+chr20	25863641	rs117758765	A	T	.	PASS	RSID=rs117758765	.	.
+chr20	23807486	rs146043327	T	C	.	PASS	RSID=rs146043327	.	.
+chr20	23348329	rs113642949	C	G	.	PASS	RSID=rs113642949	.	.
+chr20	21531894	rs6035877	A	C	.	PASS	RSID=rs6035877	.	.
+chr20	21366737	rs73298368	A	C	.	PASS	RSID=rs73298368	.	.
+chr20	22689361	rs192930932	C	G	.	PASS	RSID=rs192930932	.	.
+chr20	20837304	rs6113023	T	C	.	PASS	RSID=rs6113023	.	.
+chr20	24789150	rs11470980m	TAA	T	.	PASS	RSID=rs11470980m	.	.
+chr20	20786003	rs869313	A	G	.	PASS	RSID=rs869313	.	.
+chr20	20854874	rs6035716	T	C	.	PASS	RSID=rs6035716	.	.
+chr20	31220959	rs117112132	A	T	.	PASS	RSID=rs117112132	.	.
+chr20	20188997	rs4814958	A	G	.	PASS	RSID=rs4814958	.	.
+chr20	25486723	rs446649	A	G	.	PASS	RSID=rs446649	.	.
+chr20	22028003	rs28592	T	C	.	PASS	RSID=rs28592	.	.
+chr20	23930172	rs2260317	C	G	.	PASS	RSID=rs2260317	.	.
+chr20	23653509	rs73102386	A	G	.	PASS	RSID=rs73102386	.	.
+chr20	25849705	rs6115326	A	G	.	PASS	RSID=rs6115326	.	.
+chr20	24731570	rs3830852	AC	A	.	PASS	RSID=rs3830852	.	.
+chr20	23735402	rs113597496	T	C	.	PASS	RSID=rs113597496	.	.
+chr20	23792777	rs6114294	T	C	.	PASS	RSID=rs6114294	.	.
+chr20	24721907	rs6049907	T	C	.	PASS	RSID=rs6049907	.	.
+chr20	30306086	rs4097052	T	C	.	PASS	RSID=rs4097052	.	.
+chr20	24747352	rs9305140	A	C	.	PASS	RSID=rs9305140	.	.
+chr20	25193794	rs6115080	A	G	.	PASS	RSID=rs6115080	.	.
+chr20	21517398	rs56150901	T	G	.	PASS	RSID=rs56150901	.	.
+chr20	24842996	rs1888655	A	G	.	PASS	RSID=rs1888655	.	.
+chr20	30294392	rs6087205	T	C	.	PASS	RSID=rs6087205	.	.
+chr20	21920485	rs3818179	T	C	.	PASS	RSID=rs3818179	.	.
+chr20	30345279	rs71185345	TC	T	.	PASS	RSID=rs71185345	.	.
+chr20	21567482	rs143300941	C	G	.	PASS	RSID=rs143300941	.	.
+chr20	24716441	rs2424623	T	C	.	PASS	RSID=rs2424623	.	.
+chr20	21258013	rs4813420	A	G	.	PASS	RSID=rs4813420	.	.
+chr20	24296083	rs6049571	A	T	.	PASS	RSID=rs6049571	.	.
+chr20	24748772	rs1474776	A	G	.	PASS	RSID=rs1474776	.	.
+chr20	23401389	rs2424537	T	C	.	PASS	RSID=rs2424537	.	.
+chr20	25944485	rs4003058	A	T	.	PASS	RSID=rs4003058	.	.
+chr20	30264237	rs1923055	T	C	.	PASS	RSID=rs1923055	.	.
+chr20	21492857	rs4426587	A	G	.	PASS	RSID=rs4426587	.	.
+chr20	21920594	rs3818180	T	G	.	PASS	RSID=rs3818180	.	.
+chr20	22925809	rs1888610	T	G	.	PASS	RSID=rs1888610	.	.
+chr20	20798194	rs73126426	C	G	.	PASS	RSID=rs73126426	.	.
+chr20	20591452	rs6075681	A	C	.	PASS	RSID=rs6075681	.	.
+chr20	22611326	rs1203934	A	C	.	PASS	RSID=rs1203934	.	.
+chr20	24096356	rs6132697	A	G	.	PASS	RSID=rs6132697	.	.
+chr20	25045335	rs77160533	T	G	.	PASS	RSID=rs77160533	.	.
+chr20	24311369	rs75574265	A	G	.	PASS	RSID=rs75574265	.	.
+chr20	21209578	rs34527828	T	TA	.	PASS	RSID=rs34527828	.	.
+chr20	23778157	rs6036528	T	C	.	PASS	RSID=rs6036528	.	.
+chr20	24346857	rs34068230	A	G	.	PASS	RSID=rs34068230	.	.
+chr20	23044658	rs2007363	T	G	.	PASS	RSID=rs2007363	.	.
+chr20	23217194	rs6083044	A	G	.	PASS	RSID=rs6083044	.	.
+chr20	25069182	rs62217195	T	G	.	PASS	RSID=rs62217195	.	.
+chr20	20851235	rs9305132	T	C	.	PASS	RSID=rs9305132	.	.
+chr20	25886961	rs4095849	A	G	.	PASS	RSID=rs4095849	.	.
+chr20	20387891	rs34554466	A	T	.	PASS	RSID=rs34554466	.	.
+chr20	23544076	rs1555356	A	C	.	PASS	RSID=rs1555356	.	.
+chr20	24611710	rs79581014	A	T	.	PASS	RSID=rs79581014	.	.
+chr20	24952234	rs141965801	T	C	.	PASS	RSID=rs141965801	.	.
+chr20	21426749	rs6132427	A	G	.	PASS	RSID=rs6132427	.	.
+chr20	23099732	rs6083004	A	C	.	PASS	RSID=rs6083004	.	.
+chr20	24675592	rs6049860	A	G	.	PASS	RSID=rs6049860	.	.
+chr20	25971414	rs142110057	C	CATGGG	.	PASS	RSID=rs142110057	.	.
+chr20	23286843	rs1541232	A	G	.	PASS	RSID=rs1541232	.	.
+chr20	24559869	rs4815278	T	C	.	PASS	RSID=rs4815278	.	.
+chr20	30308652	rs6119013	T	C	.	PASS	RSID=rs6119013	.	.
+chr20	20114156	rs146552609	GCTA	G	.	PASS	RSID=rs146552609	.	.
+chr20	21770813	rs11087360	T	TG	.	PASS	RSID=rs11087360	.	.
+chr20	23619166	rs144247761	CTT	C	.	PASS	RSID=rs144247761	.	.
+chr20	22720482	rs6048283	T	G	.	PASS	RSID=rs6048283	.	.
+chr20	24110819	rs116887478	A	T	.	PASS	RSID=rs116887478	.	.
+chr20	30305743	rs1830543	T	C	.	PASS	RSID=rs1830543	.	.
+chr20	24992833	rs57265446	A	G	.	PASS	RSID=rs57265446	.	.
+chr20	21156917	rs6047277	A	G	.	PASS	RSID=rs6047277	.	.
+chr20	23293443	rs117067738	T	C	.	PASS	RSID=rs117067738	.	.
+chr20	23747060	rs6036516	T	G	.	PASS	RSID=rs6036516	.	.
+chr20	25742996	rs12106173	A	G	.	PASS	RSID=rs12106173	.	.
+chr20	22997669	rs34581486	GGT	G	.	PASS	RSID=rs34581486	.	.
+chr20	30386530	rs71336529	T	TGTG	.	PASS	RSID=rs71336529	.	.
+chr20	23468261	rs201604207	A	AT	.	PASS	RSID=rs201604207	.	.
+chr20	24295056	rs11476050	TC	T	.	PASS	RSID=rs11476050	.	.
+chr20	31376027	rs6057657	A	G	.	PASS	RSID=rs6057657	.	.
+chr20	23027097	rs220987	T	C	.	PASS	RSID=rs220987	.	.
+chr20	22275632	rs6113607	T	C	.	PASS	RSID=rs6113607	.	.
+chr20	20131667	rs2424256	T	C	.	PASS	RSID=rs2424256	.	.
+chr20	25301445	rs35080499	CT	C	.	PASS	RSID=rs35080499	.	.
+chr20	21686775	rs742729	T	C	.	PASS	RSID=rs742729	.	.
+chr20	31309227	rs2376546	T	G	.	PASS	RSID=rs2376546	.	.
+chr20	23890786	rs73098928	T	C	.	PASS	RSID=rs73098928	.	.
+chr20	24430430	rs74173645	T	C	.	PASS	RSID=rs74173645	.	.
+chr20	21793353	rs6082511	A	C	.	PASS	RSID=rs6082511	.	.
+chr20	24772973	rs77095985	C	G	.	PASS	RSID=rs77095985	.	.
+chr20	23577259	rs2145239	A	G	.	PASS	RSID=rs2145239	.	.
+chr20	23668826	rs2424599	T	C	.	PASS	RSID=rs2424599	.	.
+chr20	24001984	rs6049298	C	G	.	PASS	RSID=rs6049298	.	.
+chr20	24043772	rs4555417	A	G	.	PASS	RSID=rs4555417	.	.
+chr20	22676008	rs6036173	A	C	.	PASS	RSID=rs6036173	.	.
+chr20	25937369	rs71332672	A	ATTTTTT	.	PASS	RSID=rs71332672	.	.
+chr20	22424635	rs5840962	TGCTAA	T	.	PASS	RSID=rs5840962	.	.
+chr20	23103282	rs1835700	A	G	.	PASS	RSID=rs1835700	.	.
+chr20	26113677	rs202185378	T	G	.	PASS	RSID=rs202185378	.	.
+chr20	26160927	rs371702211	GA	G	.	PASS	RSID=rs371702211	.	.
+chr20	23806773	rs4643608	C	G	.	PASS	RSID=rs4643608	.	.
+chr20	25375861	rs2500401	A	G	.	PASS	RSID=rs2500401	.	.
+chr20	25747366	rs1122769	T	G	.	PASS	RSID=rs1122769	.	.
+chr20	31255748	rs142531694	A	AT	.	PASS	RSID=rs142531694	.	.
+chr20	24444835	rs75173498	A	T	.	PASS	RSID=rs75173498	.	.
+chr20	22939548	rs151107420	A	T	.	PASS	RSID=rs151107420	.	.
+chr20	22817225	rs6082864	T	G	.	PASS	RSID=rs6082864	.	.
+chr20	23397461	rs2249943	A	G	.	PASS	RSID=rs2249943	.	.
+chr20	20817902	rs6082183	T	G	.	PASS	RSID=rs6082183	.	.
+chr20	25311872	rs117915702	T	C	.	PASS	RSID=rs117915702	.	.
+chr20	24919989	rs6515552	A	T	.	PASS	RSID=rs6515552	.	.
+chr20	21784671	rs6035947	T	C	.	PASS	RSID=rs6035947	.	.
+chr20	24927522	rs227614	T	C	.	PASS	RSID=rs227614	.	.
+chr20	23018944	rs34980833	C	G	.	PASS	RSID=rs34980833	.	.
+chr20	24450172	rs6036803	A	G	.	PASS	RSID=rs6036803	.	.
+chr20	31402535	rs112994932	A	G	.	PASS	RSID=rs112994932	.	.
+chr20	22669410	rs6082774	A	G	.	PASS	RSID=rs6082774	.	.
+chr20	23731245	rs6114248	A	G	.	PASS	RSID=rs6114248	.	.
+chr20	24956953	rs73344911	A	G	.	PASS	RSID=rs73344911	.	.
+chr20	22723701	rs6048293	T	C	.	PASS	RSID=rs6048293	.	.
+chr20	25642133	rs6138625	T	C	.	PASS	RSID=rs6138625	.	.
+chr20	20967640	rs6137193	C	G	.	PASS	RSID=rs6137193	.	.
+chr20	20516830	rs6082028	A	G	.	PASS	RSID=rs6082028	.	.
+chr20	21494308	rs200557473	C	CAA	.	PASS	RSID=rs200557473	.	.
+chr20	20075898	rs6046594	A	C	.	PASS	RSID=rs6046594	.	.
+chr20	21551617	rs201885242	T	TA	.	PASS	RSID=rs201885242	.	.
+chr20	23333194	rs6048727	A	T	.	PASS	RSID=rs6048727	.	.
+chr20	23470166	rs35649770	C	G	.	PASS	RSID=rs35649770	.	.
+chr20	24142792	rs6049429	T	C	.	PASS	RSID=rs6049429	.	.
+chr20	21904194	rs6113413	T	C	.	PASS	RSID=rs6113413	.	.
+chr20	24990420	rs62215129	T	G	.	PASS	RSID=rs62215129	.	.
+chr20	24738149	rs77251106	T	C	.	PASS	RSID=rs77251106	.	.
+chr20	23567764	rs2247337	T	C	.	PASS	RSID=rs2247337	.	.
+chr20	22163418	rs804549	T	C	.	PASS	RSID=rs804549	.	.
+chr20	24068321	rs6114456	A	G	.	PASS	RSID=rs6114456	.	.
+chr20	21646705	rs34086200	A	AT	.	PASS	RSID=rs34086200	.	.
+chr20	25080183	rs144858318	A	AAAG	.	PASS	RSID=rs144858318	.	.
+chr20	24402817	rs16986554	A	G	.	PASS	RSID=rs16986554	.	.
+chr20	26211983	rs12480023	C	G	.	PASS	RSID=rs12480023	.	.
+chr20	22673477	rs6075934	T	G	.	PASS	RSID=rs6075934	.	.
+chr20	24000929	rs6036603	A	G	.	PASS	RSID=rs6036603	.	.
+chr20	30332565	rs6057296	T	G	.	PASS	RSID=rs6057296	.	.
+chr20	26295341	rs6084108	T	C	.	PASS	RSID=rs6084108	.	.
+chr20	25575767	rs4815432	A	C	.	PASS	RSID=rs4815432	.	.
+chr20	26210957	rs202089927	G	GTA	.	PASS	RSID=rs202089927	.	.
+chr20	31302677	rs1018403	A	G	.	PASS	RSID=rs1018403	.	.
+chr20	24937903	rs6083686	A	G	.	PASS	RSID=rs6083686	.	.
+chr20	24038797	rs7344251	T	C	.	PASS	RSID=rs7344251	.	.
+chr20	25953830	rs139191804	T	TTC	.	PASS	RSID=rs139191804	.	.
+chr20	24292808	rs6114608	A	G	.	PASS	RSID=rs6114608	.	.
+chr20	30210468	rs77818571	T	C	.	PASS	RSID=rs77818571	.	.
+chr20	22958341	rs2404675	T	C	.	PASS	RSID=rs2404675	.	.
+chr20	26305238	rs4815524	A	T	.	PASS	RSID=rs4815524	.	.
+chr20	21308641	rs12481571	A	G	.	PASS	RSID=rs12481571	.	.
+chr20	25620691	rs6050717	T	C	.	PASS	RSID=rs6050717	.	.
+chr20	20285616	rs1115628	A	T	.	PASS	RSID=rs1115628	.	.
+chr20	25642616	rs6138627	A	G	.	PASS	RSID=rs6138627	.	.
+chr20	20931576	rs4815007	T	C	.	PASS	RSID=rs4815007	.	.
+chr20	30402970	rs2379655	A	G	.	PASS	RSID=rs2379655	.	.
+chr20	30319782	rs6119023	A	C	.	PASS	RSID=rs6119023	.	.
+chr20	22359137	rs2328717	A	G	.	PASS	RSID=rs2328717	.	.
+chr20	20908920	rs6075736	A	C	.	PASS	RSID=rs6075736	.	.
+chr20	21780545	rs6047620	T	C	.	PASS	RSID=rs6047620	.	.
+chr20	23192860	rs6076036	T	G	.	PASS	RSID=rs6076036	.	.
+chr20	21079251	rs11480815	C	CA	.	PASS	RSID=rs11480815	.	.
+chr20	22649863	rs11424154	C	CT	.	PASS	RSID=rs11424154	.	.
+chr20	25462361	rs559771	C	G	.	PASS	RSID=rs559771	.	.
+chr20	25877049	rs6050960	A	G	.	PASS	RSID=rs6050960	.	.
+chr20	24888864	rs6083660	A	G	.	PASS	RSID=rs6083660	.	.
+chr20	24080709	rs858140	A	G	.	PASS	RSID=rs858140	.	.
+chr20	25468212	rs11087522	G	GT	.	PASS	RSID=rs11087522	.	.
+chr20	24662294	rs13040961	A	G	.	PASS	RSID=rs13040961	.	.
+chr20	24938801	rs227639	A	G	.	PASS	RSID=rs227639	.	.
+chr20	25934544	rs3859660	A	T	.	PASS	RSID=rs3859660	.	.
+chr20	22495390	rs17753702	T	C	.	PASS	RSID=rs17753702	.	.
+chr20	22176871	rs145328454	A	T	.	PASS	RSID=rs145328454	.	.
+chr20	24899593	rs1411894	A	G	.	PASS	RSID=rs1411894	.	.
+chr20	24704953	rs6049888	C	G	.	PASS	RSID=rs6049888	.	.
+chr20	25898089	rs1807476	A	G	.	PASS	RSID=rs1807476	.	.
+chr20	24988003	rs117290773	T	C	.	PASS	RSID=rs117290773	.	.
+chr20	23017406	rs200466265	C	CA	.	PASS	RSID=rs200466265	.	.
+chr20	23043613	rs1986208	T	G	.	PASS	RSID=rs1986208	.	.
+chr20	23782309	rs6036531	T	C	.	PASS	RSID=rs6036531	.	.
+chr20	24941670	rs6050179	A	T	.	PASS	RSID=rs6050179	.	.
+chr20	22628040	rs1146365	A	G	.	PASS	RSID=rs1146365	.	.
+chr20	22400559	rs41279034	T	C	.	PASS	RSID=rs41279034	.	.
+chr20	21948419	rs2424410	A	C	.	PASS	RSID=rs2424410	.	.
+chr20	22614618	rs1203939	A	G	.	PASS	RSID=rs1203939	.	.
+chr20	25581148	rs7266592	A	G	.	PASS	RSID=rs7266592	.	.
+chr20	30337396	rs6057157	T	C	.	PASS	RSID=rs6057157	.	.
+chr20	25226438	rs7453	T	C	.	PASS	RSID=rs7453	.	.
+chr20	21083503	rs56061351	A	G	.	PASS	RSID=rs56061351	.	.
+chr20	24666049	rs73100765	C	G	.	PASS	RSID=rs73100765	.	.
+chr20	24232287	rs529209	T	G	.	PASS	RSID=rs529209	.	.
+chr20	25855710	rs35414172	A	C	.	PASS	RSID=rs35414172	.	.
+chr20	24001451	rs58130877	A	G	.	PASS	RSID=rs58130877	.	.
+chr20	23461371	rs12625160	T	C	.	PASS	RSID=rs12625160	.	.
+chr20	31276299	rs6089084	T	C	.	PASS	RSID=rs6089084	.	.
+chr20	20038238	rs11468747	T	TA	.	PASS	RSID=rs11468747	.	.
+chr20	23757333	rs6049079	T	G	.	PASS	RSID=rs6049079	.	.
+chr20	25197685	rs6138535	A	T	.	PASS	RSID=rs6138535	.	.
+chr20	23245607	rs34344436	C	CTG	.	PASS	RSID=rs34344436	.	.
+chr20	23771613	rs117926522	T	C	.	PASS	RSID=rs117926522	.	.
+chr20	23812631	rs6036539	A	T	.	PASS	RSID=rs6036539	.	.
+chr20	22714576	rs6082796	T	C	.	PASS	RSID=rs6082796	.	.
+chr20	24360971	rs117347553	A	C	.	PASS	RSID=rs117347553	.	.
+chr20	23846146	rs4815236	A	G	.	PASS	RSID=rs4815236	.	.
+chr20	20926104	rs6047155	A	G	.	PASS	RSID=rs6047155	.	.
+chr20	23200717	rs6083035	T	C	.	PASS	RSID=rs6083035	.	.
+chr20	23132455	rs844895	T	C	.	PASS	RSID=rs844895	.	.
+chr20	24720494	rs2064435	A	G	.	PASS	RSID=rs2064435	.	.
+chr20	22529901	rs73902850	C	G	.	PASS	RSID=rs73902850	.	.
+chr20	21379890	rs6047414	A	G	.	PASS	RSID=rs6047414	.	.
+chr20	22415657	rs1212571	T	C	.	PASS	RSID=rs1212571	.	.
+chr20	22172841	rs34841884	GATAT	G	.	PASS	RSID=rs34841884	.	.
+chr20	22767709	rs2424469	A	G	.	PASS	RSID=rs2424469	.	.
+chr20	24843326	rs6515535	A	G	.	PASS	RSID=rs6515535	.	.
+chr20	25998394	rs6107127	A	G	.	PASS	RSID=rs6107127	.	.
+chr20	20744318	rs79363786	T	C	.	PASS	RSID=rs79363786	.	.
+chr20	21480134	rs6137355	T	C	.	PASS	RSID=rs6137355	.	.
+chr20	25694966	rs4815445	T	C	.	PASS	RSID=rs4815445	.	.
+chr20	24623853	rs8126133	A	G	.	PASS	RSID=rs8126133	.	.
+chr20	23736254	rs34888527	A	T	.	PASS	RSID=rs34888527	.	.
+chr20	25942095	rs71332673	A	AT	.	PASS	RSID=rs71332673	.	.
+chr20	21074404	rs6035772	T	C	.	PASS	RSID=rs6035772	.	.
+chr20	22455491	rs6048105	T	G	.	PASS	RSID=rs6048105	.	.
+chr20	25142309	rs6050359	T	C	.	PASS	RSID=rs6050359	.	.
+chr20	23010665	rs371528979	GT	G	.	PASS	RSID=rs371528979	.	.
+chr20	24944844	rs150012766	C	CCATTGACA	.	PASS	RSID=rs150012766	.	.
+chr20	24034638	rs10715126	G	GT	.	PASS	RSID=rs10715126	.	.
+chr20	30383751	rs11905491	C	G	.	PASS	RSID=rs11905491	.	.
+chr20	24307114	rs188712912	A	T	.	PASS	RSID=rs188712912	.	.
+chr20	23191199	rs11474487m	A	AATGG	.	PASS	RSID=rs11474487m	.	.
+chr20	24618016	rs71907542	T	TGA	.	PASS	RSID=rs71907542	.	.
+chr20	25499469	rs390123	C	G	.	PASS	RSID=rs390123	.	.
+chr20	26262551	rs816540	A	G	.	PASS	RSID=rs816540	.	.
+chr20	25475631	rs199910325	T	TGAG	.	PASS	RSID=rs199910325	.	.
+chr20	21679637	rs2179715	A	C	.	PASS	RSID=rs2179715	.	.
+chr20	26005743	rs71332688	A	AT	.	PASS	RSID=rs71332688	.	.
+chr20	23113962	rs10627775	T	TAG	.	PASS	RSID=rs10627775	.	.
+chr20	23288745	rs11472931	T	TTTG	.	PASS	RSID=rs11472931	.	.
+chr20	21515451	rs55708384	C	G	.	PASS	RSID=rs55708384	.	.
+chr20	24456567	rs6076229	A	G	.	PASS	RSID=rs6076229	.	.
+chr20	24767514	rs111240886	T	G	.	PASS	RSID=rs111240886	.	.
+chr20	25624392	rs111359514	T	C	.	PASS	RSID=rs111359514	.	.
+chr20	20190924	rs2328502	T	C	.	PASS	RSID=rs2328502	.	.
+chr20	23549589	rs1964135	T	C	.	PASS	RSID=rs1964135	.	.
+chr20	21016779	rs6113103	T	C	.	PASS	RSID=rs6113103	.	.
+chr20	31396659	rs12480259	T	C	.	PASS	RSID=rs12480259	.	.
+chr20	21576236	rs4815050	A	T	.	PASS	RSID=rs4815050	.	.
+chr20	30298308	rs1923053	A	G	.	PASS	RSID=rs1923053	.	.
+chr20	25854012	rs113496949	C	CG	.	PASS	RSID=rs113496949	.	.
+chr20	24678316	rs6049868	A	G	.	PASS	RSID=rs6049868	.	.
+chr20	20290579	rs1327912	T	C	.	PASS	RSID=rs1327912	.	.
+chr20	25081239	rs61304082	T	C	.	PASS	RSID=rs61304082	.	.
+chr20	20936411	rs78915013	GA	G	.	PASS	RSID=rs78915013	.	.
+chr20	22384908	rs199843	T	G	.	PASS	RSID=rs199843	.	.
+chr20	30317281	rs4010821	T	C	.	PASS	RSID=rs4010821	.	.
+chr20	21189546	rs117363166	A	G	.	PASS	RSID=rs117363166	.	.
+chr20	23652608	rs73102379	T	C	.	PASS	RSID=rs73102379	.	.
+chr20	24545212	rs715863	A	G	.	PASS	RSID=rs715863	.	.
+chr20	25464417	rs142945184	AAAAC	A	.	PASS	RSID=rs142945184	.	.
+chr20	25298029	rs11470034m	C	CACTA	.	PASS	RSID=rs11470034m	.	.
+chr20	24403124	rs11907112	A	G	.	PASS	RSID=rs11907112	.	.
+chr20	24093018	rs114475426	T	C	.	PASS	RSID=rs114475426	.	.
+chr20	22813805	rs6036222	T	C	.	PASS	RSID=rs6036222	.	.
+chr20	22794066	rs4815144	T	C	.	PASS	RSID=rs4815144	.	.
+chr20	25388781	rs67676850	T	C	.	PASS	RSID=rs67676850	.	.
+chr20	24348339	rs926608	T	C	.	PASS	RSID=rs926608	.	.
+chr20	23363796	rs16985266	A	G	.	PASS	RSID=rs16985266	.	.
+chr20	24751855	rs6049950	A	G	.	PASS	RSID=rs6049950	.	.
+chr20	22791372	rs11906944	A	G	.	PASS	RSID=rs11906944	.	.
+chr20	21819986	rs137915406	A	AT	.	PASS	RSID=rs137915406	.	.
+chr20	23733212	rs4296495	T	C	.	PASS	RSID=rs4296495	.	.
+chr20	23732309	rs6114249	T	C	.	PASS	RSID=rs6114249	.	.
+chr20	23033866	rs2268198	A	G	.	PASS	RSID=rs2268198	.	.
+chr20	20824159	rs6082186	T	G	.	PASS	RSID=rs6082186	.	.
+chr20	30401205	rs6119121	C	G	.	PASS	RSID=rs6119121	.	.
+chr20	21169993	rs4815028	T	C	.	PASS	RSID=rs4815028	.	.
+chr20	20762187	rs56176849	T	TG	.	PASS	RSID=rs56176849	.	.
+chr20	30331323	rs4010840	T	G	.	PASS	RSID=rs4010840	.	.
+chr20	20171728	rs11696933	A	G	.	PASS	RSID=rs11696933	.	.
+chr20	21839429	rs7269692	T	C	.	PASS	RSID=rs7269692	.	.
+chr20	20569739	rs17803719	T	C	.	PASS	RSID=rs17803719	.	.
+chr20	24983566	rs2008275	T	C	.	PASS	RSID=rs2008275	.	.
+chr20	23283880	rs6132591	C	G	.	PASS	RSID=rs6132591	.	.
+chr20	20182715	rs113545843	G	GTAGAAGCAAT	.	PASS	RSID=rs113545843	.	.
+chr20	25936204	rs180982315	T	G	.	PASS	RSID=rs180982315	.	.
+chr20	26116661	rs1937054	A	G	.	PASS	RSID=rs1937054	.	.
+chr20	21790043	rs143348682	A	G	.	PASS	RSID=rs143348682	.	.
+chr20	21651907	rs2424399	A	C	.	PASS	RSID=rs2424399	.	.
+chr20	30359354	rs36057906	A	G	.	PASS	RSID=rs36057906	.	.
+chr20	21131069	rs6075769	A	G	.	PASS	RSID=rs6075769	.	.
+chr20	21457201	rs2424370	T	G	.	PASS	RSID=rs2424370	.	.
+chr20	20825768	rs71330805	T	TTTTTA	.	PASS	RSID=rs71330805	.	.
+chr20	24678470	rs6049869	C	G	.	PASS	RSID=rs6049869	.	.
+chr20	20134969	rs10718342	CT	C	.	PASS	RSID=rs10718342	.	.
+chr20	22635505	rs1203953	T	C	.	PASS	RSID=rs1203953	.	.
+chr20	23652139	rs8122922	T	C	.	PASS	RSID=rs8122922	.	.
+chr20	23031540	rs6515299	T	C	.	PASS	RSID=rs6515299	.	.
+chr20	20819038	rs6132350	A	G	.	PASS	RSID=rs6132350	.	.
+chr20	24463579	rs75473856	A	G	.	PASS	RSID=rs75473856	.	.
+chr20	24799274	rs226695	A	G	.	PASS	RSID=rs226695	.	.
+chr20	21897778	rs6082553	A	G	.	PASS	RSID=rs6082553	.	.
+chr20	25170477	rs145715681	C	CA	.	PASS	RSID=rs145715681	.	.
+chr20	20144420	rs11360248	TC	T	.	PASS	RSID=rs11360248	.	.
+chr20	24209548	rs10719229	TC	T	.	PASS	RSID=rs10719229	.	.
+chr20	22487118	rs73087891	A	G	.	PASS	RSID=rs73087891	.	.
+chr20	25448150	rs1047171	T	C	.	PASS	RSID=rs1047171	.	.
+chr20	23926792	rs1741625	C	G	.	PASS	RSID=rs1741625	.	.
+chr20	25214132	rs6083780	A	G	.	PASS	RSID=rs6083780	.	.
+chr20	23722537	rs11699507	T	G	.	PASS	RSID=rs11699507	.	.
+chr20	23571720	rs6138004	C	G	.	PASS	RSID=rs6138004	.	.
+chr20	21117636	rs6047258	T	G	.	PASS	RSID=rs6047258	.	.
+chr20	24153087	rs6138223	C	G	.	PASS	RSID=rs6138223	.	.
+chr20	30288673	rs1969708	T	C	.	PASS	RSID=rs1969708	.	.
+chr20	30407572	rs112179649	T	TA	.	PASS	RSID=rs112179649	.	.
+chr20	23129246	rs844891	C	G	.	PASS	RSID=rs844891	.	.
+chr20	24381043	rs2206646	T	C	.	PASS	RSID=rs2206646	.	.
+chr20	24291637	rs146690294	A	ATTTTTCTGACCT	.	PASS	RSID=rs146690294	.	.
+chr20	21842091	rs147805094	A	G	.	PASS	RSID=rs147805094	.	.
+chr20	23639439	rs3761280	A	G	.	PASS	RSID=rs3761280	.	.
+chr20	25704573	rs6050804	A	C	.	PASS	RSID=rs6050804	.	.
+chr20	23257091	rs4815184	T	C	.	PASS	RSID=rs4815184	.	.
+chr20	30404558	rs75324673	T	C	.	PASS	RSID=rs75324673	.	.
+chr20	20673944	rs6075693	T	C	.	PASS	RSID=rs6075693	.	.
+chr20	26174591	rs73108001	T	G	.	PASS	RSID=rs73108001	.	.
+chr20	22968005	rs2150570	A	G	.	PASS	RSID=rs2150570	.	.
+chr20	22097349	rs144008971	T	C	.	PASS	RSID=rs144008971	.	.
+chr20	24237491	rs2057220	A	C	.	PASS	RSID=rs2057220	.	.
+chr20	25434443	rs60830840	TTTTTC	T	.	PASS	RSID=rs60830840	.	.
+chr20	24805504	rs188533431m	GA	G	.	PASS	RSID=rs188533431m	.	.
+chr20	25581317	rs73337401	A	C	.	PASS	RSID=rs73337401	.	.
+chr20	24065003	rs60186051	T	C	.	PASS	RSID=rs60186051	.	.
+chr20	23644561	rs199651024	A	AT	.	PASS	RSID=rs199651024	.	.
+chr20	30266813	rs6057512	A	C	.	PASS	RSID=rs6057512	.	.
+chr20	21800394	rs6113378	T	C	.	PASS	RSID=rs6113378	.	.
+chr20	23639631	rs34897231	A	G	.	PASS	RSID=rs34897231	.	.
+chr20	21981894	rs5840940	G	GT	.	PASS	RSID=rs5840940	.	.
+chr20	24433942	rs6036787	A	T	.	PASS	RSID=rs6036787	.	.
+chr20	23861763	rs6132679	A	T	.	PASS	RSID=rs6132679	.	.
+chr20	22018315	rs201560	T	C	.	PASS	RSID=rs201560	.	.
+chr20	25154050	rs71183390	T	TG	.	PASS	RSID=rs71183390	.	.
+chr20	25005080	rs5841045	C	CA	.	PASS	RSID=rs5841045	.	.
+chr20	21321301	rs11471340	CTGTGTG	C	.	PASS	RSID=rs11471340	.	.
+chr20	25112820	rs6132800	C	G	.	PASS	RSID=rs6132800	.	.
+chr20	20967996	rs73121822	T	C	.	PASS	RSID=rs73121822	.	.
+chr20	23264623	rs1891682	T	C	.	PASS	RSID=rs1891682	.	.
+chr20	23752362	rs6114257	T	G	.	PASS	RSID=rs6114257	.	.
+chr20	23805344	rs142919764	T	TTA	.	PASS	RSID=rs142919764	.	.
+chr20	30337542	rs2424861	A	G	.	PASS	RSID=rs2424861	.	.
+chr20	24287559	rs6114599	A	C	.	PASS	RSID=rs6114599	.	.
+chr20	23977499	rs146617300	A	G	.	PASS	RSID=rs146617300	.	.
+chr20	22764427	rs2424464	A	G	.	PASS	RSID=rs2424464	.	.
+chr20	25116153	rs1884265	A	C	.	PASS	RSID=rs1884265	.	.
+chr20	24042404	rs11698121	C	G	.	PASS	RSID=rs11698121	.	.
+chr20	25276566	rs2281561	A	G	.	PASS	RSID=rs2281561	.	.
+chr20	23026143	rs148898727	C	G	.	PASS	RSID=rs148898727	.	.
+chr20	25902613	rs4121094	T	C	.	PASS	RSID=rs4121094	.	.
+chr20	25266016	rs77528141	A	T	.	PASS	RSID=rs77528141	.	.
+chr20	20796678	rs6106291	T	G	.	PASS	RSID=rs6106291	.	.
+chr20	21481698	rs186764248	A	G	.	PASS	RSID=rs186764248	.	.
+chr20	23495752	rs2273378	A	G	.	PASS	RSID=rs2273378	.	.
+chr20	23512941	rs146817147	A	C	.	PASS	RSID=rs146817147	.	.
+chr20	24895751	rs6106961	T	C	.	PASS	RSID=rs6106961	.	.
+chr20	26288924	rs1189987	T	C	.	PASS	RSID=rs1189987	.	.
+chr20	23780448	rs4513354	A	C	.	PASS	RSID=rs4513354	.	.
+chr20	22654306	rs113275570	C	CAGAT	.	PASS	RSID=rs113275570	.	.
+chr20	24281837	rs74717191	T	G	.	PASS	RSID=rs74717191	.	.
+chr20	24805563	rs226700	A	C	.	PASS	RSID=rs226700	.	.
+chr20	25549763	rs68149491	A	G	.	PASS	RSID=rs68149491	.	.
+chr20	20897505	rs138172491	A	AG	.	PASS	RSID=rs138172491	.	.
+chr20	20120290	rs6081881	T	C	.	PASS	RSID=rs6081881	.	.
+chr20	25256702	rs4815398	A	G	.	PASS	RSID=rs4815398	.	.
+chr20	25227295	rs8115257	A	G	.	PASS	RSID=rs8115257	.	.
+chr20	24646700	rs141389220	C	CA	.	PASS	RSID=rs141389220	.	.
+chr20	20118256	rs73605585	T	C	.	PASS	RSID=rs73605585	.	.
+chr20	31314582	rs6058546	A	G	.	PASS	RSID=rs6058546	.	.
+chr20	31326310	rs201425318	A	AT	.	PASS	RSID=rs201425318	.	.
+chr20	22174394	rs73620319	G	GC	.	PASS	RSID=rs73620319	.	.
+chr20	23052248	rs2207109	A	G	.	PASS	RSID=rs2207109	.	.
+chr20	21373012	rs11479394	CT	C	.	PASS	RSID=rs11479394	.	.
+chr20	25127747	rs4815375	A	G	.	PASS	RSID=rs4815375	.	.
+chr20	23678089	rs146754716	A	ATAT	.	PASS	RSID=rs146754716	.	.
+chr20	20025995	rs34483428	T	TA	.	PASS	RSID=rs34483428	.	.
+chr20	25129760	rs1108810	A	G	.	PASS	RSID=rs1108810	.	.
+chr20	23688668	rs10854252	C	G	.	PASS	RSID=rs10854252	.	.
+chr20	23118450	rs844865	A	G	.	PASS	RSID=rs844865	.	.
+chr20	24577496	rs4815279	T	C	.	PASS	RSID=rs4815279	.	.
+chr20	22378520	rs200115585	G	GTA	.	PASS	RSID=rs200115585	.	.
+chr20	20122329	rs79662128	T	C	.	PASS	RSID=rs79662128	.	.
+chr20	24311172	rs77450198	A	T	.	PASS	RSID=rs77450198	.	.
+chr20	26230248	rs60546378	AAC	A	.	PASS	RSID=rs60546378	.	.
+chr20	24822332	rs1122607	T	C	.	PASS	RSID=rs1122607	.	.
+chr20	24061692	rs1797026	T	C	.	PASS	RSID=rs1797026	.	.
+chr20	20212156	rs6106208	T	C	.	PASS	RSID=rs6106208	.	.
+chr20	21689469	rs11474377	CAA	C	.	PASS	RSID=rs11474377	.	.
+chr20	24995166	rs55917150	C	G	.	PASS	RSID=rs55917150	.	.
+chr20	20404104	rs35894782	A	AAATAG	.	PASS	RSID=rs35894782	.	.
+chr20	22610325	rs1203931	A	G	.	PASS	RSID=rs1203931	.	.
+chr20	22138503	rs804520	A	G	.	PASS	RSID=rs804520	.	.
+chr20	31245806	rs6059724	A	G	.	PASS	RSID=rs6059724	.	.
+chr20	31258810	rs73119530	T	C	.	PASS	RSID=rs73119530	.	.
+chr20	31224912	rs6089173	A	T	.	PASS	RSID=rs6089173	.	.
+chr20	22985142	rs2567615	A	G	.	PASS	RSID=rs2567615	.	.
+chr20	30286223	rs111229491	T	C	.	PASS	RSID=rs111229491	.	.
+chr20	25380190	rs2500405	A	G	.	PASS	RSID=rs2500405	.	.
+chr20	25712847	rs6107071	C	G	.	PASS	RSID=rs6107071	.	.
+chr20	20178678	rs7362858m	T	G	.	PASS	RSID=rs7362858m	.	.
+chr20	23706658	rs34110980	A	G	.	PASS	RSID=rs34110980	.	.
+chr20	21195666	rs145965314	T	TTGTCC	.	PASS	RSID=rs145965314	.	.
+chr20	30307918	rs6057144	A	C	.	PASS	RSID=rs6057144	.	.
+chr20	23473275	rs6083135	A	G	.	PASS	RSID=rs6083135	.	.
+chr20	24863684	rs8114760	T	C	.	PASS	RSID=rs8114760	.	.
+chr20	31278458	rs150259532	A	AT	.	PASS	RSID=rs150259532	.	.
+chr20	31401689	rs55856334	T	C	.	PASS	RSID=rs55856334	.	.
+chr20	30280134	rs6119220	T	C	.	PASS	RSID=rs6119220	.	.
+chr20	21580093	rs11477853	T	TA	.	PASS	RSID=rs11477853	.	.
+chr20	21910872	rs8123219	T	C	.	PASS	RSID=rs8123219	.	.
+chr20	24687106	rs34241321	C	G	.	PASS	RSID=rs34241321	.	.
+chr20	31296089	rs201269954	CAT	C	.	PASS	RSID=rs201269954	.	.
+chr20	22435192	rs2757069	A	G	.	PASS	RSID=rs2757069	.	.
+chr20	24303888	rs6083481	T	G	.	PASS	RSID=rs6083481	.	.
+chr20	25431056	rs74936049	A	T	.	PASS	RSID=rs74936049	.	.
+chr20	20384019	rs2876571	C	G	.	PASS	RSID=rs2876571	.	.
+chr20	25997213	rs6107126	A	G	.	PASS	RSID=rs6107126	.	.
+chr20	23624926	rs28703706	C	G	.	PASS	RSID=rs28703706	.	.
+chr20	22718846	rs1983920	T	C	.	PASS	RSID=rs1983920	.	.
+chr20	23741355	rs6036507	A	G	.	PASS	RSID=rs6036507	.	.
+chr20	24416055	rs4378873	T	C	.	PASS	RSID=rs4378873	.	.
+chr20	25180454	rs71312679	C	CA	.	PASS	RSID=rs71312679	.	.
+chr20	25388762	rs149328431	G	GT	.	PASS	RSID=rs149328431	.	.
+chr20	23501793	rs3004111	A	G	.	PASS	RSID=rs3004111	.	.
+chr20	22738357	rs7347088	T	C	.	PASS	RSID=rs7347088	.	.
+chr20	20592583	rs17741669	T	C	.	PASS	RSID=rs17741669	.	.
+chr20	26175976	rs190571706	A	T	.	PASS	RSID=rs190571706	.	.
+chr20	21196848	rs1548254	C	G	.	PASS	RSID=rs1548254	.	.
+chr20	25265926	rs6115115	A	G	.	PASS	RSID=rs6115115	.	.
+chr20	24380114	rs74173638	A	T	.	PASS	RSID=rs74173638	.	.
+chr20	23468669	rs2983278	A	G	.	PASS	RSID=rs2983278	.	.
+chr20	22807543	rs6036220	T	G	.	PASS	RSID=rs6036220	.	.
+chr20	25469247	rs34507264	T	C	.	PASS	RSID=rs34507264	.	.
+chr20	24956649	rs6114959	A	C	.	PASS	RSID=rs6114959	.	.
+chr20	20388919	rs35179160	G	GT	.	PASS	RSID=rs35179160	.	.
+chr20	26007323	rs6051086	A	G	.	PASS	RSID=rs6051086	.	.
+chr20	22489296	rs78761543	A	G	.	PASS	RSID=rs78761543	.	.
+chr20	23400559	rs2424535	T	C	.	PASS	RSID=rs2424535	.	.
+chr20	20119640	rs35385716m	A	AT	.	PASS	RSID=rs35385716m	.	.
+chr20	25368484	rs2500395	T	C	.	PASS	RSID=rs2500395	.	.
+chr20	24857252	rs137941831	T	C	.	PASS	RSID=rs137941831	.	.
+chr20	24752372	rs7264934	T	C	.	PASS	RSID=rs7264934	.	.
+chr20	24216668	rs544423	C	G	.	PASS	RSID=rs544423	.	.
+chr20	24244943	rs7263015	T	C	.	PASS	RSID=rs7263015	.	.
+chr20	24220250	rs145571512	T	C	.	PASS	RSID=rs145571512	.	.
+chr20	31407647	rs6059128	A	C	.	PASS	RSID=rs6059128	.	.
+chr20	23341008	rs6048736	T	C	.	PASS	RSID=rs6048736	.	.
+chr20	22768724	rs6113803	A	T	.	PASS	RSID=rs6113803	.	.
+chr20	24100731	rs6036647	T	C	.	PASS	RSID=rs6036647	.	.
+chr20	20257484	rs6046769	A	G	.	PASS	RSID=rs6046769	.	.
+chr20	24415042	rs6114704	T	C	.	PASS	RSID=rs6114704	.	.
+chr20	30353402	rs146868954	G	GT	.	PASS	RSID=rs146868954	.	.
+chr20	22331722	rs6048031	A	C	.	PASS	RSID=rs6048031	.	.
+chr20	23238676	rs6048634	A	G	.	PASS	RSID=rs6048634	.	.
+chr20	21787513	rs11087362	G	GT	.	PASS	RSID=rs11087362	.	.
+chr20	24520693	rs35053344m	C	CAA	.	PASS	RSID=rs35053344m	.	.
+chr20	22343246	rs199824	A	G	.	PASS	RSID=rs199824	.	.
+chr20	23658747	rs8115833	A	G	.	PASS	RSID=rs8115833	.	.
+chr20	20996868	rs6113096	T	C	.	PASS	RSID=rs6113096	.	.
+chr20	24116174	rs6132701	A	G	.	PASS	RSID=rs6132701	.	.
+chr20	23433493	rs142311611	C	G	.	PASS	RSID=rs142311611	.	.
+chr20	25750332	rs6050867	T	C	.	PASS	RSID=rs6050867	.	.
+chr20	20427125	rs928070	A	C	.	PASS	RSID=rs928070	.	.
+chr20	23644562	rs6114210	A	AT	.	PASS	RSID=rs6114210	.	.
+chr20	26305583	rs6051285	A	G	.	PASS	RSID=rs6051285	.	.
+chr20	24938410	rs6138417	T	C	.	PASS	RSID=rs6138417	.	.
+chr20	23508560	rs2983303	T	C	.	PASS	RSID=rs2983303	.	.
+chr20	20679614	rs11483171	GA	G	.	PASS	RSID=rs11483171	.	.
+chr20	25487495	rs424487	C	G	.	PASS	RSID=rs424487	.	.
+chr20	25430450	rs6083862	A	T	.	PASS	RSID=rs6083862	.	.
+chr20	20931183	rs77595497	T	C	.	PASS	RSID=rs77595497	.	.
+chr20	25350016	rs79430684	T	C	.	PASS	RSID=rs79430684	.	.
+chr20	22702223	rs913296	T	C	.	PASS	RSID=rs913296	.	.
+chr20	23923502	rs2261435	A	G	.	PASS	RSID=rs2261435	.	.
+chr20	25217346	rs4815394	T	C	.	PASS	RSID=rs4815394	.	.
+chr20	20285618	rs1410262	A	C	.	PASS	RSID=rs1410262	.	.
+chr20	23859715	rs71183363	C	CA	.	PASS	RSID=rs71183363	.	.
+chr20	22777322	rs926744	T	C	.	PASS	RSID=rs926744	.	.
+chr20	20034311	rs6132261	A	C	.	PASS	RSID=rs6132261	.	.
+chr20	24325750	rs58313021m	T	G	.	PASS	RSID=rs58313021m	.	.
+chr20	20032297	rs140676287	T	TA	.	PASS	RSID=rs140676287	.	.
+chr20	23891044	rs114472559	A	G	.	PASS	RSID=rs114472559	.	.
+chr20	21933054	rs142950903	C	G	.	PASS	RSID=rs142950903	.	.
+chr20	22302700	rs364819	T	C	.	PASS	RSID=rs364819	.	.
+chr20	25927541	rs74173698	T	C	.	PASS	RSID=rs74173698	.	.
+chr20	23713676	rs6132651	A	G	.	PASS	RSID=rs6132651	.	.
+chr20	20735551	rs6075701	A	T	.	PASS	RSID=rs6075701	.	.
+chr20	22298096	rs6113618	T	G	.	PASS	RSID=rs6113618	.	.
+chr20	23097220	rs844811	T	C	.	PASS	RSID=rs844811	.	.
+chr20	21318093	rs6047374	T	C	.	PASS	RSID=rs6047374	.	.
+chr20	23720436	rs7274860	C	G	.	PASS	RSID=rs7274860	.	.
+chr20	23687020	rs6048993	A	G	.	PASS	RSID=rs6048993	.	.
+chr20	24992727	rs11087492	A	G	.	PASS	RSID=rs11087492	.	.
+chr20	30317983	rs181166610	A	G	.	PASS	RSID=rs181166610	.	.
+chr20	31234613	rs2145063	A	G	.	PASS	RSID=rs2145063	.	.
+chr20	23843933	rs59410699	A	AT	.	PASS	RSID=rs59410699	.	.
+chr20	30417972	rs6057423	A	G	.	PASS	RSID=rs6057423	.	.
+chr20	20126967	rs60174111	T	C	.	PASS	RSID=rs60174111	.	.
+chr20	21054369	rs6082303	T	C	.	PASS	RSID=rs6082303	.	.
+chr20	24284673	rs72078782	A	ATAGTAAATCTC	.	PASS	RSID=rs72078782	.	.
+chr20	23846794	rs6138139	A	G	.	PASS	RSID=rs6138139	.	.
+chr20	20140920	rs66785203	CT	C	.	PASS	RSID=rs66785203	.	.
+chr20	21141098	rs6035788	C	G	.	PASS	RSID=rs6035788	.	.
+chr20	23832837	rs80207161	A	T	.	PASS	RSID=rs80207161	.	.
+chr20	22397559	rs6137637	A	G	.	PASS	RSID=rs6137637	.	.
+chr20	25858166	rs6138689	T	G	.	PASS	RSID=rs6138689	.	.
+chr20	25755371	rs73597867	T	G	.	PASS	RSID=rs73597867	.	.
+chr20	23422298	rs34648279	T	G	.	PASS	RSID=rs34648279	.	.
+chr20	24103421	rs114089782	A	G	.	PASS	RSID=rs114089782	.	.
+chr20	20705380	rs11476695	A	AT	.	PASS	RSID=rs11476695	.	.
+chr20	22812984	rs4815148	C	G	.	PASS	RSID=rs4815148	.	.
+chr20	25857008	rs7272734	C	G	.	PASS	RSID=rs7272734	.	.
+chr20	25351499	rs75786989	T	C	.	PASS	RSID=rs75786989	.	.
+chr20	21158982	rs68145616mm	A	ATATTTATT	.	PASS	RSID=rs68145616mm	.	.
+chr20	21248753	rs2424355	A	G	.	PASS	RSID=rs2424355	.	.
+chr20	23259471	rs1203983	A	G	.	PASS	RSID=rs1203983	.	.
+chr20	20186313	rs4814956	T	C	.	PASS	RSID=rs4814956	.	.
+chr20	26173841	rs117810254	T	C	.	PASS	RSID=rs117810254	.	.
+chr20	24302277	rs2132551	A	C	.	PASS	RSID=rs2132551	.	.
+chr20	20427669	rs6046856	T	C	.	PASS	RSID=rs6046856	.	.
+chr20	23775892	rs6049101	A	G	.	PASS	RSID=rs6049101	.	.
+chr20	23042063	rs7361512	T	G	.	PASS	RSID=rs7361512	.	.
+chr20	30280511	rs6567482	T	G	.	PASS	RSID=rs6567482	.	.
+chr20	20549223	rs6046923	A	G	.	PASS	RSID=rs6046923	.	.
+chr20	26289615	rs111604999	T	G	.	PASS	RSID=rs111604999	.	.
+chr20	25210457	rs56786067	G	GC	.	PASS	RSID=rs56786067	.	.
+chr20	25630449	rs73341305	T	G	.	PASS	RSID=rs73341305	.	.
+chr20	22110717	rs6047894	A	G	.	PASS	RSID=rs6047894	.	.
+chr20	23544009	rs62206961	A	G	.	PASS	RSID=rs62206961	.	.
+chr20	23062940	rs2424511	T	C	.	PASS	RSID=rs2424511	.	.
+chr20	21261523	rs55962189	A	T	.	PASS	RSID=rs55962189	.	.
+chr20	24626261	rs6049821	T	C	.	PASS	RSID=rs6049821	.	.
+chr20	31393820	rs8118310	C	G	.	PASS	RSID=rs8118310	.	.
+chr20	21277415	rs4813421	A	G	.	PASS	RSID=rs4813421	.	.
+chr20	24562950	rs10626104	T	TGAG	.	PASS	RSID=rs10626104	.	.
+chr20	22048547	rs71330837	G	GATTT	.	PASS	RSID=rs71330837	.	.
+chr20	23439186	rs35752699	T	TG	.	PASS	RSID=rs35752699	.	.
+chr20	24889930	rs6083662	T	C	.	PASS	RSID=rs6083662	.	.
+chr20	21400556	rs374749367	GTT	G	.	PASS	RSID=rs374749367	.	.
+chr20	25877645	rs6115362	A	T	.	PASS	RSID=rs6115362	.	.
+chr20	21059320	rs62218917	A	G	.	PASS	RSID=rs62218917	.	.
+chr20	31296279	rs61162328	TATATATATTTGA	T	.	PASS	RSID=rs61162328	.	.
+chr20	24686394	rs12624740	T	G	.	PASS	RSID=rs12624740	.	.
+chr20	23600675	rs67483168	T	C	.	PASS	RSID=rs67483168	.	.
+chr20	25526383	rs11087523	T	TA	.	PASS	RSID=rs11087523	.	.
+chr20	20273691	rs2424311	A	G	.	PASS	RSID=rs2424311	.	.
+chr20	23930472	rs3004159	A	C	.	PASS	RSID=rs3004159	.	.
+chr20	22730696	rs7270374	T	C	.	PASS	RSID=rs7270374	.	.
+chr20	25546032	rs2104734	A	G	.	PASS	RSID=rs2104734	.	.
+chr20	23405572	rs56194005	A	T	.	PASS	RSID=rs56194005	.	.
+chr20	23498451	rs2983296	A	G	.	PASS	RSID=rs2983296	.	.
+chr20	22582387	rs1203910	T	C	.	PASS	RSID=rs1203910	.	.
+chr20	25889591	rs6037263	A	G	.	PASS	RSID=rs6037263	.	.
+chr20	23854088	rs11087438	A	AG	.	PASS	RSID=rs11087438	.	.
+chr20	21270205	rs6082363	T	C	.	PASS	RSID=rs6082363	.	.
+chr20	22940136	rs4624450	C	G	.	PASS	RSID=rs4624450	.	.
+chr20	23040960	rs6076013	T	C	.	PASS	RSID=rs6076013	.	.
+chr20	21302797	rs3761290	A	G	.	PASS	RSID=rs3761290	.	.
+chr20	21559808	rs11474308	CAA	C	.	PASS	RSID=rs11474308	.	.
+chr20	20026511	rs11482080	G	GT	.	PASS	RSID=rs11482080	.	.
+chr20	25865592	rs6115348	A	C	.	PASS	RSID=rs6115348	.	.
+chr20	30403910	rs6057402	T	C	.	PASS	RSID=rs6057402	.	.
+chr20	21840434	rs6047662	C	G	.	PASS	RSID=rs6047662	.	.
+chr20	23588103	rs117553219	A	G	.	PASS	RSID=rs117553219	.	.
+chr20	23744382	rs4134385	A	G	.	PASS	RSID=rs4134385	.	.
+chr20	30367912	rs6087162	T	C	.	PASS	RSID=rs6087162	.	.
+chr20	21428288	rs57825825	A	C	.	PASS	RSID=rs57825825	.	.
+chr20	22767999	rs1761	A	G	.	PASS	RSID=rs1761	.	.
+chr20	23747191	rs6049067	C	G	.	PASS	RSID=rs6049067	.	.
+chr20	20162851	rs3060450	GCAA	G	.	PASS	RSID=rs3060450	.	.
+chr20	24559874	rs56902891m	G	GT	.	PASS	RSID=rs56902891m	.	.
+chr20	24928175	rs227616	T	C	.	PASS	RSID=rs227616	.	.
+chr20	20156150	rs6046666	A	G	.	PASS	RSID=rs6046666	.	.
+chr20	23967412	rs911655	A	G	.	PASS	RSID=rs911655	.	.
+chr20	24440138	rs2206643	A	G	.	PASS	RSID=rs2206643	.	.
+chr20	21398607	rs77542622	A	G	.	PASS	RSID=rs77542622	.	.
+chr20	23787166	rs35786205	A	C	.	PASS	RSID=rs35786205	.	.
+chr20	23914687	rs2995104	A	G	.	PASS	RSID=rs2995104	.	.
+chr20	24936776	rs6036988	T	C	.	PASS	RSID=rs6036988	.	.
+chr20	25974396	rs73603407	T	G	.	PASS	RSID=rs73603407	.	.
+chr20	24208099	rs2644841	T	C	.	PASS	RSID=rs2644841	.	.
+chr20	23201922	rs6083037	A	T	.	PASS	RSID=rs6083037	.	.
+chr20	25870896	rs7272868	T	C	.	PASS	RSID=rs7272868	.	.
+chr20	24929961	rs227622	T	C	.	PASS	RSID=rs227622	.	.
+chr20	20044786	rs11478926	A	AT	.	PASS	RSID=rs11478926	.	.
+chr20	24995974	rs6114984	A	G	.	PASS	RSID=rs6114984	.	.
+chr20	22177534	rs804575	T	G	.	PASS	RSID=rs804575	.	.
+chr20	21188884	rs113462767	T	G	.	PASS	RSID=rs113462767	.	.
+chr20	23436552	rs201539660	C	CAAAAAAA	.	PASS	RSID=rs201539660	.	.
+chr20	22740873	rs8124044	A	T	.	PASS	RSID=rs8124044	.	.
+chr20	22728077	rs6048302	A	G	.	PASS	RSID=rs6048302	.	.
+chr20	21795145	rs1476398	A	G	.	PASS	RSID=rs1476398	.	.
+chr20	20736956	rs12481653	A	T	.	PASS	RSID=rs12481653	.	.
+chr20	22706313	rs73304737	T	C	.	PASS	RSID=rs73304737	.	.
+chr20	23732335	rs200972430	TTG	T	.	PASS	RSID=rs200972430	.	.
+chr20	20262914	rs34200155	A	G	.	PASS	RSID=rs34200155	.	.
+chr20	23177254	rs844929	A	G	.	PASS	RSID=rs844929	.	.
+chr20	22531891	rs6075924	T	C	.	PASS	RSID=rs6075924	.	.
+chr20	24557885	rs4815277	A	G	.	PASS	RSID=rs4815277	.	.
+chr20	23124543	rs844885	A	G	.	PASS	RSID=rs844885	.	.
+chr20	24178005	rs138332109	A	G	.	PASS	RSID=rs138332109	.	.
+chr20	23471854	rs2983281	A	G	.	PASS	RSID=rs2983281	.	.
+chr20	24282039	rs78962074	T	C	.	PASS	RSID=rs78962074	.	.
+chr20	24274218	rs858056	T	C	.	PASS	RSID=rs858056	.	.
+chr20	22482199	rs7269344	T	G	.	PASS	RSID=rs7269344	.	.
+chr20	24309790	rs6114637	A	G	.	PASS	RSID=rs6114637	.	.
+chr20	20029881	rs11469785	T	TTTTTG	.	PASS	RSID=rs11469785	.	.
+chr20	30266696	rs148385831	A	G	.	PASS	RSID=rs148385831	.	.
+chr20	20591166	rs144678172	A	ACAT	.	PASS	RSID=rs144678172	.	.
+chr20	21599086	rs140997269	GA	G	.	PASS	RSID=rs140997269	.	.
+chr20	23658728	rs10585771	A	AAT	.	PASS	RSID=rs10585771	.	.
+chr20	21429126	rs12624803	A	G	.	PASS	RSID=rs12624803	.	.
+chr20	23656193	rs8123349	A	G	.	PASS	RSID=rs8123349	.	.
+chr20	30321272	rs6118885	T	G	.	PASS	RSID=rs6118885	.	.
+chr20	26127318	rs113612143	A	G	.	PASS	RSID=rs113612143	.	.
+chr20	31410787	rs760996	A	G	.	PASS	RSID=rs760996	.	.

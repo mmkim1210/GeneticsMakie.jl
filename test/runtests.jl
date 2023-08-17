@@ -3,6 +3,7 @@ using Test
 using CairoMakie
 using CSV
 using DataFrames
+import FASTX: FASTA
 using SnpArrays
 using Statistics
 
@@ -165,13 +166,34 @@ end
     @test nrow(chain) == 53950
     @test ncol(chain) == 11
 
-    gwas = CSV.read("data/sumstats.csv", DataFrame)
+    run(`gzip -d data/GRCh37.p13.chr20.fa.gz`)
+    run(`gzip -d data/GRCh38.p13.chr20.fa.gz`)
+    fasta37 = FASTA.Reader(open("data/GRCh37.p13.chr20.fa"), index = "data/GRCh37.p13.chr20.fa.fai")
+    fasta38 = FASTA.Reader(open("data/GRCh38.p13.chr20.fa"), index = "data/GRCh38.p13.chr20.fa.fai")
+
+    gwas = CSV.read("data/sumstats.w_indels.csv.gz", DataFrame)
     GeneticsMakie.mungesumstats!(gwas)
-    gwasarr = [gwas]
-    unmapped, multiple = GeneticsMakie.liftoversumstats!(gwasarr, chain)
-    @test nrow(gwasarr[1]) == 2999
-    @test nrow(unmapped[1]) == 1
+    unmapped, multiple =
+    GeneticsMakie.liftoversumstats!([gwas], fasta37, fasta38, chain; referenceorder = false)
+    @test nrow(unmapped[1]) == 0
     @test nrow(multiple[1]) == 0
+
+    gwas = CSV.read("data/sumstats.w_indels.csv", DataFrame)
+    GeneticsMakie.mungesumstats!(gwas)
+    unmapped, multiple =
+    GeneticsMakie.liftoversumstats!([gwas], fasta37, fasta38, chain; referenceorder = true)
+    bcftools_score = CSV.read("data/adhd_Demontis.38.vcf", DataFrame, comment = "##")
+    select!(bcftools_score,
+            :ID => :SNP, "#CHROM" => (col -> replace.(col, "chr" => "")) => :CHR,
+            :POS => :BP, :REF => :A1, :ALT => :A2)
+    @test nrow(innerjoin(gwas, bcftools_score, on = [:SNP, :CHR, :BP, :A1, :A2])) == 1479
+    @test nrow(unmapped[1]) == 0
+    @test nrow(multiple[1]) == 0
+
+    close(fasta37)
+    close(fasta38)
+    run(`gzip data/GRCh37.p13.chr20.fa`)
+    run(`gzip data/GRCh38.p13.chr20.fa`)
 
     push!(chain, chain[nrow(chain), :])
     @test_throws ErrorException GeneticsMakie.findnewcoord("Y",
