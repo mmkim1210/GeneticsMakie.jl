@@ -105,29 +105,23 @@ samtools faidx data/fasta/hg38.fa
 
 ```julia
 import FASTX: FASTA
-hg19io = open("data/fasta/hg19.fa")
-hg19fa = FASTA.Reader(hg19io)
-hg19fai = FASTA.Index("data/fasta/hg19.fa.fai")
-FASTA.index!(hg19fa, hg19fai)
-hg38io = open("data/fasta/hg38.fa")
-hg38fa = FASTA.Reader(hg38io)
-hg38fai = FASTA.Index("data/fasta/hg38.fa.fai")
-FASTA.index!(hg38fa, hg38fai)
+hg19 = FASTA.Reader(open("data/fasta/hg19.fa"), index = "data/fasta/hg19.fa.fai")
+hg19 = FASTA.Reader(open("data/fasta/hg38.fa"), index = "data/fasta/hg38.fa.fai")
 ```
 
 With the chain file and the FASTA files loaded, we can now perform liftover on our 
 GWAS. `GeneticsMakie.liftoversumstats!` will liftover the sumstats in place and return 
-a NamedTuple of `unmapped`) unmapped variants still on the original build and `multiple`) 
+a DataFrame of `unmapped`) unmapped variants still on the original build and `multiple`) 
 variants on the target build that has mapped to multiple positions. Liftover will 
 take a while to complete, especially summary statistics with many variants.
 ```julia
 dfs_hg38 = deepcopy(dfs)
-unmapped, multiple = GeneticsMakie.liftoversumstats!(dfs_hg38, chain, hg19fa, hg38fa;
+unmapped, multiple = GeneticsMakie.liftoversumstats!(dfs_hg38, hg19fa, hg38fa, chain; 
                                                      multiplematches = :warning,
-                                                     pickreference = :longest,
-                                                     indelref = :start,
+                                                     whichreference = :first_silent,
+                                                     indelreference = :start,
                                                      extendambiguous = true)
-close(hg19io)
-close(hg38io)
+close(hg19)
+close(hg38)
 ```
 

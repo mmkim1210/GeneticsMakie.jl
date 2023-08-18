@@ -161,7 +161,9 @@ end
     @test nrow(df) == 1
     df = GeneticsMakie.findgwasloci([gwas, gwas])
     @test nrow(df) == 1
+end
 
+@testset "Liftover" begin
     chain = GeneticsMakie.readchain("data/hg19ToHg38.over.chain.gz")
     @test nrow(chain) == 53950
     @test ncol(chain) == 11
@@ -171,7 +173,7 @@ end
     fasta37 = FASTA.Reader(open("data/GRCh37.p13.chr20.fa"), index = "data/GRCh37.p13.chr20.fa.fai")
     fasta38 = FASTA.Reader(open("data/GRCh38.p13.chr20.fa"), index = "data/GRCh38.p13.chr20.fa.fai")
 
-    gwas = CSV.read("data/sumstats.w_indels.csv.gz", DataFrame)
+    gwas = CSV.read("data/sumstats.w_indels.csv", DataFrame)
     GeneticsMakie.mungesumstats!(gwas)
     unmapped, multiple =
     GeneticsMakie.liftoversumstats!([gwas], fasta37, fasta38, chain; referenceorder = false)
@@ -181,7 +183,7 @@ end
     gwas = CSV.read("data/sumstats.w_indels.csv", DataFrame)
     GeneticsMakie.mungesumstats!(gwas)
     unmapped, multiple =
-    GeneticsMakie.liftoversumstats!([gwas], fasta37, fasta38, chain; referenceorder = true)
+    GeneticsMakie.liftoversumstats!([gwas], fasta37, fasta38, chain)
     bcftools_score = CSV.read("data/adhd_Demontis.38.vcf", DataFrame, comment = "##")
     select!(bcftools_score,
             :ID => :SNP, "#CHROM" => (col -> replace.(col, "chr" => "")) => :CHR,
