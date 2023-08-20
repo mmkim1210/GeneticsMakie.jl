@@ -10,6 +10,7 @@ DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 FASTX = "c2308a5c-f048-11e8-3e8a-31650f418d12"
 Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
+Parsers = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
 SnpArrays = "4e780e97-f5bf-4111-9dc4-b70aaf691b06"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 

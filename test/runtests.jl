@@ -161,6 +161,28 @@ end
     @test nrow(df) == 1
     df = GeneticsMakie.findgwasloci([gwas, gwas])
     @test nrow(df) == 1
+
+    run(`gzip -d data/GRCh37.p13.chr20.fa.gz`)
+    fasta37 = FASTA.Reader(open("data/GRCh37.p13.chr20.fa"), index = "data/GRCh37.p13.chr20.fa.fai")
+    gwas = CSV.read("data/sumstats.w_indels.csv", DataFrame)
+    GeneticsMakie.mungesumstats!(gwas)
+    rsids = gwas.SNP
+    @test nrow(GeneticsMakie.normalizesumstats!(gwas, fasta37; dropmismatch = true)) == 1479
+
+    dbsnp_df = CSV.read("data/dbsnp.chr20.vcf", DataFrame; comment = "##", delim = "\t")
+    dbsnp_it = CSV.Rows("data/dbsnp.chr20.vcf", comment = "##", delim = "\t")
+
+    GeneticsMakie.harmonizevariantnames!(gwas, dbsnp_df)
+    # Not all rsids match due to:
+    # 1) Multiple rsids exist for the same variant
+    # 2) Indels that do not have the proper reference allele assigned. `normalizesumstats!` 
+    # seeks to fix this problem but it cannot be perfectly sensitive
+    @test sum(gwas.SNP .== rsids) > 1200
+    GeneticsMakie.harmonizevariantnames!(gwas, dbsnp_it)
+    @test sum(gwas.SNP .== rsids) > 1200
+
+    close(fasta37)
+    run(`gzip data/GRCh37.p13.chr20.fa`)
 end
 
 @testset "Liftover" begin

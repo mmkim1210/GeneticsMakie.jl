@@ -4,6 +4,7 @@ using CodecZlib
 using CairoMakie
 using Makie.GeometryBasics
 using DataFrames
+using Parsers
 using SnpArrays
 using Statistics
 using Distributions
@@ -14,7 +15,6 @@ include("plotgenes.jl")
 include("plotisoforms.jl")
 include("plotld.jl")
 include("mungesumstats.jl")
-include("liftover.jl")
 include("plotlocus.jl")
 include("plotloops.jl")
 include("plotqq.jl")
