@@ -736,7 +736,7 @@ harmonizevariantnames!([gwas], vcf_dataframe)
 
 function harmonizevariantnames!(gwas::Vector{<:AbstractDataFrame}, vcf_iterator)
     for ss in gwas
-        ss.SNP .= missings(String, nrow(ss))
+        ss.SNP = missings(String, nrow(ss))
     end
     variantdf = vcat([select(ss, :CHR, :BP, :A1, :A2) for ss in gwas]...)
     sortedidx = sortperm(variantdf, [:CHR, :BP, :A2])
@@ -756,7 +756,7 @@ harmonizevariantnames!(gwas::AbstractDataFrame, vcf_iterator) =
 harmonizevariantnames!([gwas], vcf_iterator)
 
 function harmonizevariantnames!(gwas::AbstractDataFrame)
-    gwas.SNP .= missings(String, nrow(gwas))
+    gwas.SNP = missings(String, nrow(gwas))
     mungesnpid!(gwas)
 end
 
