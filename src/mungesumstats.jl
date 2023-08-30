@@ -1354,7 +1354,7 @@ function liftoversumstats!(
                 gwas[i, :A1] = newalleles[i][1].alleles[1]
                 gwas[i, :A2] = newalleles[i][1].alleles[2]
             end
-        elseif length(newcoords[i]) > 1
+        elseif length(newpositions[i]) > 1
             additionalmatches = DataFrame(fill(gwas[i, :], length(newpositions[i])))
             referencemismatch = []
             for j in eachindex(newpositions[i])
@@ -1393,7 +1393,7 @@ function liftoversumstats!(
                 end
             end
             additionalmatches[!, :score] = [newpositions[i][j].score
-                                            for j in eachindex(newcoords[i])]
+                                            for j in eachindex(newpositions[i])]
             if referenceorder
                 deleteat!(additionalmatches, referencemismatch)
             end
