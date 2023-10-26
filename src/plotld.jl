@@ -11,9 +11,9 @@ Heatmap of symmetric correlation matrix `LD` with the diagonal elements on the x
 """
 @recipe(PlotLD, LD) do scene
     Attributes(
-        threshold = 1 / 9,
-        colormap = cgrad(:Blues_9, 9, categorical = true),
-        colorrange = (0, 1),
+        threshold   = 1 / 9,
+        colormap    = cgrad(:Blues_9, 9, categorical = true),
+        colorrange  = (0, 1),
         strokewidth = 0
     )
 end
@@ -25,7 +25,7 @@ function Makie.plot!(plot::PlotLD{<:Tuple{<:AbstractMatrix}})
     m = count(>(threshold), LD)
     addx1 = [0, 1, 0, 1]
     addx2 = [1, 1, 0, 1]
-    addy = [0, -1, 0, 1]
+    addy  = [0, -1, 0, 1]
     polys = Vector{Polygon}(undef, Int((m - n) / 2 + n))
     LDvech = Vector{Float32}(undef, Int((m - n) / 2 + n))
     counter = 1
