@@ -165,9 +165,7 @@ end
 @testset "Plotting LD" begin
     LD = rand(10, 10)
     LD = LD + transpose(LD)
-    for i in 1:size(LD, 1)
-        LD[i, i] = 1
-    end
+    [LD[i, i] = 1 for i in 1:size(LD, 1)]
     f = Figure()
     ax = Axis(f[1, 1])
     GeneticsMakie.plotld!(ax, LD)
