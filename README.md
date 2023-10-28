@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/src/assets/logo2.svg" width="60%"></p>
+<p align="center"><img src="docs/src/assets/logo2.svg" width="80%"></p>
 
 # GeneticsMakie
 
