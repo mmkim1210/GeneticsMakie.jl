@@ -1,5 +1,6 @@
 """
     plotld(LD::AbstractMatrix; kwargs)
+    plotld!(ax::Axis, LD::AbstractMatrix; kwargs)
 
 Heatmap of symmetric correlation matrix `LD` with the diagonal elements on the x-axis.
 

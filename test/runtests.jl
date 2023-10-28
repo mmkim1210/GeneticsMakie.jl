@@ -5,6 +5,7 @@ using CSV
 using DataFrames
 using SnpArrays
 using Statistics
+using Distributions
 
 @testset "Plotting genes/isoforms" begin
     gencode = CSV.read("data/gencode.gtf", DataFrame)
@@ -162,18 +163,6 @@ end
     rm("manhattan.png")
 end
 
-@testset "Plotting LD" begin
-    LD = rand(10, 10)
-    LD = LD + transpose(LD)
-    [LD[i, i] = 1 for i in 1:size(LD, 1)]
-    f = Figure()
-    ax = Axis(f[1, 1])
-    GeneticsMakie.plotld!(ax, LD)
-    save("ld.png", f)
-    @test isfile("ld.png")
-    rm("ld.png")
-end
-
 @testset "Plotting LocusZoom" begin
     kgp = SnpData("data/kgp")
     gwas = CSV.read("data/locus.csv", DataFrame)
@@ -233,21 +222,6 @@ end
     rm("qq.png")
 end
 
-@testset "Plotting correlation" begin
-    f = Figure()
-    ax = Axis(f[1, 1])
-    n = 10
-    GeneticsMakie.plotrg!(ax, (rand(n, n) .* 2 .- 1), string.(1:n), circle = true)
-    colsize!(f.layout, 1, Aspect(1, 1))
-    rowsize!(f.layout, 1, 18 * n)
-    save("cor.png", f)
-    @test isfile("cor.png")
-    rm("cor.png")
-end
-
-@testset "Plotting TWAS" begin
-end
-
 @testset "Plotting loops" begin
     loopdf = CSV.read("data/loops.csv", DataFrame)
     loopdf.chr1 = string.(loopdf.chr1)
@@ -305,4 +279,32 @@ end
     save("loops.png", f)
     @test isfile("loops.png")
     rm("loops.png")
+end
+
+@testset "Plotting LD" begin
+    LD = rand(50, 50)
+    LD = (LD + transpose(LD)) / 2
+    [LD[i, i] = 1 for i in 1:size(LD, 1)]
+    f, ax, p = plotld(LD)
+    ax.aspect = DataAspect()
+    xlims!(0, 10)
+    ylims!(0, 5)
+    hidedecorations!(ax)
+    hidespines!(ax, :r, :l, :b)
+    Colorbar(f[1, 2], p, label = "LD", height = Relative(0.2))
+    save("ld.png", f)
+    @test isfile("ld.png")
+    rm("ld.png")
+end
+
+@testset "Plotting correlation" begin
+    r = rand(Uniform(-1, 1), 10, 10)
+    f, ax, p = plotrg(r)
+    ax.aspect = DataAspect()
+    xlims!(0, size(r, 1))
+    ylims!(-size(r, 1), 0)
+    hidedecorations!(ax)
+    save("corr.png", f)
+    @test isfile("corr.png")
+    rm("corr.png")
 end

@@ -1,18 +1,39 @@
-function plotrg!(
-    ax::Axis,
-    r::AbstractMatrix,
-    colnames::AbstractVector; 
-    p::Union{AbstractMatrix, Nothing} = nothing,
-    circle::Bool = true,
-    diag::Bool = false,
-    )
+"""
+    plotrg(r::AbstractMatrix; kwargs)
+    plotrg!(ax::Axis, r::AbstractMatrix; kwargs)
 
+Correlation plot of matrix `r`.
+
+# Keyword arguments
+- `circle`      : whether to draw cicles instead of rectangles (default to `true`)
+- `diagonal`    : whether to visualize diagonal elements (default to `false`)
+- `colormap`    : colormap of values (default to `:RdBu_10`)
+- `colorrange`  : start and end points of `colormap` (default to `(-1, 1)`)
+- `strokewidth` : width of outline around surrounding boxes (default to `0.5`)
+"""
+@recipe(Plotrg, r) do scene
+    Attributes(
+        circle      = true,
+        diagonal    = false,
+        colormap    = :RdBu_10,
+        colorrange  = (-1, 1),
+        strokewidth = 0.5
+    )
+end
+
+function Makie.plot!(plot::Plotrg{<:Tuple{<:AbstractMatrix}})
+    r           = plot[:r][]
+    circle      = plot[:circle][]
+    diagonal    = plot[:diagonal][]
+    colormap    = plot[:colormap][]
+    colorrange  = plot[:colorrange][]
+    strokewidth = plot[:strokewidth][]
     n = size(r, 1)
-    ps = Vector{Polygon}(undef, n^2)
+    polys = Vector{Polygon}(undef, n^2)
     counter = 1
     for i in 1:n
         for j in 1:n
-            ps[counter] = Polygon([
+            polys[counter] = Polygon([
                 Point2f(i - 1, 1 - j),
                 Point2f(i - 1, -j),
                 Point2f(i, -j),
@@ -21,9 +42,9 @@ function plotrg!(
             counter += 1
         end
     end
-    psd = Vector{Polygon}(undef, n)
+    polysd = Vector{Polygon}(undef, n)
     for i in 1:n
-        psd[i] = Polygon([
+        polysd[i] = Polygon([
             Point2f(i - 1, 1 - i),
             Point2f(i - 1, -i),
             Point2f(i, -i),
@@ -45,7 +66,7 @@ function plotrg!(
                 counter += 1
             end
         end
-        if diag
+        if diagonal
             csd = Vector{Circle}(undef, n)
             colord = Vector{Float32}(undef, n)
             for i in 1:n
@@ -70,47 +91,21 @@ function plotrg!(
                 counter += 1
             end
         end
-        if diag
-            csd = Vector{Circle}(undef, n)
+        if diagonal
+            csd = Vector{Rect}(undef, n)
             colord = Vector{Float32}(undef, n)
             for i in 1:n
                 widthd = r[i, i] * 0.95
-                csd[i] = Rect(i - 1 + (1 - withd) / 2, 1 - i - (1 - withd) / 2, withd, -withd)
+                csd[i] = Rect(i - 1 + (1 - widthd) / 2, 1 - i - (1 - widthd) / 2, widthd, -widthd)
                 colord[i] = r[i, i]
             end
         end
     end
-    poly!(ax, ps, color = :white, strokewidth = 0.5, strokecolor = "#C3C3C3")
-    # poly!(ax, psd, color = "#C3C3C3", strokewidth = 0.5, strokecolor = "#C3C3C3")
-    poly!(ax, csl, color = colorl, colorrange = (-1, 1), colormap = :RdBu_10)
-    poly!(ax, csu, color = coloru, colorrange = (-1, 1), colormap = :RdBu_10)
-    if !isnothing(p)
-        pvalues = Matrix{Float64}(undef, n^2, 3)
-        counter = 1
-        for i in 1:n
-            for j in 1:n
-                j == i ? pvalues[counter, 1] = 1 : pvalues[counter, 1] = p[j, i]
-                pvalues[counter, 2] = i - 0.5
-                pvalues[counter, 3] = -j + 0.5
-                counter += 1
-            end
-        end
-        ind = findall(x -> x < 0.05, pvalues[:, 1]) 
-        scatter!(ax, pvalues[ind, 2], pvalues[ind, 3], marker = '✳', markersize = 7, color = :black)
+    poly!(plot, polys, color = :white, strokewidth = strokewidth, strokecolor = "#C3C3C3")
+    # poly!(plot, polysd, color = "#C3C3C3", strokewidth = strokewidth, strokecolor = "#C3C3C3")
+    poly!(plot, csl, color = colorl, colorrange = colorrange, colormap = colormap)
+    poly!(plot, csu, color = coloru, colorrange = colorrange, colormap = colormap)
+    if diagonal
+        poly!(plot, csd, color = colord, colorrange = colorrange, colormap = colormap)
     end
-    if diag
-        poly!(ax, csd, color = colord, colorrange = (-1, 1), colormap = :RdBu_10)
-    end
-    ax.xticks = (0.5:(n - 0.5), colnames)
-    ax.yticks = (-0.5:-1:-(n - 0.5), colnames)
-    ax.xticklabelsize = 6
-    ax.yticklabelsize = 6
-    ax.xticklabelpad = 0
-    ax.yticklabelpad = 1
-    ax.xaxisposition = :top
-    ax.yaxisposition = :left
-    hidedecorations!(ax, ticklabels = false)
-    xlims!(ax, 0, n)
-    ylims!(ax, -n, 0)
-    ax.aspect = DataAspect()
 end
