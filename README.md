@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/src/assets/logo2.svg" width="60%"></p>
+
 # GeneticsMakie
 
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://mmkim1210.github.io/GeneticsMakie.jl/dev)
