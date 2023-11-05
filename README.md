@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/src/assets/logo2.svg" width="80%"></p>
+<p align="center"><img src="docs/src/assets/logo2.svg" width="100%"></p>
 
 # GeneticsMakie
 
@@ -7,7 +7,7 @@
 [![Coverage](https://codecov.io/gh/mmkim1210/GeneticsMakie.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/mmkim1210/GeneticsMakie.jl)
 
 ## Installation
-GeneticsMakie.jl supports Julia v1.6 or later.
+GeneticsMakie.jl supports <a href="https://julialang.org"><img src="https://julialang.org/assets/infra/julia.ico" width="10em"> Julia </a> v1.6 or later.
 ```julia
 julia> ]
 pkg> add GeneticsMakie
