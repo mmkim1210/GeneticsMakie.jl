@@ -1,4 +1,4 @@
-GRCh38_highld = [
+const GRCh38_highld = [
     (chr = "1", range1 = 47761740, range2 = 51761740),
     (chr = "1", range1 = 125169943, range2 = 125170022),
     (chr = "1", range1 = 144106678, range2 = 144106709),
@@ -25,7 +25,7 @@ GRCh38_highld = [
     (chr = "20", range1 = 33948532, range2 = 36438183),
 ]
 
-GRCh37_highld = [
+const GRCh37_highld = [
     (chr = "1", range1 = 48000000, range2 = 52000000),
     (chr = "2", range1 = 86000000, range2 = 100500000),
     (chr = "2", range1 = 134500000, range2 = 138000000),
@@ -54,7 +54,7 @@ GRCh37_highld = [
 ]
 # https://genome.sph.umich.edu/wiki/Regions_of_high_linkage_disequilibrium_(LD)
 
-GRCh38_totlength = Dict(
+const GRCh38_totlength = Dict(
     "1" => 248956422,
     "2" => 242193529,
     "3" => 198295559,
@@ -81,7 +81,7 @@ GRCh38_totlength = Dict(
     "Y" => 57227415,
 )
 
-GRCh37_totlength = Dict(
+const GRCh37_totlength = Dict(
     "1" => 249250621,
     "2" => 243199373,
     "3" => 198022430,
