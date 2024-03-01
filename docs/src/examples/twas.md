@@ -36,7 +36,7 @@ df.P = parse.(Float64, df.P)
 ```
 
 ```julia
-f = Figure(resolution = (408, 792))
+f = Figure(size = (408, 792))
 ax = Axis(f[1, 1])
 GeneticsMakie.plotgwas!(ax, df; ymax = 13, p = 2.2e-6)
 hidespines!(ax, :t, :r)

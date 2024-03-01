@@ -37,7 +37,7 @@ By default, `GeneticsMakie.plotgwas!` highlights the genome-wide significant thr
 and corresponding significant variants. We can turn off this option by using the `linecolor` and `scattercolor` keyword arguments. 
 
 ```julia
-f = Figure(resolution = (408, 792))
+f = Figure(size = (408, 792))
 axs = [Axis(f[i, 1]) for i in 1:length(titles)]
 for i in eachindex(titles)
     GeneticsMakie.plotgwas!(axs[i], dfs[i]; linecolor = nothing, scattercolor = nothing)
