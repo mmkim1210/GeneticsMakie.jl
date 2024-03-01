@@ -29,7 +29,7 @@ gencode = CSV.read("data/gencode/$(file)", DataFrame; delim = "\t", comment = "#
     GRCh37 genomic coordinates. Make sure to use the matching human genome build when
     visualizing your results. 
 
-The ninth column of a [GTF file](https://uswest.ensembl.org/info/website/upload/gff.html) 
+The ninth column of a [GTF file](https://www.gencodegenes.org/pages/data_format.html) 
 contains rich information about features, so we can parse this column.
 ```julia
 GeneticsMakie.parsegtf!(gencode)

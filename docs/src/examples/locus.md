@@ -28,7 +28,7 @@ ranges = [start - 1e6, stop + 1e6]
 
 n = length(dfs)
 titles = ["Height (Yengo et al. 2018)", "Weight (Yengo et al. 2018)"]
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotlocus!(axs[i], chr, ranges[1], ranges[2], dfs[i])
@@ -43,7 +43,7 @@ Colorbar(f[1:n, 2], limits = (0, 1), ticks = 0:1:1, height = 20,
     colormap = [:gray60, :red2], label = "LD", ticksize = 0, tickwidth = 0,
     tickalign = 0, ticklabelsize = 6, flip_vertical_label = true,
     labelsize = 6, width = 5, spinewidth = 0.5)
-Label(f[1:n, 0], text = "-log[p]", fontsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], rich("-log", subscript("10"), rich("P", font = :italic)), fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)
@@ -73,7 +73,7 @@ kgp = SnpData("data/1kg/kgp.chr15")
 We can then color variants by LD with the index/sentinel SNP by using the `ld` keyword argument.
 
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotlocus!(axs[i], chr, ranges[1], ranges[2], dfs[i]; ld = kgp)
@@ -88,7 +88,7 @@ Colorbar(f[1:n, 2], limits = (0, 1), ticks = 0:1:1, height = 20,
     colormap = [:gray60, :red2], label = "LD", ticksize = 0, tickwidth = 0,
     tickalign = 0, ticklabelsize = 6, flip_vertical_label = true,
     labelsize = 6, width = 5, spinewidth = 0.5)
-Label(f[1:n, 0], text = "-log[p]", fontsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], rich("-log", subscript("10"), rich("P", font = :italic)), fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)
@@ -103,7 +103,7 @@ f
 We can also color variants by LD with the same SNP by using the `ld` keyword argument.
 
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotlocus!(axs[i], chr, ranges[1], ranges[2], dfs[i]; ld = (kgp, ("15", 89395626)))
@@ -118,7 +118,7 @@ Colorbar(f[1:n, 2], limits = (0, 1), ticks = 0:1:1, height = 20,
     colormap = [:gray60, :red2], label = "LD", ticksize = 0, tickwidth = 0,
     tickalign = 0, ticklabelsize = 6, flip_vertical_label = true,
     labelsize = 6, width = 5, spinewidth = 0.5)
-Label(f[1:n, 0], text = "-log[p]", fontsize = 6, rotation = pi / 2)
+Label(f[1:n, 0], rich("-log", subscript("10"), rich("P", font = :italic)), fontsize = 6, rotation = pi / 2)
 rowgap!(f.layout, 5)
 colgap!(f.layout, 5)
 for i in 1:(n + 1)

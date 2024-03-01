@@ -38,8 +38,8 @@ function plotqq!(
     ylims!(ax, 0, ymax)
     hidedecorations!(ax, label = false, ticklabels = false, ticks = false)
     ax.aspect = AxisAspect(1)
-    ax.xlabel = "Expected -log[p]"
-    ax.ylabel = "Observed -log[p]"
+    ax.xlabel = rich("Expected -log", subscript("10"), rich("P", font = :italic))
+    ax.ylabel = rich("Observed -log", subscript("10"), rich("P", font = :italic))
     ax.xticklabelsize = 6
     ax.yticklabelsize = 6
     ax.xlabelsize = 8

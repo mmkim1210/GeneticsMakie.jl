@@ -19,7 +19,7 @@ isdir("figs") || mkdir("figs")
 set_theme!(font = "Arial")
 
 gene = "NRXN1"
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(ax, gene, gencode; height = 0.1)
 GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
@@ -32,7 +32,7 @@ f
 To save some space, we can plot the isoform labels on the left by using the `text` keyword argument. 
 
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(ax, gene, gencode; height = 0.1, text = :l)
 GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
@@ -47,7 +47,7 @@ We look at a different gene, _GRIN2A_.
 
 ```julia
 gene = "GRIN2A"
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(ax, gene, gencode; isoformcolor = :forestgreen, height = 0.1)
 GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
@@ -60,7 +60,7 @@ f
 We can change the order of isoforms by using the `orderby` keyword argument.
 
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(ax, gene, gencode; orderby = ["ENST00000675189", "ENST00000463531"], isoformcolor = :forestgreen, height = 0.1)
 GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, range1, range2)
@@ -71,7 +71,7 @@ f
 ![](../figs/GRIN2A-isoform-order.png)
 
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs, chr, range1, range2 = GeneticsMakie.plotisoforms!(ax, gene, gencode; orderby = ["ENST00000675189", "ENST00000463531"], 
     highlight = (["ENST00000675398", "ENST00000562109"], fill(:brown3, 2)), isoformcolor = :forestgreen, height = 0.1)

@@ -23,7 +23,7 @@ set_theme!(font = "Arial")
 
 gene = "CACNA1G"
 chr, start, stop = GeneticsMakie.findgene(gene, gencode)
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 ranges = [start - 1e5, stop + 1e5]
 rs = GeneticsMakie.plotgenes!(ax, chr, ranges[1], ranges[2], gencode)
@@ -36,7 +36,7 @@ f
 
 We can adjust the height of exons using the `height` keyword argument.
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs = GeneticsMakie.plotgenes!(ax, chr, ranges[1], ranges[2], gencode; height = 0.1)
 GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, ranges[1], ranges[2])
@@ -48,7 +48,7 @@ f
 
 We can change the color of genes and text using the `genecolor` and `textcolor` keyword arguments, respectively.
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs = GeneticsMakie.plotgenes!(ax, chr, ranges[1], ranges[2], gencode; height = 0.1, genecolor = :mediumorchid3, textcolor = :forestgreen)
 GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, ranges[1], ranges[2])
@@ -61,7 +61,7 @@ f
 Alternatively, we can visualize this locus by passing `gene` as a positional argument and 
 `window` as a keyword argument.
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs = GeneticsMakie.plotgenes!(ax, gene, gencode; window = 1e5, height = 0.1, genecolor = :brown3)
 GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, ranges[1], ranges[2])
@@ -74,7 +74,7 @@ f
 There is no limit to the number of genes we can visualize. Below we visualize a larger 
 ± 2 Mb window around `gene`.
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs = GeneticsMakie.plotgenes!(ax, gene, gencode; window = 2e6, height = 0.1)
 GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, start - 2e6, stop + 2e6)
@@ -96,7 +96,7 @@ by certain properties such as those that are protein coding or those that are
 significant in some sort of gene-level association. 
 
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs = GeneticsMakie.plotgenes!(ax, chr, start, (gene, :brown3), gencode; window = 1e5, height = 0.1)
 GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, start - 1e5, start + 1e5)
@@ -107,7 +107,7 @@ f
 ![](../figs/CACNA1G-gene-highlight.png)
 
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs = GeneticsMakie.plotgenes!(ax, chr, start, ([gene, "EPN3"], [:brown3, :forestgreen]), gencode; window = 1e5, height = 0.1)
 GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, start - 1e5, start + 1e5)
@@ -121,7 +121,7 @@ Finally, we can make additional modifications on top of the figure as needed usi
 [__Makie.jl__](https://makie.juliaplots.org/stable/).
 
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 ax = Axis(f[1, 1])
 rs = GeneticsMakie.plotgenes!(ax, chr, start, gencode; window = 1e5, height = 0.1)
 GeneticsMakie.labelgenome(f[1, 1, Bottom()], chr, start - 1e5, start + 1e5)

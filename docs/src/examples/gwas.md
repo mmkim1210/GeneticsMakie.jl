@@ -18,7 +18,7 @@ titles = ["Height (Yengo et al. 2018)", "Weight (Yengo et al. 2018)"]
 ```
 
 ```julia
-f = Figure(resolution = (408, 792))
+f = Figure(size = (408, 792))
 axs = [Axis(f[i, 1]) for i in 1:length(titles)]
 for i in eachindex(titles)
     GeneticsMakie.plotgwas!(axs[i], dfs[i])
@@ -55,7 +55,7 @@ f
 We can color even and odd chromosomes with different colors by using the `chromcolors` keyword argument. 
 
 ```julia
-f = Figure(resolution = (408, 792))
+f = Figure(size = (408, 792))
 axs = [Axis(f[i, 1]) for i in 1:length(titles)]
 for i in eachindex(titles)
     GeneticsMakie.plotgwas!(axs[i], dfs[i]; linecolor = nothing, scattercolor = nothing, 
@@ -73,7 +73,7 @@ f
 
 We can then use `GeneticsMakie.plotqq!` to draw QQ plots.
 ```julia
-f = Figure(resolution = (408, 792))
+f = Figure(size = (408, 792))
 axs = [Axis(f[2, i]) for i in 1:length(titles)]
 for i in eachindex(titles)
     GeneticsMakie.plotqq!(axs[i], dfs[i]; ystep = 5)

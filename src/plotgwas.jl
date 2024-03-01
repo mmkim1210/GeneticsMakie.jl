@@ -55,7 +55,7 @@ function plotgwas!(
     hideydecorations!(ax, label = false, ticklabels = false, ticks = false)
     hidexdecorations!(ax, label = false, ticklabels = false)
     ax.xlabel = "Chromosome"
-    ax.ylabel = "-log[p]"
+    ax.ylabel = rich("-log", subscript("10"), rich("P", font = :italic))
     ax.xticks = ((cumsum(storage.maxpos) + storage.add) / 2, storage.CHR)
     ax.yticks = setticks(ymax)
     ax.xticklabelsize = 6
