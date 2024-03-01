@@ -1,11 +1,14 @@
 module GeneticsMakie
 
+using CodecZlib
 using CairoMakie
 using Makie.GeometryBasics
 using DataFrames
+using Parsers
 using SnpArrays
 using Statistics
 using Distributions
+import FASTX: FASTA
 
 include("parsegtf.jl")
 include("plotgenes.jl")
