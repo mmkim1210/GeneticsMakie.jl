@@ -25,7 +25,7 @@ ranges = [start - 1e6, stop + 1e6]
 n = length(dfs)
 titles = [&quot;ENCFF730CMY&quot;]
 
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i])
@@ -45,7 +45,7 @@ end
 resize_to_layout!(f)
 f</code></pre><p><img src="../../figs/MYC-loops.png" alt/></p><p>We can zoom in closer to the gene body by setting a smaller genomic range. With this  closer look, we can see yellow boxes at the ends of the arcs, each representing the  anchors of each loop. The span and length of these interaction anchors is recorded  in the ChIA-PET BEDPE file and is set to reflect the length of a ChIP DNA fragment.</p><pre><code class="language-julia hljs">ranges = [start - 1e5, stop + 1e5]
 
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i])
@@ -65,7 +65,7 @@ end
 resize_to_layout!(f)
 f</code></pre><p><img src="../../figs/MYC-loops-zoom.png" alt/></p><p>We can change the color of the loops and anchors using the <code>colorarc</code> and <code>colorend</code>  keywords respectively.  Additionally, we can change the line width of the loops using  the <code>linewidth</code> keyword.</p><pre><code class="language-julia hljs">ranges = [start - 1e6, stop + 1e6]
 
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i];
@@ -84,7 +84,7 @@ for i in 1:(n + 1)
     vlines!(axs[i], stop, color = (:gold, 0.5), linewidth = 0.5)
 end
 resize_to_layout!(f)
-f</code></pre><p><img src="../../figs/MYC-loops-color.png" alt/></p><p>By subsetting our data to what we wish to display, we can be more specific in what we wish to visualize. For example, if we wanted only the enhancer-promoter loops for <em>MYC</em>, we can filter our DataFrame to loops that link to the promoter region for <em>MYC</em>. Here we filter our DataFrame to loops that link within the <em>MYC</em> gene body and promoter. Additionally, by running <code>GeneticsMakie.plotloops!</code> on the same axis, we can overlay these loops on top of the previous full set of loops.</p><pre><code class="language-julia hljs">f = Figure(resolution = (306, 792))
+f</code></pre><p><img src="../../figs/MYC-loops-color.png" alt/></p><p>By subsetting our data to what we wish to display, we can be more specific in what we wish to visualize. For example, if we wanted only the enhancer-promoter loops for <em>MYC</em>, we can filter our DataFrame to loops that link to the promoter region for <em>MYC</em>. Here we filter our DataFrame to loops that link within the <em>MYC</em> gene body and promoter. Additionally, by running <code>GeneticsMakie.plotloops!</code> on the same axis, we can overlay these loops on top of the previous full set of loops.</p><pre><code class="language-julia hljs">f = Figure(size = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], 
@@ -112,4 +112,4 @@ for i in 1:(n + 1)
     vlines!(axs[i], stop, color = (:gold, 0.5), linewidth = 0.5)
 end
 resize_to_layout!(f)
-f</code></pre><p><img src="../../figs/MYC-loops-overlay.png" alt/></p><p>As with the LocusZoom plots, by using <a href="https://makie.juliaplots.org/stable/"><strong>Makie.jl</strong></a>&#39;s layout tools, it becomes easy to draw additional tracks. For example, in a separate track, we can include chromatin interactions present in other samples. In another example, we can include interactions found through other sequencing methods.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../twas/">« Plotting TWAS</a><a class="docs-footer-nextpage" href="../peaks/">Plotting peaks »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Friday 1 March 2024 05:55">Friday 1 March 2024</span>. Using Julia version 1.10.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+f</code></pre><p><img src="../../figs/MYC-loops-overlay.png" alt/></p><p>As with the LocusZoom plots, by using <a href="https://makie.juliaplots.org/stable/"><strong>Makie.jl</strong></a>&#39;s layout tools, it becomes easy to draw additional tracks. For example, in a separate track, we can include chromatin interactions present in other samples. In another example, we can include interactions found through other sequencing methods.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../twas/">« Plotting TWAS</a><a class="docs-footer-nextpage" href="../peaks/">Plotting peaks »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Friday 1 March 2024 20:46">Friday 1 March 2024</span>. Using Julia version 1.10.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
