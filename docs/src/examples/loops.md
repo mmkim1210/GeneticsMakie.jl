@@ -44,7 +44,7 @@ ranges = [start - 1e6, stop + 1e6]
 n = length(dfs)
 titles = ["ENCFF730CMY"]
 
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i])
@@ -74,7 +74,7 @@ in the ChIA-PET BEDPE file and is set to reflect the length of a ChIP DNA fragme
 ```julia
 ranges = [start - 1e5, stop + 1e5]
 
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i])
@@ -103,7 +103,7 @@ the `linewidth` keyword.
 ```julia
 ranges = [start - 1e6, stop + 1e6]
 
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], dfs[i];
@@ -135,7 +135,7 @@ _MYC_ gene body and promoter. Additionally, by running
 of the previous full set of loops.
 
 ```julia
-f = Figure(resolution = (306, 792))
+f = Figure(size = (306, 792))
 axs = [Axis(f[i, 1]) for i in 1:(n + 1)]
 for i in 1:n
     GeneticsMakie.plotloops!(axs[i], chr, ranges[1], ranges[2], 

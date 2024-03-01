@@ -48,7 +48,7 @@ chr, start, stop = GeneticsMakie.findgene(gene, gencode)
 ranges = [start - 1e6, stop + 1e6]
 
 begin
-    f = Figure(resolution = (306, 792))
+    f = Figure(size = (306, 792))
     axs = [Axis(f[i, 1]) for i in 1:2]
     ax = axs[1]
     reader = open(BigWig.Reader, "data/chipseq/$(basename(chipseq["continuous"]))")
@@ -116,7 +116,7 @@ called by [MACS2](https://pypi.org/project/MACS2/).
 ```julia
 begin
     using Makie.GeometryBasics
-    f = Figure(resolution = (306, 792))
+    f = Figure(size = (306, 792))
     axs = [Axis(f[i, 1]) for i in 1:2]
     ax = axs[1]
     narrowpeak_header =
@@ -164,7 +164,7 @@ can visualize both the continuous track and the called peaks simultaneously.
 
 ```julia
 begin
-    f = Figure(resolution = (306, 792))
+    f = Figure(size = (306, 792))
     axs = [Axis(f[i, 1]) for i in 1:3]
     ax = axs[1]
     reader = open(BigWig.Reader, "data/chipseq/$(basename(chipseq["continuous"]))")
