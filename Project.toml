@@ -17,6 +17,7 @@ DataFrames = "1"
 Distributions = "0.25"
 Makie = "0.20"
 SnpArrays = "0.3"
+Statistics = "1"
 julia = "1.6, 1.7, 1.8, 1.9, 1.10"
 
 [extras]
