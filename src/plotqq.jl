@@ -32,7 +32,7 @@ function plotqq!(
     band!(ax, expect, low, high, color = :gray90)
     scatter!(ax, expect, obs, markersize = 2, color = :black)
     lines!(ax, expect, expect, color = :red2, linewidth = 0.75)
-    text!(ax, "λgc = $(round(λgc, digits = 2))", position = (xmax - 0.5, 1), 
+    text!(ax, xmax - 0.5, 1, text = "λgc = $(round(λgc, digits = 2))", 
         fontsize = 6, align = (:right, :bottom))
     xlims!(ax, 0, xmax)
     ylims!(ax, 0, ymax)

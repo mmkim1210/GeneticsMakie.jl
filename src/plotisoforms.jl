@@ -98,17 +98,15 @@ function plotisoforms!(
                 lines!(ax, [bs[j, 1], bs[j, 2]], 
                     [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
                     color = isoformcolor, linewidth = 0.5)
-                text!(ax, "$(isoforms[j])", 
-                    position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
-                    align = (:center, :bottom), fontsize = 6, color = textcolor)
+                text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height),
+                    text = "$(isoforms[j])", align = (:center, :bottom), fontsize = 6, color = textcolor)
             else
                 poly!(ax, ps[j], color = highlight[2][ind], strokewidth = 0)
                 lines!(ax, [bs[j, 1], bs[j, 2]], 
                     [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
                     color = highlight[2][ind], linewidth = 0.5)
-                text!(ax, "$(isoforms[j])", 
-                    position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
-                    align = (:center, :bottom), fontsize = 6, color = textcolor)
+                text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height),
+                    text = "$(isoforms[j])", align = (:center, :bottom), fontsize = 6, color = textcolor)
             end
         end
     elseif text == :bottom || text == :b
@@ -119,17 +117,15 @@ function plotisoforms!(
                 lines!(ax, [bs[j, 1], bs[j, 2]], 
                     [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
                     color = isoformcolor, linewidth = 0.5)
-                text!(ax, "$(isoforms[j])", 
-                    position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - height - (rows[j] - 1) * (0.25 + height)), 
-                    align = (:center, :top), fontsize = 6, color = textcolor)
+                text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - height - (rows[j] - 1) * (0.25 + height),
+                    text = "$(isoforms[j])", align = (:center, :top), fontsize = 6, color = textcolor)
             else
                 poly!(ax, ps[j], color = highlight[2][ind], strokewidth = 0)
                 lines!(ax, [bs[j, 1], bs[j, 2]], 
                     [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
                     color = highlight[2][ind], linewidth = 0.5)
-                text!(ax, "$(isoforms[j])", 
-                    position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - height - (rows[j] - 1) * (0.25 + height)), 
-                    align = (:center, :top), fontsize = 6, color = textcolor)
+                text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - height - (rows[j] - 1) * (0.25 + height),
+                    text = "$(isoforms[j])", align = (:center, :top), fontsize = 6, color = textcolor)
             end
         end
     else

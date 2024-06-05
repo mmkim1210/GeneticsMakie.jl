@@ -105,9 +105,8 @@ function plotgenes!(
             [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)], 
             color = genecolor, linewidth = 0.5)
         g = (strand[j] == "+" ? genes[j] * "→" : "←" * genes[j])
-        text!(ax, "$g", 
-            position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
-            align = (:center, :bottom), fontsize = 6, color = textcolor)
+        text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height),
+            text = "$g", align = (:center, :bottom), fontsize = 6, color = textcolor)
     end
     ax.spinewidth = 0.75
     hidexdecorations!(ax)
@@ -161,18 +160,16 @@ function plotgenes!(
                 [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)], 
                 color = highlight[2][ind], linewidth = 0.5)
             g = (strand[j] == "+" ? genes[j] * "→" : "←" * genes[j])
-            text!(ax, "$g", 
-                position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)), 
-                align = (:center, :bottom), fontsize = 6, color = highlight[2][ind])
+            text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height),
+                text = "$g", align = (:center, :bottom), fontsize = 6, color = highlight[2][ind])
         else
             poly!(ax, ps[j], color = "gray60", strokewidth = 0)
             lines!(ax, [bs[j, 1], bs[j, 2]], 
                 [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)], 
                 color = "gray60", linewidth = 0.5)
             g = (strand[j] == "+" ? genes[j] * "→" : "←" * genes[j])
-            text!(ax, "$g", 
-                position = ((bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height)),
-                align = (:center, :bottom), fontsize = 6, color = "gray60")
+            text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height),
+                text = "$g", align = (:center, :bottom), fontsize = 6, color = "gray60")
         end
     end
     ax.spinewidth = 0.75

@@ -114,12 +114,12 @@ function plotlocus!(
             bp = df.BP[ind]
             p = df.P[ind]
             scatter!(ax, [bp], [p], color = :purple1, markersize = 4.0, marker = '◆')
-            text!(ax, "$(df.index[1])", position = (bp, p), fontsize = 6, align = (:center, :bottom))    
+            text!(ax, bp, p, text = "$(df.index[1])", fontsize = 6, align = (:center, :bottom))    
         elseif length(df.index[1]) > 0
             ind = findfirst(df.SNP .== df.index[1])
             bp, p = df.BP[ind], df.P[ind]
             scatter!(ax, [bp], [p], color = :purple1, markersize = 4.0, marker = '◆')
-            text!(ax, "$(df.index[1])", position = (bp, p), fontsize = 6, align = (:center, :bottom))    
+            text!(ax, bp, p, text = "$(df.index[1])", fontsize = 6, align = (:center, :bottom))    
         end
     else
         scatter!(ax, df.BP, df.P, color = :gray60, markersize = 1.5)
