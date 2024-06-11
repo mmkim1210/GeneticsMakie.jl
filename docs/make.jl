@@ -7,7 +7,7 @@ makedocs(;
     modules = [GeneticsMakie],
     authors = "Minsoo <mmkim1210@gmail.com> and contributors",
     repo = "https://github.com/mmkim1210/GeneticsMakie.jl/blob/{commit}{path}#{line}",
-    sitename = "GeneticsMakie.jl",
+    sitename = "GeneticsMakie",
     format = Documenter.HTML(;
         prettyurls = get(ENV, "CI", "false") == "true",
         canonical = "https://mmkim1210.github.io/GeneticsMakie.jl",
