@@ -64,17 +64,19 @@ function coordinateisforms(
 end
 
 """
-    plotisoforms!(ax::Axis, gene::AbstractString, gencode::DataFrame; kwargs)
+    plotisoforms!(ax::Axis, gene::AbstractString, gencode::DataFrame)
 
 Plot each isoform of a given `gene` on a separate row.
 
-# Arguments
-- `orderby::Union{Nothing, AbstractVector{<:AbstractString}} = nothing`: the order of isoforms.
-- `highlight::Union{Nothing, Tuple{AbstractVector, AbstractVector}} = nothing`: isoforms to be highlighted and their colors.
-- `height::Real = 0.25`: the height of exons.
-- `isoformcolor = :royalblue`: the color of isoforms.
-- `textcolor = :black`: the color of isoform labels.
-- `text::Union{Bool, Symbol} = :top`: the position of isoform labels. 
+# Keyword arguments
+```
+orderby::Union{Nothing, AbstractVector{<:AbstractString}}           order of isoforms; default nothing
+highlight::Union{Nothing, Tuple{AbstractVector, AbstractVector}}    isoforms to be highlighted and their colors; default nothing
+height                                                              height of exons; default 0.25
+isoformcolor                                                        color of isoforms; default :royalblue
+textcolor                                                           color of isoform labels; default :black
+text::Union{Bool, Symbol}                                           position of isoform labels; default :top
+```
 """
 function plotisoforms!(
     ax::Axis,

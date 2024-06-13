@@ -34,9 +34,9 @@ function drawloop!(
 end
 
 """
-    plotloops!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, loopdf::DataFrame; kwargs)
-    plotloops!(ax::Axis, chromosome::AbstractString, bp::Real, loopdf::DataFrame; kwargs)
-    plotloops!(ax::Axis, gene::AbstractString, loopdf::DataFrame, gencode::DataFrame; kwargs)
+    plotloops!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, loopdf::DataFrame)
+    plotloops!(ax::Axis, chromosome::AbstractString, bp::Real, loopdf::DataFrame)
+    plotloops!(ax::Axis, gene::AbstractString, loopdf::DataFrame, gencode::DataFrame)
 
 Plot loops present in `loopdf` within a given `chromosome` and genomic range between `range1` 
 and `range2`.
@@ -44,12 +44,15 @@ and `range2`.
 Alternatively, plot within a given `chromosome` and a certain `window` around a 
 genomic coordinate `bp` or plot within a certain `window` around `gene`.
 
-# Arguments
-- `ymax::Real = 102`: the maximum value for y axis.
-- `linewidth = 0.25`: the line width of the loops' arcs.
-- `colorarc = "#9658B2"`: the color of loops' arcs.
-- `colorend = ("#FFBB00", 0.5)`: the color of loops' ends.
-- `resolution = 1000`: plot `resolution` points along x-axis within the given range.
+# Keyword arguments
+```
+ymax            maximum value for y-axis; default 102
+linewidth       line width of the arcs; default 0.25
+colorarc        color of arcs; default #9658B2
+colorend        color of arcs' ends; default ("#FFBB00", 0.5)
+resolution      plot `resolution` points along x-axis within the given range; default 1000
+window          window around genomic coordinate or gene; default 1e6
+```
 """
 function plotloops!(
         ax::Axis,

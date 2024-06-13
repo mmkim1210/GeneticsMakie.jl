@@ -62,9 +62,9 @@ function coordinategenes(
 end
 
 """
-    plotgenes!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gencode::DataFrame; kwargs)
-    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame; kwargs)
-    plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame; kwargs)
+    plotgenes!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, gencode::DataFrame)
+    plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame)
+    plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame)
 
 Plot collapsed gene bodies for genes within a given `chromosome` and genomic range 
 between `range1` and `range2`.
@@ -72,11 +72,13 @@ between `range1` and `range2`.
 Alternatively, plot within a given `chromosome` and a certain `window` around a 
 genomic coordinate `bp` or plot within a certain `window` around `gene`.
 
-# Arguments
-- `height::Real = 0.25`: the height of exons.
-- `genecolor = :royalblue`: the color of genes.
-- `textcolor = :black`: the color of gene labels.
-- `window::Real = 1e6`: the window around `bp` or `gene`.                                       
+# Keyword arguments
+```
+height      height of exons; default 0.25
+genecolor   color of genes; default :royalblue
+textcolor   color of gene labels; default :black
+window      window around bp or gene; default 1e6
+```
 """
 function plotgenes!(
     ax::Axis,

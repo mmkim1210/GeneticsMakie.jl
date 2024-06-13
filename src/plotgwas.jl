@@ -1,15 +1,18 @@
 """
-    plotgwas!(ax::Axis, gwas::DataFrame; ymax::Real, p::Real, sigline::Bool, sigcolor::Bool, build = 37)
+    plotgwas!(ax::Axis, gwas::DataFrame)
 
 Plot `gwas` results as a Manhattan plot.
 
-# Arguments
-- `ymax::Real`: the maximum value for y axis.
-- `p::Real = 5e-8`: the genome-wide significance threshold.
-- `linecolor = :red2`: the color of genome-wide significance line, which can be turned off by setting to `nothing`.
-- `scattercolor = "#4DB069"`: the color of genome-wide significant variants, which can be turned off by setting to `nothing`.
-- `chromcolors = ["#0D0D66", "#7592C8"]`: the colors of even and odd chromosomes. 
-- `build::Int = 37`: the human genome build. 
+# Keyword arguments
+```
+ymax            maximum value for y-axis
+p               genome-wide significance threshold; default 5e-8
+linecolor       color of genome-wide significance line, which can be turned off by setting to nothing; default :red2
+scattercolor    color of genome-wide significant variants, which can be turned off by setting to nothing; default "#4DB069"
+chromcolors     colors of even and odd chromosomes; default ["#0D0D66", "#7592C8"]
+build::Int      human genome build; default 37 
+```
+
 """
 function plotgwas!(
     ax::Axis,
