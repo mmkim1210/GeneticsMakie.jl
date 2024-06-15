@@ -7,7 +7,7 @@ Plot QQ plot of `P` values where the expected distribution is the uniform distri
 # Keyword arguments
 ```
 xstep       x-axis ticks step size; default 1
-ystep       y-axis ticks step size: default 2
+ystep       y-axis ticks step size; default 2
 ```
 """
 function plotqq!(

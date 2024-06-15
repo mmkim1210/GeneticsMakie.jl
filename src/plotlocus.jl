@@ -68,11 +68,12 @@ and `range2`.
 Alternatively, plot within a given `chromosome` and a certain `window` around a 
 genomic coordinate `bp` or plot within a certain `window` around `gene`.
 
-# Arguments
-- `ld::Union{Nothing, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}} = nothing`: 
-    the reference panel for which LD is calculated.
-- `ymax::Real`: the maximum value for y axis. 
-- `window::Real = 1e6`: the window around `bp` or `gene`. 
+# Keyword arguments
+```
+ld::Union{Nothing, SnpData, Tuple{SnpData, Union{AbstractString, Tuple{AbstractString, Int}}}}      default nothing
+ymax                                                                                                maximum value for y-axis
+window                                                                                              window around genomic coordinate or gene; default 1e6
+```
 """
 function plotlocus!(
     ax::Axis,
