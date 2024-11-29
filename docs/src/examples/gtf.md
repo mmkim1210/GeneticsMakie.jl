@@ -26,8 +26,9 @@ gencode = CSV.read("data/gencode/$(file)", DataFrame; delim = "\t", comment = "#
 !!! warning "Human genome build"
     The latest human genome assembly is [GRCh38](https://www.ncbi.nlm.nih.gov/grc/human/data?asm=GRCh38.p14), but we use an annotation with coordinates 
     from the older version (GRCh37), because a lot of the GWAS results are shared in 
-    GRCh37 genomic coordinates. Make sure to use the matching human genome build when
-    visualizing your results. 
+    GRCh37 genomic coordinates. Make sure to either use the matching human genome 
+    build or perform liftover on the GWAS summary statistics (as described in 
+    [Munging summary statistics](@ref)) when visualizing your results. 
 
 The ninth column of a [GTF file](https://www.gencodegenes.org/pages/data_format.html) 
 contains rich information about features, so we can parse this column.

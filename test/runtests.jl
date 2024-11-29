@@ -3,6 +3,7 @@ using Test
 using CairoMakie
 using CSV
 using DataFrames
+import FASTX: FASTA
 using SnpArrays
 using Statistics
 using Distributions
@@ -138,6 +139,21 @@ end
     @test ncol(gwas) == 6
 
     gwas = CSV.read("data/sumstats.csv", DataFrame)
+    select!(gwas, "#CHROM", :POS, :PVAL, :BETA => (col -> exp.(col)) => :OR, :SE)
+    GeneticsMakie.mungesumstats!(gwas)
+    @test ncol(gwas) == 5
+
+    gwas = CSV.read("data/sumstats.csv", DataFrame)
+    select!(gwas, "#CHROM", :POS, :PVAL, :BETA)
+    GeneticsMakie.mungesumstats!(gwas)
+    @test ncol(gwas) == 5
+
+    gwas = CSV.read("data/sumstats.csv", DataFrame)
+    select!(gwas, "#CHROM", :POS, :PVAL, :BETA => (col -> exp.(col)) => :OR)
+    GeneticsMakie.mungesumstats!(gwas)
+    @test ncol(gwas) == 5
+
+    gwas = CSV.read("data/sumstats.csv", DataFrame)
     select!(gwas, "#CHROM", :POS, :PVAL)
     GeneticsMakie.mungesumstats!(gwas)
     @test ncol(gwas) == 4
@@ -146,6 +162,71 @@ end
     @test nrow(df) == 1
     df = GeneticsMakie.findgwasloci([gwas, gwas])
     @test nrow(df) == 1
+
+    run(`gzip -d data/GRCh37.p13.chr20.fa.gz`)
+    fasta37 = FASTA.Reader(open("data/GRCh37.p13.chr20.fa"), index = "data/GRCh37.p13.chr20.fa.fai")
+    gwas = CSV.read("data/sumstats.w_indels.csv", DataFrame)
+    GeneticsMakie.mungesumstats!(gwas)
+    rsids = gwas.SNP
+    @test nrow(GeneticsMakie.normalizesumstats!(gwas, fasta37; dropmismatch = true)) == 1479
+
+    dbsnp_df = CSV.read("data/dbsnp.chr20.vcf", DataFrame; comment = "##", delim = "\t")
+    dbsnp_it = CSV.Rows("data/dbsnp.chr20.vcf", comment = "##", delim = "\t")
+
+    GeneticsMakie.harmonizevariantnames!(gwas, dbsnp_df)
+    # Not all rsids match due to:
+    # 1) Multiple rsids exist for the same variant
+    # 2) Indels that do not have the proper reference allele assigned. `normalizesumstats!` 
+    # seeks to fix this problem but it cannot be perfectly sensitive
+    @test sum(gwas.SNP .== rsids) > 1200
+    GeneticsMakie.harmonizevariantnames!(gwas, dbsnp_it)
+    @test sum(gwas.SNP .== rsids) > 1200
+
+    close(fasta37)
+    run(`gzip data/GRCh37.p13.chr20.fa`)
+end
+
+@testset "Liftover" begin
+    chain = GeneticsMakie.readchain("data/hg19ToHg38.over.chain.gz")
+    @test nrow(chain) == 53950
+    @test ncol(chain) == 11
+
+    run(`gzip -d data/GRCh37.p13.chr20.fa.gz`)
+    run(`gzip -d data/GRCh38.p13.chr20.fa.gz`)
+    fasta37 = FASTA.Reader(open("data/GRCh37.p13.chr20.fa"), index = "data/GRCh37.p13.chr20.fa.fai")
+    fasta38 = FASTA.Reader(open("data/GRCh38.p13.chr20.fa"), index = "data/GRCh38.p13.chr20.fa.fai")
+
+    gwas = CSV.read("data/sumstats.w_indels.csv", DataFrame)
+    GeneticsMakie.mungesumstats!(gwas)
+    unmapped, multiple =
+    GeneticsMakie.liftoversumstats!([gwas], fasta37, fasta38, chain; referenceorder = false)
+    @test nrow(unmapped[1]) == 0
+    @test nrow(multiple[1]) == 0
+
+    gwas = CSV.read("data/sumstats.w_indels.csv", DataFrame)
+    GeneticsMakie.mungesumstats!(gwas)
+    unmapped, multiple =
+    GeneticsMakie.liftoversumstats!([gwas], fasta37, fasta38, chain)
+    bcftools_score = CSV.read("data/adhd_Demontis.38.vcf", DataFrame, comment = "##")
+    select!(bcftools_score,
+            :ID => :SNP, "#CHROM" => (col -> replace.(col, "chr" => "")) => :CHR,
+            :POS => :BP, :REF => :A1, :ALT => :A2)
+    @test nrow(innerjoin(gwas, bcftools_score, on = [:SNP, :CHR, :BP, :A1, :A2])) == 1479
+    @test nrow(unmapped[1]) == 0
+    @test nrow(multiple[1]) == 0
+
+    close(fasta37)
+    close(fasta38)
+    run(`gzip data/GRCh37.p13.chr20.fa`)
+    run(`gzip data/GRCh38.p13.chr20.fa`)
+
+    push!(chain, chain[nrow(chain), :])
+    @test_throws ErrorException GeneticsMakie.findnewcoord("Y",
+                                                           59282592,
+                                                           chain;
+                                                           multiplematches = :error)
+    @test length(GeneticsMakie.findnewcoord("Y", 59282592, chain;
+                                            multiplematches = :warning)) == 2
 end
 
 @testset "Plotting GWAS" begin
