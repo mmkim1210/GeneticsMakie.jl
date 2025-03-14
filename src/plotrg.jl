@@ -19,7 +19,7 @@ strokewidth     width of outline around surrounding boxes; default 0.5
         diagonal    = false,
         colormap    = :RdBu_10,
         colorrange  = (-1, 1),
-        strokewidth = 0.5
+        strokewidth = 1
     )
 end
 
@@ -110,4 +110,6 @@ function Makie.plot!(plot::Plotrg{<:Tuple{<:AbstractMatrix}})
     if diagonal
         poly!(plot, csd, color = colord, colorrange = colorrange, colormap = colormap)
     end
+    xlims!(0, n)
+    ylims!(-n, 0)
 end

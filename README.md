@@ -2,10 +2,10 @@
 
 # GeneticsMakie
 
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://mmkim1210.github.io/GeneticsMakie.jl/dev)
+[![Dev](https://img.shields.io/badge/docs-latest-blue.svg)](https://mmkim1210.github.io/GeneticsMakie.jl/dev)
 [![Build Status](https://github.com/mmkim1210/GeneticsMakie.jl/workflows/CI/badge.svg)](https://github.com/mmkim1210/GeneticsMakie.jl/actions)
 [![Coverage](https://codecov.io/gh/mmkim1210/GeneticsMakie.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/mmkim1210/GeneticsMakie.jl)
-[![Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/GeneticsMakie&label=downloads)](https://pkgs.genieframework.com/?packages=GeneticsMakie)
+![Repo Size](https://img.shields.io/github/repo-size/mmkim1210/GeneticsMakie.jl)
 
 ## Installation
 GeneticsMakie.jl supports <a href="https://julialang.org"><img src="https://julialang.org/assets/infra/julia.ico" width="10em"> Julia </a> v1.6 or later.
@@ -15,7 +15,7 @@ pkg> add GeneticsMakie
 ```
 
 ## Documentation
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://mmkim1210.github.io/GeneticsMakie.jl/dev)
+[![Dev](https://img.shields.io/badge/docs-latest-blue.svg)](https://mmkim1210.github.io/GeneticsMakie.jl/dev)
 
 ## Examples
 Visualize 1 Mb window around *KMT2E* gene:
