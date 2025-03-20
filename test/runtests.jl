@@ -296,15 +296,3 @@ end
     @test isfile("ld.png")
     rm("ld.png")
 end
-
-@testset "Plotting correlation" begin
-    r = rand(Uniform(-1, 1), 10, 10)
-    f, ax, p = plotrg(r)
-    ax.aspect = DataAspect()
-    xlims!(0, size(r, 1))
-    ylims!(-size(r, 1), 0)
-    hidedecorations!(ax)
-    save("corr.png", f)
-    @test isfile("corr.png")
-    rm("corr.png")
-end

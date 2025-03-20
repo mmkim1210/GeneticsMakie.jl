@@ -25,7 +25,7 @@ function drawloop!(
     ys = ellipse.(xs .- midpoints[1] .- a, a, b)
     lines!(ax, xs, ys; color = colorarc, linewidth = linewidth)
     feet =
-    [Polygon([Point2f(pairedend[1], 0),
+    [Rect([Point2f(pairedend[1], 0),
               Point2f(pairedend[1], -5),
               Point2f(pairedend[2], -5),
               Point2f(pairedend[2], 0)])
@@ -38,10 +38,10 @@ end
     plotloops!(ax::Axis, chromosome::AbstractString, bp::Real, loopdf::DataFrame)
     plotloops!(ax::Axis, gene::AbstractString, loopdf::DataFrame, gencode::DataFrame)
 
-Plot loops present in `loopdf` within a given `chromosome` and genomic range between `range1` 
+Plot loops present in `loopdf` within a given `chromosome` and genomic range between `range1`
 and `range2`.
 
-Alternatively, plot within a given `chromosome` and a certain `window` around a 
+Alternatively, plot within a given `chromosome` and a certain `window` around a
 genomic coordinate `bp` or plot within a certain `window` around `gene`.
 
 # Keyword arguments

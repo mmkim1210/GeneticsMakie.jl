@@ -186,7 +186,7 @@ function mungezscore!(gwas::DataFrame)
             end
         end
     end
-end 
+end
 
 function mungepvalue!(gwas::DataFrame)
     filter!(x -> 0 <= x.P <= 1, gwas)
@@ -236,15 +236,19 @@ findlocus(ref::SnpData, chr::AbstractString, range1::Real, range2::Real) =
     findlocus(ref.snp_info.chromosome, ref.snp_info.position, chr, range1, range2)
 
 """
-    findgwasloci(gwas::DataFrame; p::Real)
-    findgwasloci(gwas::Vector{DataFrame}; p::Real)
+    findgwasloci(gwas::DataFrame)
+    findgwasloci(gwas::Vector{DataFrame})
 
 Find genome-wide significant loci for `gwas` that are separated from each
 other by at least 1 Mb.
 
-Alternatively, find genome-wide significant loci across multiple `gwas` that 
-are all separated by at least 1 Mb. `p` determines the genome-wide significance threshold, 
-which is 5e-8 by default.
+Alternatively, find genome-wide significant loci across multiple `gwas` that
+are all separated by at least 1 Mb.
+
+# Keyword argument
+```
+p::Real        genome-wide significance threshold; default 5e-8
+```
 """
 function findgwasloci(gwas::DataFrame; p::Real = 5e-8)
     loci = DataFrame(CHR = String[], BP = Int[], P = Float64[])
@@ -294,7 +298,6 @@ function findsnps(
     A2₂::AbstractVector;
     matchalleles::Bool = true
     )
-    
     if matchalleles
         ind = Matrix{Union{Missing, Int}}(undef, length(CHR₁), 2)
         for i in 1:size(ind, 1)
@@ -319,7 +322,7 @@ end
 
 function findsnps(gwas::DataFrame, ref::SnpData; matchalleles::Bool = true)
     if matchalleles
-        return findsnps(gwas.CHR, gwas.BP, gwas.A1, gwas.A2, 
+        return findsnps(gwas.CHR, gwas.BP, gwas.A1, gwas.A2,
             ref.snp_info.chromosome, ref.snp_info.position, ref.snp_info.allele1, ref.snp_info.allele2)
     else
         return findsnps(gwas.CHR, gwas.BP, ref.snp_info.chromosome, ref.snp_info.position)
@@ -344,14 +347,16 @@ function findsnps(gwas₁::DataFrame, gwas₂::DataFrame; matchalleles::Bool = t
 end
 
 """
-    findclosestgene(chr::AbstractString, bp::Real, gencode::DataFrame; start::Bool, proteincoding::Bool)
-    findclosestgene(df::DataFrame, gencode::DataFrame; start::Bool, proteincoding::Bool)
+    findclosestgene(chr::AbstractString, bp::Real, gencode::DataFrame)
+    findclosestgene(df::DataFrame, gencode::DataFrame)
 
-Find the closest gene(s) to a genomic coordinate or a list of genomic coordinates using `gencode`. 
+Find the closest gene to a genomic coordinate or a list of genomic coordinates using `gencode`.
 
-Optionally, the closest gene can be defined from the gene start site using `start`,
-and only protein coding genes can be considered using `proteincoding`. 
-The default `start` and `proteincoding` are `false`.
+# Keyword arguments
+```
+start::Bool             find closest gene from gene start site; default false
+proteincoding::Bool     find closest protein coding gene; default false
+```
 """
 function findclosestgene(
     chr::AbstractString,
@@ -360,7 +365,6 @@ function findclosestgene(
     start::Bool = false,
     proteincoding::Bool = false
     )
-
     if proteincoding
         df = filter(x -> (x.seqnames == chr) && (x.feature == "gene") && (x.gene_type == "protein_coding"), gencode)
     else
@@ -419,7 +423,6 @@ function findclosestgenes(
     proteincoding::Bool = false,
     n::Real = 5
     )
-
     if proteincoding
         df = filter(x -> (x.seqnames == chr) && (x.feature == "gene") && (x.gene_type == "protein_coding"), gencode)
     else

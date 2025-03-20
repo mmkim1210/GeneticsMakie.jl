@@ -1,5 +1,5 @@
 function coordinateisforms(
-    gene::AbstractString, 
+    gene::AbstractString,
     gencode::DataFrame,
     orderby::Union{Nothing, AbstractVector{<:AbstractString}},
     height::Real,
@@ -13,7 +13,7 @@ function coordinateisforms(
     chromosome = df.seqnames[1]
     isoforms = unique(dfi.transcript_id)
     n = length(isoforms)
-    ps = Vector{Vector{Polygon}}(undef, n) 
+    ps = Vector{Vector{Rect}}(undef, n)
     bs = Matrix{Float64}(undef, n, 2)
     rows = collect(1:n)
     if !isnothing(orderby)
@@ -33,10 +33,10 @@ function coordinateisforms(
     for j in eachindex(isoforms)
         ranges = view(dfe, findall(isequal(isoforms[j]), dfe.transcript_id), [:start, :end])
         m = size(ranges, 1)
-        p = Vector{Polygon}(undef, m)
+        p = Vector{Rect}(undef, m)
         if text == true || text == :top || text == :t || text == :bottom || text == :b
             for i = 1:m
-                p[i] = Polygon(
+                p[i] = Rect(
                     [Point2f(ranges[i, 1], 1 - height - (rows[j] - 1) * (0.25 + height)),
                     Point2f(ranges[i, 1], 1 - (rows[j] - 1) * (0.25 + height)),
                     Point2f(ranges[i, 2], 1 - (rows[j] - 1) * (0.25 + height)),
@@ -45,7 +45,7 @@ function coordinateisforms(
             end
         else
             for i = 1:m
-                p[i] = Polygon(
+                p[i] = Rect(
                     [Point2f(ranges[i, 1], 1 - height - (rows[j] - 1) * (0.025 + height)),
                     Point2f(ranges[i, 1], 1 - (rows[j] - 1) * (0.025 + height)),
                     Point2f(ranges[i, 2], 1 - (rows[j] - 1) * (0.025 + height)),
@@ -83,7 +83,7 @@ function plotisoforms!(
     gene::AbstractString,
     gencode::DataFrame;
     orderby::Union{Nothing, AbstractVector{<:AbstractString}} = nothing,
-    highlight::Union{Nothing, Tuple{AbstractVector, AbstractVector}} = nothing, 
+    highlight::Union{Nothing, Tuple{AbstractVector, AbstractVector}} = nothing,
     height::Real = 0.25,
     isoformcolor = :royalblue,
     textcolor = :black,
@@ -97,14 +97,14 @@ function plotisoforms!(
             ind = findfirst(isequal(isoforms[j]), highlight[1])
             if isnothing(ind)
                 poly!(ax, ps[j], color = isoformcolor, strokewidth = 0)
-                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                lines!(ax, [bs[j, 1], bs[j, 2]],
                     [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
                     color = isoformcolor, linewidth = 0.5)
                 text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height),
                     text = "$(isoforms[j])", align = (:center, :bottom), fontsize = 6, color = textcolor)
             else
                 poly!(ax, ps[j], color = highlight[2][ind], strokewidth = 0)
-                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                lines!(ax, [bs[j, 1], bs[j, 2]],
                     [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
                     color = highlight[2][ind], linewidth = 0.5)
                 text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height),
@@ -116,14 +116,14 @@ function plotisoforms!(
             ind = findfirst(isequal(isoforms[j]), highlight[1])
             if isnothing(ind)
                 poly!(ax, ps[j], color = isoformcolor, strokewidth = 0)
-                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                lines!(ax, [bs[j, 1], bs[j, 2]],
                     [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
                     color = isoformcolor, linewidth = 0.5)
                 text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - height - (rows[j] - 1) * (0.25 + height),
                     text = "$(isoforms[j])", align = (:center, :top), fontsize = 6, color = textcolor)
             else
                 poly!(ax, ps[j], color = highlight[2][ind], strokewidth = 0)
-                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                lines!(ax, [bs[j, 1], bs[j, 2]],
                     [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
                     color = highlight[2][ind], linewidth = 0.5)
                 text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - height - (rows[j] - 1) * (0.25 + height),
@@ -135,12 +135,12 @@ function plotisoforms!(
             ind = findfirst(isequal(isoforms[j]), highlight[1])
             if isnothing(ind)
                 poly!(ax, ps[j], color = isoformcolor, strokewidth = 0)
-                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                lines!(ax, [bs[j, 1], bs[j, 2]],
                     [1 - height / 2 - (rows[j] - 1) * (0.025 + height), 1 - height / 2 - (rows[j] - 1) * (0.025 + height)],
                     color = isoformcolor, linewidth = 0.5)
             else
                 poly!(ax, ps[j], color = highlight[2][ind], strokewidth = 0)
-                lines!(ax, [bs[j, 1], bs[j, 2]], 
+                lines!(ax, [bs[j, 1], bs[j, 2]],
                     [1 - height / 2 - (rows[j] - 1) * (0.025 + height), 1 - height / 2 - (rows[j] - 1) * (0.025 + height)],
                     color = highlight[2][ind], linewidth = 0.5)
             end
@@ -158,7 +158,7 @@ function plotisoforms!(
         ind = argmax(storage)
         high = storage[ind] / 2 + prop * 12
         high > range2 ? range2 = high : range2 += prop * 4.5
-    else 
+    else
         range1 = range1 - diff / 50
         range2 = range2 + diff / 50
     end

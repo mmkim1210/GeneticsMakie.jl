@@ -5,13 +5,12 @@ function coordinategenes(
     gencode::DataFrame,
     height::Real
     )
-
     df = filter(x -> (x.seqnames == chromosome) && (x.end >= range1) && (x.start <= range2), gencode)
     dfg = view(df, df.feature .== "gene", :)
     dfe = view(df, df.feature .== "exon", :)
     genes = unique(dfg.gene_name)
     strand = [dfg.strand[findfirst(isequal(gene), dfg.gene_name)] for gene in genes]
-    ps = Vector{Vector{Polygon}}(undef, length(genes))
+    ps = Vector{Vector{Rect}}(undef, length(genes))
     bs = Matrix{Float64}(undef, length(genes), 2)
     rows = ones(Int, length(genes))
     prop =  23000 * (range2 - range1) / 2.2e6
@@ -31,7 +30,7 @@ function coordinategenes(
             label2 = center2 - (length(genes[k]) + 1) * prop
             if ((stop1 > start2) || (label1 > label2)) && (rows[j] == rows[k])
                 rows[k] = rows[j] + 1
-                while true 
+                while true
                     l = findprev(isequal(rows[k]), rows, k - 1)
                     isnothing(l) && break
                     start3 = bs[l, 1]
@@ -47,9 +46,9 @@ function coordinategenes(
     for j in eachindex(genes)
         ranges = view(dfe, findall(isequal(genes[j]), dfe.gene_name), [:start, :end])
         n = size(ranges, 1)
-        p = Vector{Polygon}(undef, n)
+        p = Vector{Rect}(undef, n)
         for i = 1:n
-            p[i] = Polygon([
+            p[i] = Rect([
                 Point2f(ranges[i, 1], 1 - height - (rows[j] - 1) * (0.25 + height)),
                 Point2f(ranges[i, 1], 1 - (rows[j] - 1) * (0.25 + height)),
                 Point2f(ranges[i, 2], 1 - (rows[j] - 1) * (0.25 + height)),
@@ -66,10 +65,10 @@ end
     plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, gencode::DataFrame)
     plotgenes!(ax::Axis, gene::AbstractString, gencode::DataFrame)
 
-Plot collapsed gene bodies for genes within a given `chromosome` and genomic range 
+Plot collapsed gene bodies for genes within a given `chromosome` and genomic range
 between `range1` and `range2`.
 
-Alternatively, plot within a given `chromosome` and a certain `window` around a 
+Alternatively, plot within a given `chromosome` and a certain `window` around a
 genomic coordinate `bp` or plot within a certain `window` around `gene`.
 
 # Keyword arguments
@@ -82,7 +81,7 @@ window      window around bp or gene; default 1e6
 """
 function plotgenes!(
     ax::Axis,
-    chromosome::AbstractString, 
+    chromosome::AbstractString,
     range1::Real,
     range2::Real,
     gencode::DataFrame;
@@ -90,7 +89,6 @@ function plotgenes!(
     genecolor = :royalblue,
     textcolor = :black
     )
-
     genes, strand, ps, bs, rows = coordinategenes(chromosome, range1, range2, gencode, height)
     if length(rows) == 0
         ax.spinewidth = 0.75
@@ -103,8 +101,8 @@ function plotgenes!(
     end
     for j in 1:size(ps, 1)
         poly!(ax, ps[j], color = genecolor, strokewidth = 0)
-        lines!(ax, [bs[j, 1], bs[j, 2]], 
-            [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)], 
+        lines!(ax, [bs[j, 1], bs[j, 2]],
+            [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
             color = genecolor, linewidth = 0.5)
         g = (strand[j] == "+" ? genes[j] * "→" : "←" * genes[j])
         text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height),
@@ -136,7 +134,7 @@ Plot gene bodies with a vector of genes highlighted by a vector of colors via `h
 """
 function plotgenes!(
     ax::Axis,
-    chromosome::AbstractString, 
+    chromosome::AbstractString,
     range1::Real,
     range2::Real,
     highlight::Tuple{AbstractVector, AbstractVector},
@@ -158,16 +156,16 @@ function plotgenes!(
         ind = findfirst(isequal(genes[j]), highlight[1])
         if !isnothing(ind)
             poly!(ax, ps[j], color = highlight[2][ind], strokewidth = 0)
-            lines!(ax, [bs[j, 1], bs[j, 2]], 
-                [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)], 
+            lines!(ax, [bs[j, 1], bs[j, 2]],
+                [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
                 color = highlight[2][ind], linewidth = 0.5)
             g = (strand[j] == "+" ? genes[j] * "→" : "←" * genes[j])
             text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height),
                 text = "$g", align = (:center, :bottom), fontsize = 6, color = highlight[2][ind])
         else
             poly!(ax, ps[j], color = "gray60", strokewidth = 0)
-            lines!(ax, [bs[j, 1], bs[j, 2]], 
-                [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)], 
+            lines!(ax, [bs[j, 1], bs[j, 2]],
+                [1 - height / 2 - (rows[j] - 1) * (0.25 + height), 1 - height / 2 - (rows[j] - 1) * (0.25 + height)],
                 color = "gray60", linewidth = 0.5)
             g = (strand[j] == "+" ? genes[j] * "→" : "←" * genes[j])
             text!(ax, (bs[j, 1] + bs[j, 2]) / 2, 1 - (rows[j] - 1) * (0.25 + height),
@@ -190,14 +188,14 @@ function plotgenes!(ax::Axis, gene::AbstractString, highlight::Tuple{AbstractVec
     chr, start, stop = findgene(gene::AbstractString, gencode::DataFrame)
     plotgenes!(ax, chr, start - window, stop + window, highlight, gencode; kwargs...)
 end
-    
+
 plotgenes!(ax::Axis, chromosome::AbstractString, range1::Real, range2::Real, highlight::Tuple{AbstractString, Any}, gencode::DataFrame; kwargs...) =
     plotgenes!(ax, chromosome, range1, range2, ([highlight[1]], [highlight[2]]), gencode; kwargs...)
 
 plotgenes!(ax::Axis, chromosome::AbstractString, bp::Real, highlight::Tuple{AbstractString, Any}, gencode::DataFrame; kwargs...) =
     plotgenes!(ax, chromosome, bp, ([highlight[1]], [highlight[2]]), gencode; kwargs...)
 
-plotgenes!(ax::Axis, gene::AbstractString, highlight::Tuple{AbstractString, Any}, gencode::DataFrame; kwargs...) = 
+plotgenes!(ax::Axis, gene::AbstractString, highlight::Tuple{AbstractString, Any}, gencode::DataFrame; kwargs...) =
     plotgenes!(ax, gene, ([highlight[1]], [highlight[2]]), gencode; kwargs...)
 
 """

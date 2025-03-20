@@ -29,7 +29,7 @@ function Makie.plot!(plot::PlotLD{<:Tuple{<:AbstractMatrix}})
     addx1 = [0, 1, 0, 1]
     addx2 = [1, 1, 0, 1]
     addy  = [0, -1, 0, 1]
-    polys = Vector{Polygon}(undef, Int((m - n) / 2 + n))
+    polys = Vector{Vector{Point{2, Float32}}}(undef, Int((m - n) / 2 + n))
     LDvech = Vector{Float32}(undef, Int((m - n) / 2 + n))
     counter = 1
     for i in 1:n
@@ -37,10 +37,10 @@ function Makie.plot!(plot::PlotLD{<:Tuple{<:AbstractMatrix}})
             if LD[i, j] <= threshold
                 continue
             else
-                polys[counter] = Polygon([Point2f(
+                polys[counter] = [Point2f(
                     abs(i - j) * 5 / n + 10 / n * (i - addx2[k]) + 5 / n * addx1[k], # x coords
                     5 - abs(i - j) * 5 / n + 5 / n * addy[k] # y coords
-                    ) for k in 1:4])
+                    ) for k in 1:4]
                 LDvech[counter] = LD[i, j]
                 counter += 1
             end

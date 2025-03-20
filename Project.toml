@@ -1,21 +1,20 @@
 name = "GeneticsMakie"
 uuid = "8ca62643-82d8-47b5-a233-a06d1654fb35"
 authors = ["Minsoo <mmkim1210@gmail.com> and contributors"]
-version = "0.2.3"
+version = "0.2.4"
 
 [deps]
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
-Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
 SnpArrays = "4e780e97-f5bf-4111-9dc4-b70aaf691b06"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 
 [compat]
+CSV = "0.10.15"
 CairoMakie = "0.12"
 DataFrames = "1"
 Distributions = "0.25"
-Makie = "0.21"
 SnpArrays = "0.3"
 julia = "1"
 

@@ -1,11 +1,14 @@
 module GeneticsMakie
 
 using CairoMakie
-using Makie.GeometryBasics
 using DataFrames
 using SnpArrays
 using Statistics
 using Distributions
+
+export parsegtf!, findgene
+export mungesumstats!, findgwasloci, findclosestgene
+export plotgenes!
 
 include("parsegtf.jl")
 include("plotgenes.jl")
@@ -18,6 +21,5 @@ include("plotgwas.jl")
 include("gwas.jl")
 include("genome.jl")
 include("plotld.jl")
-include("plotrg.jl")
 
 end
